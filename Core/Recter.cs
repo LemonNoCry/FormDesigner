@@ -16,18 +16,19 @@ namespace FormDesinger
         private readonly List<SelectRecter> _selectRecters = new List<SelectRecter>();
 
         ///是否为窗体周围的方框（如果是，则位置不可改变，且只有从下、右、右下三个方向改变大小）
-        public bool IsForm;
+        private bool IsForm;
 
         public bool IsSelect => _selectRecters.Any();
+        public bool IsSelectFrom => _selectRecters.Any() && IsForm;
+        public int Count => _selectRecters.Count;
 
-        #region 多选
 
         /// <summary>
         /// 所有选中的控件
         /// </summary>
-        public List<Rectangle> GetRects()
+        public List<SelectRecter> GetSelectRects()
         {
-            return _selectRecters.Select(s => s.Rectangle).ToList();
+            return _selectRecters;
         }
 
         public void SetSelect(Rectangle r, Control c)
@@ -40,8 +41,9 @@ namespace FormDesinger
         public void AddSelect(Rectangle r, Control c)
         {
             _selectRecters.Add(new SelectRecter(c, r));
-            IsForm = _selectRecters.Count > 1;
+            IsForm = _selectRecters.Count == 0 && c is Form;
         }
+
 
         public void RemoveSelect(Rectangle r)
         {
@@ -76,7 +78,6 @@ namespace FormDesinger
             IsForm = false;
         }
 
-        #endregion
 
         /// <summary>
         /// 绘制方框
@@ -136,53 +137,58 @@ namespace FormDesinger
         /// <returns></returns>
         public DragType GetMouseDragType(Point p)
         {
-            Rectangle _rect = this._selectRecters[0].Rectangle;
-            _rect.Inflate(new Size(3, 3));
-            if (new Rectangle(_rect.Left - 2, _rect.Top - 2, 4, 4).Contains(p)
+            return _selectRecters.Select(sel => GetMouseDragType(sel.Rectangle, p))
+                .FirstOrDefault(dragType => dragType != DragType.None);
+        }
+
+        public DragType GetMouseDragType(Rectangle rect, Point p)
+        {
+            rect.Inflate(new Size(3, 3));
+            if (new Rectangle(rect.Left - 2, rect.Top - 2, 4, 4).Contains(p)
                 && !IsForm)
             {
                 return DragType.LeftTop;
             }
 
-            if (new Rectangle(_rect.Left + 2, _rect.Top - 2, _rect.Width - 4, 4).Contains(p)
+            if (new Rectangle(rect.Left + 2, rect.Top - 2, rect.Width - 4, 4).Contains(p)
                 && !IsForm)
             {
                 return DragType.Top;
             }
 
-            if (new Rectangle(_rect.Left - 2, _rect.Top + 2, 4, _rect.Height - 4).Contains(p)
+            if (new Rectangle(rect.Left - 2, rect.Top + 2, 4, rect.Height - 4).Contains(p)
                 && !IsForm)
             {
                 return DragType.Left;
             }
 
-            if (new Rectangle(_rect.Left - 2, _rect.Top + _rect.Height - 2, 4, 4).Contains(p)
+            if (new Rectangle(rect.Left - 2, rect.Top + rect.Height - 2, 4, 4).Contains(p)
                 && !IsForm)
             {
                 return DragType.LeftBottom;
             }
 
-            if (new Rectangle(_rect.Left + 2, _rect.Top + _rect.Height - 2, _rect.Width - 4, 4).Contains(p))
+            if (new Rectangle(rect.Left + 2, rect.Top + rect.Height - 2, rect.Width - 4, 4).Contains(p))
             {
                 return DragType.Bottom;
             }
 
-            if (new Rectangle(_rect.Left + _rect.Width - 2, _rect.Top + _rect.Height - 2, 4, 4).Contains(p))
+            if (new Rectangle(rect.Left + rect.Width - 2, rect.Top + rect.Height - 2, 4, 4).Contains(p))
             {
                 return DragType.RightBottom;
             }
 
-            if (new Rectangle(_rect.Left + _rect.Width - 2, _rect.Top + 2, 4, _rect.Height - 4).Contains(p))
+            if (new Rectangle(rect.Left + rect.Width - 2, rect.Top + 2, 4, rect.Height - 4).Contains(p))
             {
                 return DragType.Right;
             }
 
-            if (new Rectangle(_rect.Left + _rect.Width - 2, _rect.Top - 2, 4, 4).Contains(p) && !IsForm)
+            if (new Rectangle(rect.Left + rect.Width - 2, rect.Top - 2, 4, 4).Contains(p) && !IsForm)
             {
                 return DragType.RightTop;
             }
 
-            if (new Rectangle(_rect.Left + 2, _rect.Top + 2, _rect.Width - 4, _rect.Height - 4).Contains(p) && !IsForm)
+            if (new Rectangle(rect.Left + 2, rect.Top + 2, rect.Width - 4, rect.Height - 4).Contains(p) && !IsForm)
             {
                 return DragType.Center;
             }

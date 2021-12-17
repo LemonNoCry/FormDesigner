@@ -114,7 +114,7 @@
     </Compile>
     <Compile Include="Core\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Core\Select.cs" />
+    <Compile Include="Core\SelectRectangle.cs" />
     <Compile Include="FromDesigner.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -6,6 +6,7 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
+using System.Linq;
 using static System.Windows.Forms.Control;
 
 namespace FormDesinger
@@ -80,6 +81,14 @@ namespace FormDesinger
             }
         }
 
+        public void FlushSelectProperty()
+        {
+            if (_propertyGrid == null) return;
+            _propertyGrid.SelectedObjects = recter.GetSelectRects()
+                .Select(s => Collections.GetCollections(s.Control))
+                .ToArray();
+        }
+
         private void _propertyGrid_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
         {
             RefreshMoveControls();
@@ -91,6 +100,8 @@ namespace FormDesinger
             r = hostFrame.Parent.RectangleToScreen(r);
             r = this.RectangleToClient(r);
             recter.SetSelect(r, hostFrame);
+
+            FlushSelectProperty();
         }
 
         protected override CreateParams CreateParams
@@ -203,63 +214,99 @@ namespace FormDesinger
                     case DragType.Top:
                     {
                         Point delta = new Point(e.Location.X - _firstPoint.X, e.Location.Y - _firstPoint.Y);
-                        recter.Rect = new Rectangle(recter.Rect.X, recter.Rect.Y + delta.Y, recter.Rect.Width, recter.Rect.Height + delta.Y * (-1));
+                        foreach (var sel in recter.GetSelectRects())
+                        {
+                            sel.Rectangle = new Rectangle(sel.Rectangle.X, sel.Rectangle.Y + delta.Y, sel.Rectangle.Width, sel.Rectangle.Height + delta.Y * (-1));
+                        }
+
                         _firstPoint = e.Location;
                         break;
                     }
                     case DragType.RightTop:
                     {
                         Point delta = new Point(e.Location.X - _firstPoint.X, e.Location.Y - _firstPoint.Y);
-                        recter.Rect = new Rectangle(recter.Rect.X, recter.Rect.Y + delta.Y, recter.Rect.Width + delta.X, recter.Rect.Height + delta.Y * (-1));
+                        foreach (var sel in recter.GetSelectRects())
+                        {
+                            sel.Rectangle = new Rectangle(sel.Rectangle.X, sel.Rectangle.Y + delta.Y, sel.Rectangle.Width + delta.X, sel.Rectangle.Height + delta.Y * (-1));
+                        }
+
                         _firstPoint = e.Location;
                         break;
                     }
                     case DragType.RightBottom:
                     {
                         Point delta = new Point(e.Location.X - _firstPoint.X, e.Location.Y - _firstPoint.Y);
-                        recter.Rect = new Rectangle(recter.Rect.X, recter.Rect.Y, recter.Rect.Width + delta.X, recter.Rect.Height + delta.Y);
+                        foreach (var sel in recter.GetSelectRects())
+                        {
+                            sel.Rectangle = new Rectangle(sel.Rectangle.X, sel.Rectangle.Y, sel.Rectangle.Width + delta.X, sel.Rectangle.Height + delta.Y);
+                        }
+
                         _firstPoint = e.Location;
                         break;
                     }
                     case DragType.Right:
                     {
                         Point delta = new Point(e.Location.X - _firstPoint.X, e.Location.Y - _firstPoint.Y);
-                        recter.Rect = new Rectangle(recter.Rect.X, recter.Rect.Y, recter.Rect.Width + delta.X, recter.Rect.Height);
+                        foreach (var sel in recter.GetSelectRects())
+                        {
+                            sel.Rectangle = new Rectangle(sel.Rectangle.X, sel.Rectangle.Y, sel.Rectangle.Width + delta.X, sel.Rectangle.Height);
+                        }
+
                         _firstPoint = e.Location;
                         break;
                     }
                     case DragType.LeftTop:
                     {
                         Point delta = new Point(e.Location.X - _firstPoint.X, e.Location.Y - _firstPoint.Y);
-                        recter.Rect = new Rectangle(recter.Rect.X + delta.X, recter.Rect.Y + delta.Y, recter.Rect.Width + delta.X * (-1), recter.Rect.Height + delta.Y * (-1));
+                        foreach (var sel in recter.GetSelectRects())
+                        {
+                            sel.Rectangle = new Rectangle(sel.Rectangle.X + delta.X, sel.Rectangle.Y + delta.Y, sel.Rectangle.Width + delta.X * (-1), sel.Rectangle.Height + delta.Y * (-1));
+                        }
+
                         _firstPoint = e.Location;
                         break;
                     }
                     case DragType.LeftBottom:
                     {
                         Point delta = new Point(e.Location.X - _firstPoint.X, e.Location.Y - _firstPoint.Y);
-                        recter.Rect = new Rectangle(recter.Rect.X + delta.X, recter.Rect.Y, recter.Rect.Width + delta.X * (-1), recter.Rect.Height + delta.Y);
+                        foreach (var sel in recter.GetSelectRects())
+                        {
+                            sel.Rectangle = new Rectangle(sel.Rectangle.X + delta.X, sel.Rectangle.Y, sel.Rectangle.Width + delta.X * (-1), sel.Rectangle.Height + delta.Y);
+                        }
+
                         _firstPoint = e.Location;
                         break;
                     }
                     case DragType.Left:
                     {
                         Point delta = new Point(e.Location.X - _firstPoint.X, e.Location.Y - _firstPoint.Y);
-                        recter.Rect = new Rectangle(recter.Rect.X + delta.X, recter.Rect.Y, recter.Rect.Width + delta.X * (-1), recter.Rect.Height);
+                        foreach (var sel in recter.GetSelectRects())
+                        {
+                            sel.Rectangle = new Rectangle(sel.Rectangle.X + delta.X, sel.Rectangle.Y, sel.Rectangle.Width + delta.X * (-1), sel.Rectangle.Height);
+                        }
+
                         _firstPoint = e.Location;
                         break;
                     }
                     case DragType.Center:
                     {
                         Point delta = new Point(e.Location.X - _firstPoint.X, e.Location.Y - _firstPoint.Y);
-                        recter.Rect = new Rectangle(recter.Rect.X + delta.X, recter.Rect.Y + delta.Y, recter.Rect.Width, recter.Rect.Height);
+                        foreach (var sel in recter.GetSelectRects())
+                        {
+                            sel.Rectangle = new Rectangle(sel.Rectangle.X + delta.X, sel.Rectangle.Y + delta.Y, sel.Rectangle.Width, sel.Rectangle.Height);
+                        }
+
                         _firstPoint = e.Location;
                         break;
                     }
                     case DragType.Bottom:
                     {
                         Point delta = new Point(e.Location.X - _firstPoint.X, e.Location.Y - _firstPoint.Y);
-                        recter.Rect = new Rectangle(recter.Rect.X, recter.Rect.Y, recter.Rect.Width, recter.Rect.Height + delta.Y);
+                        foreach (var sel in recter.GetSelectRects())
+                        {
+                            sel.Rectangle = new Rectangle(sel.Rectangle.X, sel.Rectangle.Y, sel.Rectangle.Width, sel.Rectangle.Height + delta.Y);
+                        }
+
                         _firstPoint = e.Location;
                         break;
                     }
@@ -278,7 +325,7 @@ namespace FormDesinger
             }
 
             //左键选中区域
-            if (recter.IsSelect && recter.IsForm && _selectMouseDown)
+            if (recter.IsSelectFrom && _selectMouseDown)
             {
                 selectRectangle = new SelectRectangle();
                 Rectangle r = new Rectangle();
@@ -313,10 +360,8 @@ namespace FormDesinger
                     rr.Inflate(10, 10);
                     if (rr.Contains(e.Location))
                     {
-                        recter.Rect = r;
-                        _currentCtrl = c;
-                        _propertyGrid.SelectedObject = Collections.GetCollections(c); //选中控件
-                        recter.IsForm = false;
+                        recter.SetSelect(r, c);
+                        FlushSelectProperty();
                         flag = true;
                         Invalidate2(false);
                         break;
@@ -330,10 +375,7 @@ namespace FormDesinger
                     r = this.RectangleToClient(r);
                     if (r.Contains(e.Location))
                     {
-                        recter.Rect = r;
-                        recter.IsForm = true;
-                        _currentCtrl = null;
-                        _propertyGrid.SelectedObject = Collections.GetCollections(hostFrame); //选中控件容器
+                        SelectHost();
 
                         //只有在设计器内部才可以选中区域
                         _firstSelectPoint = e.Location;
@@ -368,10 +410,12 @@ namespace FormDesinger
             {
                 #region 选中区域
 
-                recter.ClearRect();
-                Rectangle select_r = new Rectangle();
-                select_r.X = _firstSelectPoint.X;
-                select_r.Y = _firstSelectPoint.Y;
+                recter.ClearSelect();
+                Rectangle select_r = new Rectangle
+                {
+                    X = _firstSelectPoint.X,
+                    Y = _firstSelectPoint.Y
+                };
                 Point mouse = this.PointToClient(MousePosition);
                 if (mouse.X - _firstSelectPoint.X < 0)
                     select_r.X = mouse.X;
@@ -381,7 +425,6 @@ namespace FormDesinger
                 select_r.Height = Math.Abs(mouse.Y - _firstSelectPoint.Y);
                 if ((select_r.Width > 5 || select_r.Height > 5) && _firstSelectPoint != new Point())
                 {
-                    bool select = false;
                     foreach (Control c in hostFrame.Controls) //遍历控件容器 看是否选中其中某一控件
                     {
                         Rectangle r = c.Bounds;
@@ -390,16 +433,14 @@ namespace FormDesinger
 
                         if (select_r.IntersectsWith(r)) //判断控件是否有部分包含在选中区域内
                         {
-                            if (!select) //处理第一个
-                            {
-                                _currentCtrl = c;
-                                _propertyGrid.SelectedObject = Collections.GetCollections(c); //选中控件
-                                recter.IsForm = false;
-                                recter.Rect = r;
-                            }
-
-                            recter.AddRect(r);
+                            recter.AddSelect(r, c);
+                            FlushSelectProperty();
                         }
+                    }
+
+                    if (!recter.IsSelect)
+                    {
+                        SelectHost();
                     }
                 }
 
@@ -429,15 +470,16 @@ namespace FormDesinger
         /// </summary>
         private void RefreshMoveControls()
         {
-            if (_currentCtrl == null) return;
-            Rectangle r = hostFrame.RectangleToScreen(_currentCtrl.Bounds);
-            r = this.RectangleToClient(r);
-            recter.ClearRect();
-            recter.Rect = r;
-            recter.IsForm = false;
-            _propertyGrid.SelectedObject = Collections.GetCollections(_currentCtrl); //选中控件
+            if (!recter.IsSelect) return;
+            foreach (var sel in recter.GetSelectRects())
+            {
+                Rectangle r = hostFrame.RectangleToScreen(sel.Control.Bounds);
+                r = this.RectangleToClient(r);
+                sel.Rectangle = r;
+            }
+
+            FlushSelectProperty();
             Invalidate2(false);
-            _currentCtrl.Focus();
         }
 
         /// <summary>
@@ -465,20 +507,16 @@ namespace FormDesinger
                 hostFrame.Controls.Add(ctrl);
                 ctrl.BringToFront();
 
-                _currentCtrl = ctrl;
-                _propertyGrid.SelectedObject = Collections.GetCollections(ctrl); //选中控件
-
                 //将控件容器坐标转换为Overlayer坐标
                 Rectangle r = hostFrame.RectangleToScreen(ctrl.Bounds);
                 r = this.RectangleToClient(r);
-
-                recter.Rect = r;
-                recter.IsForm = false;
-
+                recter.SetSelect(r, ctrl);
+                FlushSelectProperty();
                 Invalidate2(false);
             }
             catch
             {
+                // ignored
             }
 
             base.OnDragDrop(drgevent);
@@ -491,58 +529,16 @@ namespace FormDesinger
         {
             if (e.KeyValue == 46) //删除
             {
-                if (_currentCtrl != null)
+                if (recter.IsSelect && !recter.IsSelectFrom)
                 {
-                    if (recter.GetRects().Count == 0) //只有一个
+                    foreach (var sel in recter.GetSelectRects())
                     {
-                        hostFrame.Controls.Remove(_currentCtrl);
-                        _currentCtrl = null;
-                        _propertyGrid.SelectedObject = Collections.GetCollections(hostFrame); //选中控件容器
-                        Rectangle r = hostFrame.Bounds;
-                        r = hostFrame.Parent.RectangleToScreen(r);
-                        r = this.RectangleToClient(r);
-                        recter.Rect = r; //绘制的矩形转移到Form上
-                        recter.IsForm = true;
-                        Invalidate2(false);
+                        sel.Control.Dispose();
+                        hostFrame.Controls.Remove(sel.Control);
                     }
-                    else //删除多个
-                    {
-                        int delnum = 0;
-                        Agian:
-                        List<Rectangle> listdel = new List<Rectangle>();
-                        foreach (Control c in hostFrame.Controls) //遍历控件容器 看是否选中其中某一控件
-                        {
-                            foreach (Rectangle select_r in recter.GetRects())
-                            {
-                                Rectangle r = c.Bounds;
-                                r = hostFrame.RectangleToScreen(r);
-                                r = this.RectangleToClient(r);
-                                //Rectangle rr = r;
-                                //rr.Inflate(10, 10);
-                                if (select_r.IntersectsWith(r)) //判断控件是否有部分包含在选中区域内
-                                {
-                                    hostFrame.Controls.Remove(c);
-                                    _currentCtrl = null;
-                                    listdel.Add(r);
-                                }
-                            }
-                        }
 
-                        recter.RemoveRect(listdel);
-                        if (delnum < 10 && recter.GetRects().Count != 0)
-                        {
-                            delnum++;
-                            goto Agian;
-                        }
-
-                        _propertyGrid.SelectedObject = Collections.GetCollections(hostFrame); //选中控件容器
-                        Rectangle form_r = hostFrame.Bounds;
-                        form_r = hostFrame.Parent.RectangleToScreen(form_r);
-                        form_r = this.RectangleToClient(form_r);
-                        recter.Rect = form_r; //绘制的矩形转移到Form上
-                        recter.IsForm = true;
-                        Invalidate2(false);
-                    }
+                    SelectHost();
+                    Invalidate2(false);
                 }
             }
 
@@ -555,28 +551,36 @@ namespace FormDesinger
         /// <param name="e"></param>
         protected override void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
         {
-            if (_currentCtrl == null) return;
+            if (!recter.IsSelect) return;
             if (e.KeyValue == 37)
             {
-                _currentCtrl.Location = new Point(_currentCtrl.Location.X - 1, _currentCtrl.Location.Y);
+                recter.GetSelectRects()
+                    .ForEach(s => s.Control.Location = new Point(s.Control.Location.X - 1, s.Control.Location.Y));
+
                 RefreshMoveControls();
             }
 
             if (e.KeyValue == 38)
             {
-                _currentCtrl.Location = new Point(_currentCtrl.Location.X, _currentCtrl.Location.Y - 1);
+                recter.GetSelectRects()
+                    .ForEach(s => s.Control.Location = new Point(s.Control.Location.X, s.Control.Location.Y - 1));
+
                 RefreshMoveControls();
             }
 
             if (e.KeyValue == 39)
             {
-                _currentCtrl.Location = new Point(_currentCtrl.Location.X + 1, _currentCtrl.Location.Y);
+                recter.GetSelectRects()
+                    .ForEach(s => s.Control.Location = new Point(s.Control.Location.X + 1, s.Control.Location.Y));
+
                 RefreshMoveControls();
             }
 
             if (e.KeyValue == 40)
             {
-                _currentCtrl.Location = new Point(_currentCtrl.Location.X, _currentCtrl.Location.Y + 1);
+                recter.GetSelectRects()
+                    .ForEach(s => s.Control.Location = new Point(s.Control.Location.X, s.Control.Location.Y + 1));
+
                 RefreshMoveControls();
             }
 
@@ -590,41 +594,7 @@ namespace FormDesinger
         /// <summary>
         /// 当前设计器中的所有控件
         /// </summary>
-        public new ControlCollection Controls
-        {
-            get { return hostFrame.Controls; }
-        }
-
-        /// <summary>
-        /// 绘制控件
-        /// </summary>
-        public void DrawControl(string Name, string Text, Point p)
-        {
-            Point _p = new Point(p.X + 24, p.Y + 119);
-            //窗体顶部偏移量24,119
-            string[] strs = {"", Name};
-            Control ctrl = ControlHelper.CreateControl(strs[1], strs[0]); //实例化控件
-
-            ctrl.Location = hostFrame.PointToClient(_p); //屏幕坐标转换成控件容器坐标
-            if (!(ctrl is DateTimePicker))
-            {
-                ctrl.Text = Text;
-            }
-
-            hostFrame.Controls.Add(ctrl);
-            ctrl.BringToFront();
-
-            _currentCtrl = ctrl;
-            _propertyGrid.SelectedObject = Collections.GetCollections(ctrl); //选中控件
-
-            //将控件容器坐标转换为Overlayer坐标
-            Rectangle r = hostFrame.RectangleToScreen(ctrl.Bounds);
-            r = this.RectangleToClient(r);
-
-            recter.Rect = r;
-            recter.IsForm = false;
-            Invalidate2(false);
-        }
+        public new ControlCollection Controls => hostFrame.Controls;
 
         /// <summary>
         /// 绘制控件
@@ -634,48 +604,33 @@ namespace FormDesinger
             hostFrame.Controls.Add(ctrl);
             ctrl.BringToFront();
 
-            _currentCtrl = ctrl;
-            if (Parent.Parent is FromDesigner frm)
-            {
-                frm.propertyGrid1.SelectedObject = Collections.GetCollections(ctrl); //选中控件
-            }
-
-
             //将控件容器坐标转换为Overlayer坐标
             Rectangle r = hostFrame.RectangleToScreen(ctrl.Bounds);
             r = this.RectangleToClient(r);
 
-            recter.Rect = r;
-            recter.IsForm = false;
+            recter.SetSelect(r, ctrl);
+            FlushSelectProperty();
             Invalidate2(false);
         }
 
         /// <summary>
         /// 绘制控件
         /// </summary>
-        public void DrawControls(List<Control> ctrls)
+        public void DrawControls(List<Control> cons)
         {
-            Control ctrl = null;
-            foreach (Control control in ctrls)
+            hostFrame.Controls.AddRange(cons.ToArray());
+
+            recter.ClearSelect();
+            foreach (var con in cons)
             {
-                ctrl = control;
-                hostFrame.Controls.Add(ctrl);
+                //将控件容器坐标转换为Overlayer坐标
+                Rectangle r = hostFrame.RectangleToScreen(con.Bounds);
+                r = this.RectangleToClient(r);
+
+                recter.AddSelect(r, con);
             }
 
-            ctrl.BringToFront();
-            _currentCtrl = ctrl;
-            if (Parent.Parent is FromDesigner frm)
-            {
-                frm.propertyGrid1.SelectedObject = Collections.GetCollections(ctrl); //选中控件
-            }
-
-
-            //将控件容器坐标转换为Overlayer坐标
-            Rectangle r = hostFrame.RectangleToScreen(ctrl.Bounds);
-            r = this.RectangleToClient(r);
-
-            recter.Rect = r;
-            recter.IsForm = false;
+            FlushSelectProperty();
             Invalidate2(false);
         }
 
@@ -695,11 +650,8 @@ namespace FormDesinger
             selectRectangle = null;
             _firstSelectPoint = new Point();
             _selectMouseDown = false;
-            Rectangle form_r = hostFrame.Bounds;
-            form_r = hostFrame.Parent.RectangleToScreen(form_r);
-            form_r = this.RectangleToClient(form_r);
-            recter.Rect = form_r; //绘制的矩形转移到Form上
-            recter.IsForm = true;
+
+            SelectHost();
             Invalidate2(false);
         }
 
@@ -762,15 +714,15 @@ namespace FormDesinger
         public void ControlAlginFineTune()
         {
             if (!ControlAlginCheck()) return;
-            List<Point> needsort = new List<Point>(); //需要调整的控件,当Count为0时，全部调整
-            List<Control> psy = AlginFineTuneSort(false, ref needsort);
+            List<Point> needSourt = new List<Point>(); //需要调整的控件,当Count为0时，全部调整
+            List<Control> psy = AlginFineTuneSort(false, ref needSourt);
             int miny = -1;
             foreach (Control c in psy)
             {
-                if (needsort.Count > 0)
+                if (needSourt.Count > 0)
                 {
                     bool chioe = false;
-                    foreach (Point p in needsort)
+                    foreach (Point p in needSourt)
                     {
                         if (p == c.Location)
                         {
@@ -801,14 +753,14 @@ namespace FormDesinger
                 }
             }
 
-            List<Control> psx = AlginFineTuneSort(true, ref needsort);
+            List<Control> psx = AlginFineTuneSort(true, ref needSourt);
             int minx = -1;
             foreach (Control c in psx)
             {
-                if (needsort.Count > 0)
+                if (needSourt.Count > 0)
                 {
                     bool chioe = false;
-                    foreach (Point p in needsort)
+                    foreach (Point p in needSourt)
                     {
                         if (p == c.Location)
                         {
@@ -850,18 +802,18 @@ namespace FormDesinger
             if (hostFrame.Controls.Count < 2) //不足两个,排序无意义
                 return null;
             var cs = hostFrame.Controls;
-            if (recter.GetRects().Count != 0)
+            if (recter.IsSelect)
             {
                 foreach (Control c in hostFrame.Controls) //遍历控件容器 看是否选中其中某一控件
                 {
-                    foreach (Rectangle select_r in recter.GetRects())
+                    foreach (var sel in recter.GetSelectRects())
                     {
                         Rectangle r = c.Bounds;
                         r = hostFrame.RectangleToScreen(r);
                         r = this.RectangleToClient(r);
                         //Rectangle rr = r;
                         //rr.Inflate(10, 10);
-                        if (select_r.IntersectsWith(r)) //判断控件是否有部分包含在选中区域内
+                        if (sel.Rectangle.IntersectsWith(r)) //判断控件是否有部分包含在选中区域内
                         {
                             needsort.Add(c.Location);
                         }
@@ -902,9 +854,9 @@ namespace FormDesinger
         public void ControlAlgin(AlginType alginType)
         {
             if (!ControlAlginCheck()) return;
-            Point minpoint = new Point(-1, -1);
-            Size minzine = new Size(0, 0);
-            if (recter.GetRects().Count < 1)
+            Point minPoint = new Point(-1, -1);
+            Size minSize = new Size(0, 0);
+            if (!recter.IsSelect)
             {
                 return;
             }
@@ -913,34 +865,34 @@ namespace FormDesinger
 
             foreach (Control c in hostFrame.Controls) //遍历控件容器 看是否选中其中某一控件
             {
-                foreach (Rectangle select_r in recter.GetRects())
+                foreach (var sel in recter.GetSelectRects())
                 {
                     Rectangle r = c.Bounds;
                     r = hostFrame.RectangleToScreen(r);
                     r = this.RectangleToClient(r);
                     //Rectangle rr = r;
                     //rr.Inflate(10, 10);
-                    if (select_r == r) //判断控件是否有部分包含在选中区域内
+                    if (sel.Rectangle == r) //判断控件是否有部分包含在选中区域内
                     {
                         switch (alginType)
                         {
                             case AlginType.Left: //以最上面的为准
-                                if (minpoint.X == -1)
-                                    minpoint = c.Location;
-                                if (c.Location.Y < minpoint.Y)
-                                    minpoint = c.Location;
+                                if (minPoint.X == -1)
+                                    minPoint = c.Location;
+                                if (c.Location.Y < minPoint.Y)
+                                    minPoint = c.Location;
                                 break;
                             case AlginType.Top: //以最左边的为准
-                                if (minpoint.Y == -1)
-                                    minpoint = c.Location;
-                                if (c.Location.X < minpoint.X)
-                                    minpoint = c.Location;
+                                if (minPoint.Y == -1)
+                                    minPoint = c.Location;
+                                if (c.Location.X < minPoint.X)
+                                    minPoint = c.Location;
                                 break;
                             case AlginType.Right:
-                                if (minpoint.X == -1)
-                                    minpoint = c.Location;
-                                if (c.Location.Y < minpoint.Y)
-                                    minpoint = c.Location;
+                                if (minPoint.X == -1)
+                                    minPoint = c.Location;
+                                if (c.Location.Y < minPoint.Y)
+                                    minPoint = c.Location;
                                 break;
                             case AlginType.Bottom:
                                 break;
@@ -956,32 +908,32 @@ namespace FormDesinger
             for (int i = 0; i < hostFrame.Controls.Count; i++) //遍历控件容器 看是否选中其中某一控件
             {
                 Control c = hostFrame.Controls[i];
-                for (int j = 0; j < recter.GetRects().Count; j++)
+                for (int j = 0; j < recter.GetSelectRects().Count; j++)
                 {
-                    Rectangle select_r = recter.GetRects()[j];
+                    var sel = recter.GetSelectRects()[j];
                     Rectangle r = c.Bounds;
                     r = hostFrame.RectangleToScreen(r);
                     r = this.RectangleToClient(r);
                     //Rectangle rr = r;
                     //rr.Inflate(10, 10);
-                    if (select_r == r) //判断控件是否有部分包含在选中区域内
+                    if (sel.Rectangle == r) //判断控件是否有部分包含在选中区域内
                     {
                         switch (alginType)
                         {
                             case AlginType.Left:
-                                c.Location = new Point(minpoint.X, c.Location.Y);
+                                c.Location = new Point(minPoint.X, c.Location.Y);
                                 break;
                             case AlginType.Top:
-                                c.Location = new Point(c.Location.X, minpoint.Y);
+                                c.Location = new Point(c.Location.X, minPoint.Y);
                                 break;
                         }
 
                         c.Invalidate();
-                        recter.RemoveRect(select_r);
-                        Rectangle new_r = c.Bounds;
-                        new_r = hostFrame.RectangleToScreen(new_r);
-                        new_r = this.RectangleToClient(new_r);
-                        recter.AddRect(new_r);
+
+                        Rectangle newRec = c.Bounds;
+                        newRec = hostFrame.RectangleToScreen(newRec);
+                        newRec = this.RectangleToClient(newRec);
+                        sel.Rectangle = newRec;
                     }
                 }
             }
@@ -1007,25 +959,48 @@ namespace FormDesinger
 
             if (mouseUp) //鼠标弹起 更新底层控件
             {
-                if (_currentCtrl != null) //更新底层控件的位置、大小
+                foreach (var sel in recter.GetSelectRects())
                 {
-                    Rectangle r = recter.Rect;
-                    r = this.RectangleToScreen(r);
-                    r = hostFrame.RectangleToClient(r);
-                    _currentCtrl.SetBounds(r.Left, r.Top, r.Width, r.Height);
-
-                    r = _currentCtrl.Bounds;
-                    r = hostFrame.RectangleToScreen(r);
-                    r = this.RectangleToClient(r);
-                    recter.Rect = r;
-                }
-                else //更新控件容器大小
-                {
-                    Rectangle r = recter.Rect;
+                    Rectangle r = sel.Rectangle;
                     r = this.RectangleToScreen(r);
                     r = Parent.RectangleToClient(r);
-                    hostFrame.SetBounds(r.Left, r.Top, r.Width, r.Height);
+                    sel.Control.SetBounds(r.Left, r.Top, r.Width, r.Height);
+
+                    r = sel.Control.Bounds;
+                    r = hostFrame.RectangleToScreen(r);
+                    r = this.RectangleToClient(r);
+                    sel.Rectangle = r;
                 }
+                //if (!recter.IsSelectFrom) //更新底层控件的位置、大小
+                //{
+                //    foreach (var sel in recter.GetSelectRects())
+                //    {
+                //        Rectangle r = sel.Rectangle;
+                //        r = this.RectangleToScreen(r);
+                //        r = hostFrame.RectangleToClient(r);
+                //        sel.Control.SetBounds(r.Left, r.Top, r.Width, r.Height);
+
+                //        r = sel.Control.Bounds;
+                //        r = hostFrame.RectangleToScreen(r);
+                //        r = this.RectangleToClient(r);
+                //        sel.Rectangle = r;
+                //    }
+                //}
+                //else //更新控件容器大小
+                //{
+                //    foreach (var sel in recter.GetSelectRects())
+                //    {
+                //        Rectangle r = sel.Rectangle;
+                //        r = this.RectangleToScreen(r);
+                //        r = Parent.RectangleToClient(r);
+                //        sel.Control.SetBounds(r.Left, r.Top, r.Width, r.Height);
+
+                //        r = sel.Control.Bounds;
+                //        r = hostFrame.RectangleToScreen(r);
+                //        r = this.RectangleToClient(r);
+                //        sel.Rectangle = r;
+                //    }
+                //}
             }
         }
     }
