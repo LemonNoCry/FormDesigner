@@ -1,0 +1,11 @@
+﻿[Form]
+Width=612;Height=365;Text=新建设计
+[SQL]
+
+[ENDSQL]
+[TextBox]
+Width=178;Height=21;Text=TextBox;Location=35,66;TabIndex=2;ForeColor=255,0,0,0;
+[Button]
+Width=90;Height=23;Text=Button;Location=288,132;TabIndex=1;ForeColor=255,0,0,0;
+[TextBox]
+Width=176;Height=21;Text=TextBox;Location=35,32;TabIndex=0;ForeColor=255,0,0,0;

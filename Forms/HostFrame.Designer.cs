@@ -37,7 +37,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(576, 437);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "HostFrame";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.Text = "HostFrame";
             this.ResumeLayout(false);
 

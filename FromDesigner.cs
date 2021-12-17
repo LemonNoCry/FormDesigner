@@ -15,6 +15,18 @@ namespace FormDesinger
         {
             InitializeComponent();
             designerControl1._overlayer.Init(800, 500, "新建设计");
+            this.designerControl1._overlayer.PropertyGrid = this.propertyGrid1;
+        }
+
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                var cp = base.CreateParams; 
+                //WS_EX_COMPOSITED
+                cp.ExStyle |= 0x02000000; 
+                return cp; 
+            }
         }
 
         /// <summary>
@@ -25,7 +37,7 @@ namespace FormDesinger
             ToolStripItem ctrl = sender as ToolStripItem;
             if (ctrl != null)
             {
-                string[] strs = { ctrl.Tag == null ? "" : ctrl.Tag.ToString(), ctrl.Text };
+                string[] strs = {ctrl.Tag == null ? "" : ctrl.Tag.ToString(), ctrl.Text};
                 DoDragDrop(strs, DragDropEffects.Copy);
             }
             else
@@ -33,12 +45,14 @@ namespace FormDesinger
                 UserControls.ToolMenuItems tool = sender as UserControls.ToolMenuItems;
                 if (tool != null)
                 {
-                    string[] strs = { tool.Tag == null ? "" : tool.Tag.ToString(), tool.Text };
+                    string[] strs = {tool.Tag == null ? "" : tool.Tag.ToString(), tool.Text};
                     DoDragDrop(strs, DragDropEffects.Copy);
                 }
             }
         }
+
         private Point LastAddToolsLocation = new Point(-1, -1);
+
         /// <summary>
         /// 添加控件
         /// <para>外部控件</para>
@@ -61,6 +75,7 @@ namespace FormDesinger
                     {
                         MessageBox.Show("不可识别程序集！");
                     }
+
                     if (assem != null)
                     {
                         using (AddControlDialog add = new AddControlDialog())
@@ -86,7 +101,7 @@ namespace FormDesinger
                                 else
                                     LastAddToolsLocation = new Point(LastAddToolsLocation.X, LastAddToolsLocation.Y + 23);
                                 toolMenuItems.Location = LastAddToolsLocation;
-                                this.panel_tools_cus.Controls.Add(toolMenuItems);//从Panel容器中添加
+                                this.panel_tools_cus.Controls.Add(toolMenuItems); //从Panel容器中添加
                                 toolMenuItems.BringToFront();
                             }
                         }
@@ -102,6 +117,7 @@ namespace FormDesinger
                 MessageBox.Show("没有任何控件,不能保存.", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+
             SaveFileDialog fileDialog = new SaveFileDialog();
             fileDialog.Title = "请选择保存路径与文件名";
             fileDialog.Filter = "文本文件|*.txt|所有文件|*.*"; //设置要选择的文件的类型
@@ -125,6 +141,7 @@ namespace FormDesinger
                 if (dr == DialogResult.Cancel)
                     return;
             }
+
             designerControl1._overlayer.Init(800, 500, "新建设计");
             //designerControl1._hostFrame.Controls.Clear();
             //designerControl1._hostFrame.Text = "新建设计";
@@ -141,6 +158,7 @@ namespace FormDesinger
                 if (dr == DialogResult.Cancel)
                     return;
             }
+
             designerControl1._overlayer.Init(800, 500, "新建设计");
             OpenFileDialog fileDialog = new OpenFileDialog();
             fileDialog.Multiselect = false;
@@ -168,11 +186,13 @@ namespace FormDesinger
         {
             designerControl1._overlayer.ControlAlginFineTune();
         }
+
         //左对齐
         private void toolStrip_center_left_Click(object sender, EventArgs e)
         {
             designerControl1._overlayer.ControlAlgin(AlginType.Left);
         }
+
         //上对齐
         private void toolStrip_center_top_Click(object sender, EventArgs e)
         {
@@ -189,6 +209,42 @@ namespace FormDesinger
         {
             splitter1.SplitPosition = 138;
             splitter2.SplitPosition = 239;
+        }
+
+        private void formToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.Multiselect = false;
+            fileDialog.Title = "请选择文本文件";
+            fileDialog.Filter = "文本文件|*.txt|所有文件|*.*";
+            if (fileDialog.ShowDialog() == DialogResult.OK)
+            {
+                HostFrame frm = new HostFrame();
+
+                DesignerControl dc = new DesignerControl();
+                dc.Dock = DockStyle.Fill;
+                frm.Controls.Add(dc);
+
+                string fileName = fileDialog.FileName;
+                dc._overlayer.DesingerFormText = "自由型设计";
+                ContextMenuStrip menu = new ContextMenuStrip();
+                menu.Items.Add("编辑SQL");
+                dc.ContextMenuStrip = menu;
+
+                string source = System.IO.File.ReadAllText(fileName);
+                //Core.OldAnalysis old = new Core.OldAnalysis(designerControl1._overlayer);
+                //old.of_LoaddwText(source);
+                Core.Analysis anl = new Core.Analysis(dc._overlayer);
+                anl.Load(source);
+
+                frm.Show();
+                return;
+            }
+        }
+
+        private void toolMenuItems_label_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

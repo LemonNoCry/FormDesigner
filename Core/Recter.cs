@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using System.Text;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Linq;
 
 namespace FormDesinger
 {
@@ -12,86 +13,84 @@ namespace FormDesinger
     /// </summary>
     class Recter
     {
-        Rectangle _rect = new Rectangle();
-        bool _isform = false;  //是否为窗体周围的方框（如果是，则位置不可改变，且只有从下、右、右下三个方向改变大小）
+        private readonly List<SelectRecter> _selectRecters = new List<SelectRecter>();
 
-        public Rectangle Rect
-        {
-            get
-            {
-                return _rect;
-            }
-            set
-            {
-                _rect = value;
-            }
-        }
-        public bool IsForm
-        {
-            set
-            {
-                _isform = value;
-            }
-        }
+        ///是否为窗体周围的方框（如果是，则位置不可改变，且只有从下、右、右下三个方向改变大小）
+        public bool IsForm;
+
+        public bool IsSelect => _selectRecters.Any();
+
         #region 多选
-        List<Rectangle> _rects = new List<Rectangle>();
+
         /// <summary>
         /// 所有选中的控件
         /// </summary>
         public List<Rectangle> GetRects()
         {
-            return _rects;
+            return _selectRecters.Select(s => s.Rectangle).ToList();
         }
-        public void AddRect(Rectangle r)
+
+        public void SetSelect(Rectangle r, Control c)
         {
-            _rects.Add(r);
+            ClearSelect();
+            _selectRecters.Add(new SelectRecter(c, r));
+            IsForm = c is Form;
         }
-        public void RemoveRect(Rectangle r)
+
+        public void AddSelect(Rectangle r, Control c)
         {
-            if (_rects.Contains(r))
-                _rects.Remove(r);
+            _selectRecters.Add(new SelectRecter(c, r));
+            IsForm = _selectRecters.Count > 1;
         }
-        public void RemoveRect(List<Rectangle> rs)
+
+        public void RemoveSelect(Rectangle r)
+        {
+            var sel = _selectRecters.FirstOrDefault(s => s.Rectangle.Contains(r));
+            if (sel != null)
+                _selectRecters.Remove(sel);
+        }
+
+        public void RemoveSelect(Control c)
+        {
+            var sel = _selectRecters.FirstOrDefault(s => s.Control == c);
+            if (sel != null)
+                _selectRecters.Remove(sel);
+        }
+
+        public void RemoveSelect(List<Rectangle> rs)
         {
             foreach (Rectangle r in rs)
             {
-                if (_rects.Contains(r))
-                    _rects.Remove(r);
+                RemoveSelect(r);
             }
         }
+
         public bool Contains(Rectangle r)
         {
-            return _rects.Contains(r);
+            return _selectRecters.Any(s => s.Rectangle.Contains(r));
         }
-        public void ClearRect()
-        {
-            _rects = new List<Rectangle>();
-        }
-        #endregion
-        public Recter()
-        {
 
+        public void ClearSelect()
+        {
+            _selectRecters.Clear();
+            IsForm = false;
         }
+
+        #endregion
+
         /// <summary>
         /// 绘制方框
         /// </summary>
         /// <param name="g"></param>
         public void Draw(Graphics g)
         {
-            if (_rects.Count == 0)
+            foreach (var sel in _selectRecters)
             {
-                Rectangle rect = _rect;
-                DrawRecter(g, rect);
-            }
-            else
-            {
-                foreach (Rectangle rect in _rects)
-                {
-                    DrawRecter(g, rect);
-                }
+                DrawReciter(g, sel.Rectangle);
             }
         }
-        private void DrawRecter(Graphics g, Rectangle rect)
+
+        private void DrawReciter(Graphics g, Rectangle rect)
         {
             using (Pen p = new Pen(Brushes.Black, 1))
             {
@@ -102,25 +101,34 @@ namespace FormDesinger
                 p.DashStyle = DashStyle.Solid;
 
                 //8个方块
-                g.FillRectangle(Brushes.White, new Rectangle(rect.Left - 6, rect.Top - 6, 6, 6));
-                g.FillRectangle(Brushes.White, new Rectangle(rect.Left + rect.Width / 2 - 3, rect.Top - 6, 6, 6));
-                g.FillRectangle(Brushes.White, new Rectangle(rect.Left + rect.Width, rect.Top - 6, 6, 6));
-                g.FillRectangle(Brushes.White, new Rectangle(rect.Left - 6, rect.Top + rect.Height / 2 - 3, 6, 6));
-                g.FillRectangle(Brushes.White, new Rectangle(rect.Left - 6, rect.Top + rect.Height, 6, 6));
+                if (!IsForm)
+                {
+                    g.FillRectangle(Brushes.White, new Rectangle(rect.Left - 6, rect.Top - 6, 6, 6));
+                    g.FillRectangle(Brushes.White, new Rectangle(rect.Left + rect.Width / 2 - 3, rect.Top - 6, 6, 6));
+                    g.FillRectangle(Brushes.White, new Rectangle(rect.Left + rect.Width, rect.Top - 6, 6, 6));
+                    g.FillRectangle(Brushes.White, new Rectangle(rect.Left - 6, rect.Top + rect.Height / 2 - 3, 6, 6));
+                    g.FillRectangle(Brushes.White, new Rectangle(rect.Left - 6, rect.Top + rect.Height, 6, 6));
+                }
+
                 g.FillRectangle(Brushes.White, new Rectangle(rect.Left + rect.Width, rect.Top + rect.Height / 2 - 3, 6, 6));
                 g.FillRectangle(Brushes.White, new Rectangle(rect.Left + rect.Width / 2 - 3, rect.Top + rect.Height, 6, 6));
                 g.FillRectangle(Brushes.White, new Rectangle(rect.Left + rect.Width, rect.Top + rect.Height, 6, 6));
 
-                g.DrawRectangle(p, new Rectangle(rect.Left - 6, rect.Top - 6, 6, 6));
-                g.DrawRectangle(p, new Rectangle(rect.Left + rect.Width / 2 - 3, rect.Top - 6, 6, 6));
-                g.DrawRectangle(p, new Rectangle(rect.Left + rect.Width, rect.Top - 6, 6, 6));
-                g.DrawRectangle(p, new Rectangle(rect.Left - 6, rect.Top + rect.Height / 2 - 3, 6, 6));
-                g.DrawRectangle(p, new Rectangle(rect.Left - 6, rect.Top + rect.Height, 6, 6));
+                if (!IsForm)
+                {
+                    g.DrawRectangle(p, new Rectangle(rect.Left - 6, rect.Top - 6, 6, 6));
+                    g.DrawRectangle(p, new Rectangle(rect.Left + rect.Width / 2 - 3, rect.Top - 6, 6, 6));
+                    g.DrawRectangle(p, new Rectangle(rect.Left + rect.Width, rect.Top - 6, 6, 6));
+                    g.DrawRectangle(p, new Rectangle(rect.Left - 6, rect.Top + rect.Height / 2 - 3, 6, 6));
+                    g.DrawRectangle(p, new Rectangle(rect.Left - 6, rect.Top + rect.Height, 6, 6));
+                }
+
                 g.DrawRectangle(p, new Rectangle(rect.Left + rect.Width, rect.Top + rect.Height / 2 - 3, 6, 6));
                 g.DrawRectangle(p, new Rectangle(rect.Left + rect.Width / 2 - 3, rect.Top + rect.Height, 6, 6));
                 g.DrawRectangle(p, new Rectangle(rect.Left + rect.Width, rect.Top + rect.Height, 6, 6));
             }
         }
+
         /// <summary>
         /// 判断鼠标操作类型
         /// </summary>
@@ -128,48 +136,73 @@ namespace FormDesinger
         /// <returns></returns>
         public DragType GetMouseDragType(Point p)
         {
-            Rectangle _rect = this._rect;
+            Rectangle _rect = this._selectRecters[0].Rectangle;
             _rect.Inflate(new Size(3, 3));
-            if (new Rectangle(_rect.Left - 2, _rect.Top - 2, 4, 4).Contains(p) && !_isform)
+            if (new Rectangle(_rect.Left - 2, _rect.Top - 2, 4, 4).Contains(p)
+                && !IsForm)
             {
                 return DragType.LeftTop;
             }
-            if (new Rectangle(_rect.Left + 2, _rect.Top - 2, _rect.Width - 4, 4).Contains(p) && !_isform)
+
+            if (new Rectangle(_rect.Left + 2, _rect.Top - 2, _rect.Width - 4, 4).Contains(p)
+                && !IsForm)
             {
                 return DragType.Top;
             }
-            if (new Rectangle(_rect.Left - 2, _rect.Top + 2, 4, _rect.Height - 4).Contains(p) && !_isform)
+
+            if (new Rectangle(_rect.Left - 2, _rect.Top + 2, 4, _rect.Height - 4).Contains(p)
+                && !IsForm)
             {
                 return DragType.Left;
             }
-            if (new Rectangle(_rect.Left - 2, _rect.Top + _rect.Height - 2, 4, 4).Contains(p) && !_isform)
+
+            if (new Rectangle(_rect.Left - 2, _rect.Top + _rect.Height - 2, 4, 4).Contains(p)
+                && !IsForm)
             {
                 return DragType.LeftBottom;
             }
+
             if (new Rectangle(_rect.Left + 2, _rect.Top + _rect.Height - 2, _rect.Width - 4, 4).Contains(p))
             {
                 return DragType.Bottom;
             }
+
             if (new Rectangle(_rect.Left + _rect.Width - 2, _rect.Top + _rect.Height - 2, 4, 4).Contains(p))
             {
                 return DragType.RightBottom;
             }
+
             if (new Rectangle(_rect.Left + _rect.Width - 2, _rect.Top + 2, 4, _rect.Height - 4).Contains(p))
             {
                 return DragType.Right;
             }
-            if (new Rectangle(_rect.Left + _rect.Width - 2, _rect.Top - 2, 4, 4).Contains(p) && !_isform)
+
+            if (new Rectangle(_rect.Left + _rect.Width - 2, _rect.Top - 2, 4, 4).Contains(p) && !IsForm)
             {
                 return DragType.RightTop;
             }
-            if (new Rectangle(_rect.Left + 2, _rect.Top + 2, _rect.Width - 4, _rect.Height - 4).Contains(p) && !_isform)
+
+            if (new Rectangle(_rect.Left + 2, _rect.Top + 2, _rect.Width - 4, _rect.Height - 4).Contains(p) && !IsForm)
             {
                 return DragType.Center;
             }
+
             return DragType.None;
         }
-
     }
+
+    class SelectRecter
+    {
+        public SelectRecter(Control control, Rectangle rectangle)
+        {
+            Control = control;
+            Rectangle = rectangle;
+        }
+
+        public Rectangle Rectangle { get; set; }
+        public Control Control { get; set; }
+    }
+
     /// <summary>
     /// 鼠标操作类型
     /// </summary>

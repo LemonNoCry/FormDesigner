@@ -1,4 +1,6 @@
-﻿namespace FormDesinger
+﻿using System.Drawing;
+
+namespace FormDesinger
 {
     partial class Overlayer
     {
@@ -33,8 +35,7 @@
             // Overlayer
             // 
             this.AllowDrop = true;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Control;
             this.Name = "Overlayer";
             this.ResumeLayout(false);
 

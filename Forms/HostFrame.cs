@@ -17,21 +17,17 @@ namespace FormDesinger
         {
             InitializeComponent();
         }
+
         private string _sql = string.Empty;
+
         /// <summary>
         /// SQL语句
         /// </summary>
         [Browsable(true), Category("A-全局属性"), Description("SQL语句")]
         public string SQL
         {
-            get
-            {
-                return _sql;
-            }
-            set
-            {
-                _sql = value;
-            }
+            get { return _sql; }
+            set { _sql = value; }
         }
 
         protected override void OnPaint(PaintEventArgs e)
