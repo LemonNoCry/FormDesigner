@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Text;
-using System.Windows.Forms;
-using System.Drawing.Drawing2D;
 using System.Linq;
-using static System.Windows.Forms.Control;
+using System.Windows.Forms;
 
 namespace FormDesinger
 {
@@ -68,6 +63,11 @@ namespace FormDesinger
         /// 鼠标操作类型
         /// </summary>
         DragType _dragType = DragType.None;
+
+        /// <summary>
+        /// 当前设计器中的所有控件
+        /// </summary>
+        public new ControlCollection Controls => hostFrame.Controls;
 
         private PropertyGrid _propertyGrid;
 
@@ -291,12 +291,14 @@ namespace FormDesinger
                     case DragType.Center:
                     {
                         Point delta = new Point(e.Location.X - _firstPoint.X, e.Location.Y - _firstPoint.Y);
-                        foreach (var sel in recter.GetSelectRects())
-                        {
-                            sel.Rectangle = new Rectangle(sel.Rectangle.X + delta.X, sel.Rectangle.Y + delta.Y, sel.Rectangle.Width, sel.Rectangle.Height);
-                        }
+                        recter.MoveRecter(delta);
 
-                        _firstPoint = e.Location;
+                        //foreach (var sel in recter.GetSelectRects())
+                        //{
+                        //    sel.Rectangle = new Rectangle(sel.Rectangle.X + delta.X, sel.Rectangle.Y + delta.Y, sel.Rectangle.Width, sel.Rectangle.Height);
+                        //}
+
+                        //_firstPoint = e.Location;
                         break;
                     }
                     case DragType.Bottom:
@@ -360,10 +362,14 @@ namespace FormDesinger
                     rr.Inflate(10, 10);
                     if (rr.Contains(e.Location))
                     {
-                        recter.SetSelect(r, c);
-                        FlushSelectProperty();
                         flag = true;
-                        Invalidate2(false);
+                        if (!recter.IsMultipleSelect)
+                        {
+                            recter.SetSelect(r, c);
+                            FlushSelectProperty();
+                            Invalidate2(false);
+                        }
+
                         break;
                     }
                 }
@@ -404,12 +410,11 @@ namespace FormDesinger
             base.OnMouseDown(e);
         }
 
-        protected override void OnMouseUp(MouseEventArgs e)
+        private void MouseUpSelectControls(MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left) //左键弹起
+            //选中控件
+            if (selectRectangle != null)
             {
-                #region 选中区域
-
                 recter.ClearSelect();
                 Rectangle select_r = new Rectangle
                 {
@@ -437,19 +442,71 @@ namespace FormDesinger
                             FlushSelectProperty();
                         }
                     }
+                }
 
-                    if (!recter.IsSelect)
+                if (!recter.IsSelect)
+                {
+                    SelectHost();
+                }
+            }
+            else if (_dragType == DragType.None && _firstPoint.IsEmpty ||
+                     _dragType == DragType.Center && _firstPoint == e.Location)
+            {
+                bool flag = false;
+                foreach (Control c in hostFrame.Controls) //遍历控件容器 看是否选中其中某一控件
+                {
+                    Rectangle r = c.Bounds;
+                    r = hostFrame.RectangleToScreen(r);
+                    r = this.RectangleToClient(r);
+                    Rectangle rr = r;
+                    rr.Inflate(10, 10);
+                    if (rr.Contains(e.Location))
                     {
-                        SelectHost();
+                        recter.SetSelect(r, c);
+                        FlushSelectProperty();
+                        flag = true;
+                        Invalidate2(false);
+                        break;
                     }
                 }
 
-                #endregion
+                if (!flag) //没有控件被选中，判断是否选中控件容器
+                {
+                    Rectangle r = hostFrame.Bounds;
+                    r = Parent.RectangleToScreen(r);
+                    r = this.RectangleToClient(r);
+                    if (r.Contains(e.Location))
+                    {
+                        SelectHost();
+
+                        //只有在设计器内部才可以选中区域
+                        _firstSelectPoint = e.Location;
+                        _selectMouseDown = true;
+                        selectRectangle = null;
+
+                        Invalidate2(false);
+                    }
+                }
+                else
+                {
+                    _firstSelectPoint = new Point();
+                    _selectMouseDown = false;
+                    selectRectangle = null;
+                }
+            }
+        }
+
+        protected override void OnMouseUp(MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left) //左键弹起
+            {
+                MouseUpSelectControls(e);
 
                 _firstSelectPoint = new Point();
                 _selectMouseDown = false;
                 selectRectangle = null;
                 _firstPoint = new Point();
+                recter.MoveRecterEnd();
                 _mouseDown = false;
                 _dragType = DragType.None;
                 Invalidate2(true);
@@ -590,11 +647,6 @@ namespace FormDesinger
         #endregion
 
         #region 提供用户访问
-
-        /// <summary>
-        /// 当前设计器中的所有控件
-        /// </summary>
-        public new ControlCollection Controls => hostFrame.Controls;
 
         /// <summary>
         /// 绘制控件
@@ -959,18 +1011,29 @@ namespace FormDesinger
 
             if (mouseUp) //鼠标弹起 更新底层控件
             {
-                foreach (var sel in recter.GetSelectRects())
+                if (recter.IsSelectFrom)
                 {
-                    Rectangle r = sel.Rectangle;
+                    Rectangle r = recter.GetSelectRects()[0].Rectangle;
                     r = this.RectangleToScreen(r);
                     r = Parent.RectangleToClient(r);
-                    sel.Control.SetBounds(r.Left, r.Top, r.Width, r.Height);
-
-                    r = sel.Control.Bounds;
-                    r = hostFrame.RectangleToScreen(r);
-                    r = this.RectangleToClient(r);
-                    sel.Rectangle = r;
+                    hostFrame.SetBounds(r.Left, r.Top, r.Width, r.Height);
                 }
+                else
+                {
+                    foreach (var sel in recter.GetSelectRects())
+                    {
+                        Rectangle r = sel.Rectangle;
+                        r = this.RectangleToScreen(r);
+                        r = sel.Control.Parent.RectangleToClient(r);
+                        sel.Control.SetBounds(r.Left, r.Top, r.Width, r.Height);
+
+                        r = sel.Control.Bounds;
+                        r = hostFrame.RectangleToScreen(r);
+                        r = this.RectangleToClient(r);
+                        sel.Rectangle = r;
+                    }
+                }
+
                 //if (!recter.IsSelectFrom) //更新底层控件的位置、大小
                 //{
                 //    foreach (var sel in recter.GetSelectRects())

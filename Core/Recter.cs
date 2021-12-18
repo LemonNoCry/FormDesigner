@@ -19,6 +19,7 @@ namespace FormDesinger
         private bool IsForm;
 
         public bool IsSelect => _selectRecters.Any();
+        public bool IsMultipleSelect => _selectRecters.Count > 1;
         public bool IsSelectFrom => _selectRecters.Any() && IsForm;
         public int Count => _selectRecters.Count;
 
@@ -195,6 +196,32 @@ namespace FormDesinger
 
             return DragType.None;
         }
+
+        /// <summary>
+        /// 移动控件
+        /// </summary>
+        /// <param name="movePoint"></param>
+        public void MoveRecter(Point movePoint)
+        {
+            foreach (var sel in _selectRecters)
+            {
+                if (!sel.MoveHistory.HasValue)
+                {
+                    sel.MoveHistory = sel.Rectangle;
+                }
+
+                sel.Rectangle = new Rectangle(sel.MoveHistory.Value.X + movePoint.X, sel.MoveHistory.Value.Y + movePoint.Y, sel.MoveHistory.Value.Width, sel.MoveHistory.Value.Height);
+            }
+        }
+
+        /// <summary>
+        /// 移动控件
+        /// </summary>
+        /// <param name="movePoint"></param>
+        public void MoveRecterEnd()
+        {
+            _selectRecters.ForEach(s => s.MoveHistory = null);
+        }
     }
 
     class SelectRecter
@@ -206,6 +233,7 @@ namespace FormDesinger
         }
 
         public Rectangle Rectangle { get; set; }
+        public Rectangle? MoveHistory { get; set; }
         public Control Control { get; set; }
     }
 
