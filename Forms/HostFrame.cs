@@ -36,5 +36,7 @@ namespace FormDesinger
                 ControlPaint.DrawGrid(e.Graphics, this.ClientRectangle, new Size(10, 10), Color.White); //绘制底层网格White
             base.OnPaint(e);
         }
+
+      
     }
 }

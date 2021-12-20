@@ -5,13 +5,14 @@ using System.Text;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using FormDesinger.Core;
 
 namespace FormDesinger
 {
     /// <summary>
     /// 选中控件时，周围出现的方框
     /// </summary>
-    class Recter
+    public class Recter
     {
         private readonly List<SelectRecter> _selectRecters = new List<SelectRecter>();
 
@@ -29,6 +30,12 @@ namespace FormDesinger
         /// </summary>
         public List<SelectRecter> GetSelectRects()
         {
+            return _selectRecters;
+        }
+
+        public List<SelectRecter> GetSelectControlsRects()
+        {
+            if (IsForm) return new List<SelectRecter>();
             return _selectRecters;
         }
 
@@ -222,35 +229,5 @@ namespace FormDesinger
         {
             _selectRecters.ForEach(s => s.MoveHistory = null);
         }
-    }
-
-    class SelectRecter
-    {
-        public SelectRecter(Control control, Rectangle rectangle)
-        {
-            Control = control;
-            Rectangle = rectangle;
-        }
-
-        public Rectangle Rectangle { get; set; }
-        public Rectangle? MoveHistory { get; set; }
-        public Control Control { get; set; }
-    }
-
-    /// <summary>
-    /// 鼠标操作类型
-    /// </summary>
-    enum DragType
-    {
-        None,
-        Left,
-        Top,
-        Right,
-        Bottom,
-        LeftTop,
-        RightTop,
-        LeftBottom,
-        RightBottom,
-        Center
     }
 }

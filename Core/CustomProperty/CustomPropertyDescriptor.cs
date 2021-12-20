@@ -8,7 +8,7 @@ namespace FormDesinger
     /// </summary>
     public class CustomPropertyDescriptor : PropertyDescriptor
     {
-        private CustomProperty _customProperty = null;
+        private readonly CustomProperty _customProperty = null;
 
         public CustomPropertyDescriptor(CustomProperty customProperty, Attribute[] attrs)
             : base(customProperty.Name, attrs)
