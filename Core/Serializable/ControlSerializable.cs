@@ -21,10 +21,21 @@ namespace FormDesinger.Core.Serializable
         [XmlElement(Type = typeof(XmlColor))]
         public Color ForeColor { get; set; }
 
-        public CustomizeFont Font { get; set; }
-        public CustomizePoint Location { get; set; }
-        public CustomizeSize Size { get; set; }
-        public CustomizePadding Margin { get; set; }
+        [XmlElement(Type = typeof(CustomizeFont))]
+        public Font Font { get; set; }
+
+        [XmlElement(Type = typeof(CustomizePoint))]
+        public Point Location { get; set; }
+
+        [XmlElement(Type = typeof(CustomizeSize))]
+        public Size Size { get; set; }
+
+        [XmlElement(Type = typeof(CustomizeRectangle))]
+        public Rectangle ClientRectangle { get; set; }
+
+        [XmlElement(Type = typeof(CustomizePadding))]
+        public Padding Margin { get; set; }
+
         public AnchorStyles Anchor { get; set; }
         public DockStyle Dock { get; set; }
         public object Tag { get; set; }

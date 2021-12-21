@@ -1,9 +1,12 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
+using FormDesinger.Core.Serializable.CustomConverter;
 using Mapster;
 
 namespace FormDesinger.Core.Serializable
 {
-    public struct CustomizePoint
+    [Serializable]
+    public struct CustomizePoint : ICustomConverter
     {
         public int X { get; set; }
         public int Y { get; set; }
@@ -16,6 +19,26 @@ namespace FormDesinger.Core.Serializable
         public static implicit operator CustomizePoint(Point c)
         {
             return new CustomizePoint() {X = c.X, Y = c.Y};
+        }
+
+        public object Convert(object source)
+        {
+            if (source is Point point)
+            {
+                return (CustomizePoint) point;
+            }
+
+            return (CustomizePoint) new Point();
+        }
+
+        public object ReverseConvert(object target, Type tarType)
+        {
+            if (tarType == typeof(Point))
+            {
+                return (Point) this;
+            }
+
+            return default;
         }
     }
 }

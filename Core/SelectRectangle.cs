@@ -9,7 +9,7 @@ namespace FormDesinger
     /// <summary>
     /// 鼠标左键按下拖动时,出现的选中区域方框
     /// </summary>
-    class SelectRectangle
+   public class SelectRectangle
     {
         public Rectangle Rect { get; set; } = new Rectangle();
 

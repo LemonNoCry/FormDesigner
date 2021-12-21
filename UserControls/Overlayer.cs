@@ -20,6 +20,10 @@ namespace FormDesinger
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
 
+            //StartListen();
+
+            recter = new Recter(this);
+
             hostFrame = host; //默认被操作的是控件容器
             SelectHost();
 
@@ -29,19 +33,19 @@ namespace FormDesinger
         /// <summary>
         /// 被遮罩的控件容器，通过Overlayer操作该容器（以及其中的子控件）
         /// </summary>
-        HostFrame hostFrame;
+        public HostFrame hostFrame;
 
         /// <summary>
         /// 被操作控件（容器）周围的方框
         /// <para>选中效果</para>
         /// </summary>
-        Recter recter = new Recter();
+        public Recter recter;
 
         /// <summary>
         /// 鼠标选中区域周围的方框
         /// <para>鼠标多选时方框</para>
         /// </summary>
-        SelectRectangle selectRectangle = null;
+        public SelectRectangle selectRectangle = null;
 
         readonly OperationControlHistory _operationControlHistory = new OperationControlHistory();
 
@@ -91,6 +95,7 @@ namespace FormDesinger
 
         private void _propertyGrid_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
         {
+            recter.ModifyPropertyRecter(e,_operationControlHistory);
             RefreshMoveControls();
         }
 
@@ -106,7 +111,7 @@ namespace FormDesinger
 
         private void PushOperationHistory(OperationControlType operation)
         {
-            var record = new OperationControlRecord(operation,
+            var record = new OperationControlRecord(this, operation,
                 recter.GetSelectRects().Select(s => s.Control).ToList());
             _operationControlHistory.Push(record);
         }
@@ -151,6 +156,41 @@ namespace FormDesinger
             recter?.Draw(e.Graphics);          //绘制被操作控件周围的方框
             selectRectangle?.Draw(e.Graphics); //绘制被操作控件周围的方框
         }
+
+        #region 按键钩子
+
+        private KeyEventHandler _keyEventHandler = null; //按键钩子
+        private readonly KeyboardHook _kHook = new KeyboardHook();
+
+        public void StartListen()
+        {
+            _keyEventHandler = hook_KeyDown;
+            _kHook.KeyDownEvent += _keyEventHandler; //钩住键按下
+            _kHook.Start();                          //安装键盘钩子
+        }
+
+        private void hook_KeyDown(object sender, KeyEventArgs e)
+        {
+            //  这里写具体实现
+            if (ModifierKeys == Keys.Control && e.KeyCode == Keys.Z)
+            {
+                Console.WriteLine("cz");
+            }
+
+            Console.WriteLine(e.KeyCode);
+        }
+
+        public void StopListen()
+        {
+            if (_keyEventHandler != null)
+            {
+                _kHook.KeyDownEvent -= _keyEventHandler; //取消按键事件
+                _keyEventHandler = null;
+                _kHook.Stop(); //关闭键盘钩子
+            }
+        }
+
+        #endregion
 
         #region 代理所有用户操作
 
@@ -237,116 +277,132 @@ namespace FormDesinger
             }
             else
             {
+                if (_dragType == DragType.Center)
+                {
+                    Point delta = new Point(e.Location.X - _firstPoint.X, e.Location.Y - _firstPoint.Y);
+                    recter.MoveRecter(delta);
+                }
+                else if (_dragType != DragType.None)
+                {
+                    //拖动
+                    Point delta = new Point(e.Location.X - _firstPoint.X, e.Location.Y - _firstPoint.Y);
+                    recter.ModifySizeRecter(_dragType, delta);
+                }
+
                 #region 拖动
 
-                switch (_dragType) //改变方框位置大小
-                {
-                    case DragType.Top:
-                    {
-                        Point delta = new Point(e.Location.X - _firstPoint.X, e.Location.Y - _firstPoint.Y);
-                        foreach (var sel in recter.GetSelectRects())
-                        {
-                            sel.Rectangle = new Rectangle(sel.Rectangle.X, sel.Rectangle.Y + delta.Y, sel.Rectangle.Width, sel.Rectangle.Height + delta.Y * (-1));
-                        }
+                //switch (_dragType) //改变方框位置大小
+                //{
+                //    case DragType.Top:
+                //    {
+                //        foreach (var sel in recter.GetSelectRects())
+                //        {
+                //            if (!sel.MoveHistory.HasValue)
+                //            {
+                //                sel.MoveHistory = sel.Rectangle;
+                //            }
 
-                        _firstPoint = e.Location;
-                        break;
-                    }
-                    case DragType.RightTop:
-                    {
-                        Point delta = new Point(e.Location.X - _firstPoint.X, e.Location.Y - _firstPoint.Y);
-                        foreach (var sel in recter.GetSelectRects())
-                        {
-                            sel.Rectangle = new Rectangle(sel.Rectangle.X, sel.Rectangle.Y + delta.Y, sel.Rectangle.Width + delta.X, sel.Rectangle.Height + delta.Y * (-1));
-                        }
+                //            sel.Rectangle = new Rectangle(sel.MoveHistory.Value.X, sel.MoveHistory.Value.Y + delta.Y, sel.MoveHistory.Value.Width, sel.MoveHistory.Value.Height + delta.Y * (-1));
+                //        }
 
-                        _firstPoint = e.Location;
-                        break;
-                    }
-                    case DragType.RightBottom:
-                    {
-                        Point delta = new Point(e.Location.X - _firstPoint.X, e.Location.Y - _firstPoint.Y);
-                        foreach (var sel in recter.GetSelectRects())
-                        {
-                            sel.Rectangle = new Rectangle(sel.Rectangle.X, sel.Rectangle.Y, sel.Rectangle.Width + delta.X, sel.Rectangle.Height + delta.Y);
-                        }
+                //        //_firstPoint = e.Location;
+                //        break;
+                //    }
+                //    case DragType.RightTop:
+                //    {
+                //        Point delta = new Point(e.Location.X - _firstPoint.X, e.Location.Y - _firstPoint.Y);
+                //        foreach (var sel in recter.GetSelectRects())
+                //        {
+                //            sel.Rectangle = new Rectangle(sel.Rectangle.X, sel.Rectangle.Y + delta.Y, sel.Rectangle.Width + delta.X, sel.Rectangle.Height + delta.Y * (-1));
+                //        }
 
-                        _firstPoint = e.Location;
-                        break;
-                    }
-                    case DragType.Right:
-                    {
-                        Point delta = new Point(e.Location.X - _firstPoint.X, e.Location.Y - _firstPoint.Y);
-                        foreach (var sel in recter.GetSelectRects())
-                        {
-                            sel.Rectangle = new Rectangle(sel.Rectangle.X, sel.Rectangle.Y, sel.Rectangle.Width + delta.X, sel.Rectangle.Height);
-                        }
+                //        _firstPoint = e.Location;
+                //        break;
+                //    }
+                //    case DragType.RightBottom:
+                //    {
+                //        Point delta = new Point(e.Location.X - _firstPoint.X, e.Location.Y - _firstPoint.Y);
+                //        foreach (var sel in recter.GetSelectRects())
+                //        {
+                //            sel.Rectangle = new Rectangle(sel.Rectangle.X, sel.Rectangle.Y, sel.Rectangle.Width + delta.X, sel.Rectangle.Height + delta.Y);
+                //        }
 
-                        _firstPoint = e.Location;
-                        break;
-                    }
-                    case DragType.LeftTop:
-                    {
-                        Point delta = new Point(e.Location.X - _firstPoint.X, e.Location.Y - _firstPoint.Y);
-                        foreach (var sel in recter.GetSelectRects())
-                        {
-                            sel.Rectangle = new Rectangle(sel.Rectangle.X + delta.X, sel.Rectangle.Y + delta.Y, sel.Rectangle.Width + delta.X * (-1), sel.Rectangle.Height + delta.Y * (-1));
-                        }
+                //        _firstPoint = e.Location;
+                //        break;
+                //    }
+                //    case DragType.Right:
+                //    {
+                //        Point delta = new Point(e.Location.X - _firstPoint.X, e.Location.Y - _firstPoint.Y);
+                //        foreach (var sel in recter.GetSelectRects())
+                //        {
+                //            sel.Rectangle = new Rectangle(sel.Rectangle.X, sel.Rectangle.Y, sel.Rectangle.Width + delta.X, sel.Rectangle.Height);
+                //        }
 
-                        _firstPoint = e.Location;
-                        break;
-                    }
-                    case DragType.LeftBottom:
-                    {
-                        Point delta = new Point(e.Location.X - _firstPoint.X, e.Location.Y - _firstPoint.Y);
-                        foreach (var sel in recter.GetSelectRects())
-                        {
-                            sel.Rectangle = new Rectangle(sel.Rectangle.X + delta.X, sel.Rectangle.Y, sel.Rectangle.Width + delta.X * (-1), sel.Rectangle.Height + delta.Y);
-                        }
+                //        _firstPoint = e.Location;
+                //        break;
+                //    }
+                //    case DragType.LeftTop:
+                //    {
+                //        Point delta = new Point(e.Location.X - _firstPoint.X, e.Location.Y - _firstPoint.Y);
+                //        foreach (var sel in recter.GetSelectRects())
+                //        {
+                //            sel.Rectangle = new Rectangle(sel.Rectangle.X + delta.X, sel.Rectangle.Y + delta.Y, sel.Rectangle.Width + delta.X * (-1), sel.Rectangle.Height + delta.Y * (-1));
+                //        }
 
-                        _firstPoint = e.Location;
-                        break;
-                    }
-                    case DragType.Left:
-                    {
-                        Point delta = new Point(e.Location.X - _firstPoint.X, e.Location.Y - _firstPoint.Y);
-                        foreach (var sel in recter.GetSelectRects())
-                        {
-                            sel.Rectangle = new Rectangle(sel.Rectangle.X + delta.X, sel.Rectangle.Y, sel.Rectangle.Width + delta.X * (-1), sel.Rectangle.Height);
-                        }
+                //        _firstPoint = e.Location;
+                //        break;
+                //    }
+                //    case DragType.LeftBottom:
+                //    {
+                //        Point delta = new Point(e.Location.X - _firstPoint.X, e.Location.Y - _firstPoint.Y);
+                //        foreach (var sel in recter.GetSelectRects())
+                //        {
+                //            sel.Rectangle = new Rectangle(sel.Rectangle.X + delta.X, sel.Rectangle.Y, sel.Rectangle.Width + delta.X * (-1), sel.Rectangle.Height + delta.Y);
+                //        }
 
-                        _firstPoint = e.Location;
-                        break;
-                    }
-                    case DragType.Center:
-                    {
-                        Point delta = new Point(e.Location.X - _firstPoint.X, e.Location.Y - _firstPoint.Y);
-                        recter.MoveRecter(delta);
+                //        _firstPoint = e.Location;
+                //        break;
+                //    }
+                //    case DragType.Left:
+                //    {
+                //        Point delta = new Point(e.Location.X - _firstPoint.X, e.Location.Y - _firstPoint.Y);
+                //        foreach (var sel in recter.GetSelectRects())
+                //        {
+                //            sel.Rectangle = new Rectangle(sel.Rectangle.X + delta.X, sel.Rectangle.Y, sel.Rectangle.Width + delta.X * (-1), sel.Rectangle.Height);
+                //        }
 
-                        //foreach (var sel in recter.GetSelectRects())
-                        //{
-                        //    sel.Rectangle = new Rectangle(sel.Rectangle.X + delta.X, sel.Rectangle.Y + delta.Y, sel.Rectangle.Width, sel.Rectangle.Height);
-                        //}
+                //        _firstPoint = e.Location;
+                //        break;
+                //    }
+                //    case DragType.Center:
+                //    {
+                //        Point delta = new Point(e.Location.X - _firstPoint.X, e.Location.Y - _firstPoint.Y);
+                //        recter.MoveRecter(delta);
 
-                        //_firstPoint = e.Location;
-                        break;
-                    }
-                    case DragType.Bottom:
-                    {
-                        Point delta = new Point(e.Location.X - _firstPoint.X, e.Location.Y - _firstPoint.Y);
-                        foreach (var sel in recter.GetSelectRects())
-                        {
-                            sel.Rectangle = new Rectangle(sel.Rectangle.X, sel.Rectangle.Y, sel.Rectangle.Width, sel.Rectangle.Height + delta.Y);
-                        }
+                //        //foreach (var sel in recter.GetSelectRects())
+                //        //{
+                //        //    sel.Rectangle = new Rectangle(sel.Rectangle.X + delta.X, sel.Rectangle.Y + delta.Y, sel.Rectangle.Width, sel.Rectangle.Height);
+                //        //}
 
-                        _firstPoint = e.Location;
-                        break;
-                    }
-                    default:
-                    {
-                        break;
-                    }
-                }
+                //        //_firstPoint = e.Location;
+                //        break;
+                //    }
+                //    case DragType.Bottom:
+                //    {
+                //        Point delta = new Point(e.Location.X - _firstPoint.X, e.Location.Y - _firstPoint.Y);
+                //        foreach (var sel in recter.GetSelectRects())
+                //        {
+                //            sel.Rectangle = new Rectangle(sel.Rectangle.X, sel.Rectangle.Y, sel.Rectangle.Width, sel.Rectangle.Height + delta.Y);
+                //        }
+
+                //        _firstPoint = e.Location;
+                //        break;
+                //    }
+                //    default:
+                //    {
+                //        break;
+                //    }
+                //}
 
                 #endregion
             }
@@ -559,11 +615,13 @@ namespace FormDesinger
             {
                 MouseUpSelectControls(e);
 
+                recter.ModifyRecterEnd(_dragType, _operationControlHistory);
+
+
                 _firstSelectPoint = new Point();
                 _selectMouseDown = false;
                 selectRectangle = null;
                 _firstPoint = new Point();
-                recter.MoveRecterEnd();
                 _mouseDown = false;
                 _dragType = DragType.None;
                 Invalidate2(true);
@@ -648,6 +706,11 @@ namespace FormDesinger
             base.OnDragDrop(drgevent);
         }
 
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+        }
+
         /// <summary>
         /// 键盘事件
         /// </summary>
@@ -657,12 +720,7 @@ namespace FormDesinger
             {
                 if (recter.IsSelect && !recter.IsSelectFrom)
                 {
-                    foreach (var sel in recter.GetSelectRects())
-                    {
-                        sel.Control.Dispose();
-                        hostFrame.Controls.Remove(sel.Control);
-                    }
-
+                    recter.DeleteRecter(_operationControlHistory);
                     SelectHost();
                     Invalidate2(false);
                 }
@@ -678,36 +736,45 @@ namespace FormDesinger
         protected override void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
         {
             if (!recter.IsSelect) return;
-            if (e.KeyValue == 37)
+            if (e.Control && e.KeyCode == Keys.Z)
             {
-                recter.GetSelectRects()
-                    .ForEach(s => s.Control.Location = new Point(s.Control.Location.X - 1, s.Control.Location.Y));
-
-                RefreshMoveControls();
+                _operationControlHistory.Record();
             }
 
-            if (e.KeyValue == 38)
+            switch (e.KeyValue)
             {
-                recter.GetSelectRects()
-                    .ForEach(s => s.Control.Location = new Point(s.Control.Location.X, s.Control.Location.Y - 1));
+                case 37:
+                    PushOperationHistory(OperationControlType.Move);
 
-                RefreshMoveControls();
-            }
+                    recter.GetSelectRects()
+                        .ForEach(s => s.Control.Location = new Point(s.Control.Location.X - 1, s.Control.Location.Y));
 
-            if (e.KeyValue == 39)
-            {
-                recter.GetSelectRects()
-                    .ForEach(s => s.Control.Location = new Point(s.Control.Location.X + 1, s.Control.Location.Y));
+                    RefreshMoveControls();
+                    break;
+                case 38:
+                    PushOperationHistory(OperationControlType.Move);
 
-                RefreshMoveControls();
-            }
+                    recter.GetSelectRects()
+                        .ForEach(s => s.Control.Location = new Point(s.Control.Location.X, s.Control.Location.Y - 1));
 
-            if (e.KeyValue == 40)
-            {
-                recter.GetSelectRects()
-                    .ForEach(s => s.Control.Location = new Point(s.Control.Location.X, s.Control.Location.Y + 1));
+                    RefreshMoveControls();
+                    break;
+                case 39:
+                    PushOperationHistory(OperationControlType.Move);
 
-                RefreshMoveControls();
+                    recter.GetSelectRects()
+                        .ForEach(s => s.Control.Location = new Point(s.Control.Location.X + 1, s.Control.Location.Y));
+
+                    RefreshMoveControls();
+                    break;
+                case 40:
+                    PushOperationHistory(OperationControlType.Move);
+
+                    recter.GetSelectRects()
+                        .ForEach(s => s.Control.Location = new Point(s.Control.Location.X, s.Control.Location.Y + 1));
+
+                    RefreshMoveControls();
+                    break;
             }
 
             base.OnPreviewKeyDown(e);
@@ -767,7 +834,7 @@ namespace FormDesinger
             hostFrame.Width = formWidth;
             hostFrame.Height = formHeight;
             hostFrame.Text = formText;
-            recter = new Recter();
+            recter = new Recter(this);
             selectRectangle = null;
             _firstSelectPoint = new Point();
             _selectMouseDown = false;
@@ -1087,9 +1154,12 @@ namespace FormDesinger
         /// <summary>
         /// 重绘
         /// </summary>
-        private void Invalidate2(bool mouseUp)
+        public void Invalidate2(bool mouseUp)
         {
             Invalidate();
+
+            FlushSelectProperty();
+
             if (Parent != null) //更新父控件
             {
                 Rectangle rc = new Rectangle(this.Location, this.Size);
@@ -1153,6 +1223,15 @@ namespace FormDesinger
                 //    }
                 //}
             }
+        }
+
+        ~Overlayer()
+        {
+            StopListen();
+            _operationControlHistory.Clear();
+            recter.ClearSelect();
+            recter = null;
+            hostFrame = null;
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using FormDesinger.Core;
+using FormDesinger.Core.Serializable;
 
 namespace FormDesinger
 {
@@ -14,6 +15,12 @@ namespace FormDesinger
     /// </summary>
     public class Recter
     {
+        public Recter(Overlayer overlayer)
+        {
+            this.Overlayer = overlayer;
+        }
+
+        public Overlayer Overlayer;
         private readonly List<SelectRecter> _selectRecters = new List<SelectRecter>();
 
         ///是否为窗体周围的方框（如果是，则位置不可改变，且只有从下、右、右下三个方向改变大小）
@@ -204,6 +211,18 @@ namespace FormDesinger
             return DragType.None;
         }
 
+        public void RefreshRecterRectangle()
+        {
+            foreach (var selectRecter in _selectRecters)
+            {
+                var r = selectRecter.Control.Bounds;
+                r = selectRecter.Control.Parent.RectangleToScreen(r);
+                r = Overlayer.RectangleToClient(r);
+
+                selectRecter.Rectangle = r;
+            }
+        }
+
         /// <summary>
         /// 移动控件
         /// </summary>
@@ -222,12 +241,173 @@ namespace FormDesinger
         }
 
         /// <summary>
-        /// 移动控件
+        /// 改变控件大小
         /// </summary>
         /// <param name="movePoint"></param>
-        public void MoveRecterEnd()
+        public void ModifySizeRecter(DragType dragType, Point movePoint)
         {
-            _selectRecters.ForEach(s => s.MoveHistory = null);
+            foreach (var sel in _selectRecters)
+            {
+                if (!sel.MoveHistory.HasValue)
+                {
+                    sel.MoveHistory = sel.Rectangle;
+                }
+
+                switch (dragType)
+                {
+                    case DragType.Left:
+                        sel.Rectangle = new Rectangle(sel.MoveHistory.Value.X + movePoint.X, sel.MoveHistory.Value.Y, sel.MoveHistory.Value.Width + movePoint.X * (-1), sel.MoveHistory.Value.Height);
+                        break;
+                    case DragType.Top:
+                        sel.Rectangle = new Rectangle(sel.MoveHistory.Value.X, sel.MoveHistory.Value.Y + movePoint.Y, sel.MoveHistory.Value.Width, sel.MoveHistory.Value.Height + movePoint.Y * (-1));
+                        break;
+                    case DragType.Right:
+                        sel.Rectangle = new Rectangle(sel.MoveHistory.Value.X, sel.MoveHistory.Value.Y, sel.MoveHistory.Value.Width + movePoint.X, sel.MoveHistory.Value.Height);
+                        break;
+                    case DragType.Bottom:
+                        sel.Rectangle = new Rectangle(sel.MoveHistory.Value.X, sel.MoveHistory.Value.Y, sel.MoveHistory.Value.Width, sel.MoveHistory.Value.Height + movePoint.Y);
+                        break;
+                    case DragType.LeftTop:
+                        sel.Rectangle = new Rectangle(sel.MoveHistory.Value.X + movePoint.X, sel.MoveHistory.Value.Y + movePoint.Y, sel.MoveHistory.Value.Width + movePoint.X * (-1), sel.MoveHistory.Value.Height + movePoint.Y * (-1));
+                        break;
+                    case DragType.RightTop:
+                        sel.Rectangle = new Rectangle(sel.MoveHistory.Value.X, sel.MoveHistory.Value.Y + movePoint.Y, sel.MoveHistory.Value.Width + movePoint.X, sel.MoveHistory.Value.Height + movePoint.Y * (-1));
+                        break;
+                    case DragType.LeftBottom:
+                        sel.Rectangle = new Rectangle(sel.MoveHistory.Value.X + movePoint.X, sel.MoveHistory.Value.Y, sel.MoveHistory.Value.Width + movePoint.X * (-1), sel.MoveHistory.Value.Height + movePoint.Y);
+                        break;
+                    case DragType.RightBottom:
+                        sel.Rectangle = new Rectangle(sel.MoveHistory.Value.X, sel.MoveHistory.Value.Y, sel.MoveHistory.Value.Width + movePoint.X, sel.MoveHistory.Value.Height + movePoint.Y);
+                        break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 结束控件操动
+        /// </summary>
+        /// <param name="dragType"></param>
+        /// <param name="history"></param>
+        public void ModifyRecterEnd(DragType dragType, OperationControlHistory history)
+        {
+            switch (dragType)
+            {
+                case DragType.None:
+                    break;
+                case DragType.Center:
+                    MoveRecterEnd(history);
+                    break;
+                default:
+                    ModifySizeRecterEnd(history);
+                    break;
+            }
+        }
+
+        public void MoveRecterEnd(OperationControlHistory history)
+        {
+            List<Control> cons = new List<Control>();
+            List<ControlSerializable> controlSerializables = new List<ControlSerializable>();
+            _selectRecters.ForEach(s =>
+            {
+                if (s.MoveHistory.HasValue)
+                {
+                    cons.Add(s.Control);
+
+                    var cs = s.Control.MapsterCopyTo<ControlSerializable>();
+
+                    var r = s.MoveHistory.Value;
+                    r = Overlayer.RectangleToScreen(r);
+                    r = s.Control.Parent.RectangleToClient(r);
+
+                    var point = new Point(r.X, r.Y);
+                    if (point == cs.Location)
+                    {
+                        return;
+                    }
+
+                    cs.Location = point;
+                    controlSerializables.Add(cs);
+                }
+
+                s.MoveHistory = null;
+            });
+
+            if (controlSerializables.Count > 0)
+            {
+                history.Push(new OperationControlRecord(Overlayer, OperationControlType.Move, cons, controlSerializables));
+            }
+        }
+
+        public void ModifySizeRecterEnd(OperationControlHistory history)
+        {
+            List<Control> cons = new List<Control>();
+            List<ControlSerializable> controlSerializables = new List<ControlSerializable>();
+            _selectRecters.ForEach(s =>
+            {
+                if (s.MoveHistory.HasValue)
+                {
+                    cons.Add(s.Control);
+
+                    var cs = s.Control.MapsterCopyTo<ControlSerializable>();
+
+                    var r = s.MoveHistory.Value;
+                    r = Overlayer.RectangleToScreen(r);
+                    r = s.Control.Parent.RectangleToClient(r);
+
+                    if (r == cs.ClientRectangle)
+                    {
+                        return;
+                    }
+
+                    cs.ClientRectangle = r;
+                    controlSerializables.Add(cs);
+                }
+
+                s.MoveHistory = null;
+            });
+
+            if (controlSerializables.Count > 0)
+            {
+                history.Push(new OperationControlRecord(Overlayer, OperationControlType.ModifySize, cons, controlSerializables));
+            }
+        }
+
+        public void ModifyPropertyRecter(PropertyValueChangedEventArgs e, OperationControlHistory history)
+        {
+            var cpd = (CustomPropertyDescriptor) e.ChangedItem.PropertyDescriptor;
+            var cp = (CustomProperty) cpd.CustomProperty;
+
+            List<Control> cons = new List<Control>();
+            List<ControlSerializable> controlSerializables = new List<ControlSerializable>();
+            Type csType = typeof(ControlSerializable);
+            foreach (var sel in _selectRecters)
+            {
+                cons.Add(sel.Control);
+                var cs = sel.Control.MapsterCopyTo<ControlSerializable>();
+                foreach (var name in cp.PropertyNames)
+                {
+                    var pro = csType.GetProperty(name);
+                    if (pro != null)
+                    {
+                        pro.SetValue(cs, e.OldValue);
+                    }
+                }
+
+                controlSerializables.Add(cs);
+            }
+
+            history.Push(new OperationControlRecord(Overlayer, OperationControlType.ModifyProperty, cons, controlSerializables));
+        }
+
+        public void DeleteRecter(OperationControlHistory history)
+        {
+            foreach (var sel in _selectRecters)
+            {
+                sel.Control.Hide();
+                // hostFrame.Controls.Remove(sel.Control);
+            }
+
+            history.Push(new OperationControlRecord(Overlayer, OperationControlType.Delete, _selectRecters.Select(s => s.Control).ToList(), default));
         }
     }
 }

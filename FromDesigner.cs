@@ -22,12 +22,13 @@ namespace FormDesinger
         {
             get
             {
-                var cp = base.CreateParams; 
+                var cp = base.CreateParams;
                 //WS_EX_COMPOSITED
-                cp.ExStyle |= 0x02000000; 
-                return cp; 
+                cp.ExStyle |= 0x02000000;
+                return cp;
             }
         }
+
 
         /// <summary>
         /// 拖拽控件
@@ -244,7 +245,6 @@ namespace FormDesinger
 
         private void toolMenuItems_label_Load(object sender, EventArgs e)
         {
-
         }
     }
 }

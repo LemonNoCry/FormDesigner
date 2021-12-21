@@ -12,17 +12,27 @@ namespace FormDesinger.Core
     {
         public OperationControlRecord()
         {
-            
         }
-        public OperationControlRecord(OperationControlType operationControlType, List<Control> controls)
+
+        public OperationControlRecord(Overlayer overlayer, OperationControlType operationControlType, List<Control> controls)
         {
+            this.Overlayer = overlayer;
             this.OperationControlType = operationControlType;
             this.Control = controls;
             this.OperationControls = new List<ControlSerializable>();
             this.OperationControls = controls.MapsterCopyTo(OperationControls);
         }
 
+        public OperationControlRecord(Overlayer overlayer, OperationControlType operationControlType, List<Control> controls, List<ControlSerializable> controlSerializables)
+        {
+            this.Overlayer = overlayer;
+            this.OperationControlType = operationControlType;
+            this.Control = controls;
+            this.OperationControls = controlSerializables;
+        }
+
         public OperationControlType OperationControlType { get; set; }
+        public Overlayer Overlayer { get; set; }
         public List<Control> Control { get; set; }
         public List<ControlSerializable> OperationControls { get; set; }
 
@@ -34,16 +44,21 @@ namespace FormDesinger.Core
                     RecordMove();
                     break;
                 case OperationControlType.ModifySize:
+                    RecordModifySize();
                     break;
                 case OperationControlType.Add:
                     break;
                 case OperationControlType.Delete:
+                    RecordDelete();
                     break;
                 case OperationControlType.ModifyProperty:
+                    RecordModifyProperty();
                     break;
-                default:
-                    throw new ArgumentOutOfRangeException();
             }
+
+            Overlayer.recter.RefreshRecterRectangle();
+            Overlayer.FlushSelectProperty();
+            Overlayer.Invalidate2(false);
         }
 
         private void RecordMove()
@@ -56,14 +71,36 @@ namespace FormDesinger.Core
                 control.Location = history.Location;
             }
         }
-    }
 
-    public enum OperationControlType
-    {
-        Move,
-        ModifySize,
-        Add,
-        Delete,
-        ModifyProperty
+        private void RecordModifySize()
+        {
+            for (int i = 0; i < Control.Count; i++)
+            {
+                var control = Control[i];
+                var history = OperationControls[i];
+                var r = history.ClientRectangle;
+                control.SetBounds(r.Left, r.Top, r.Width, r.Height);
+            }
+        }
+
+        private void RecordDelete()
+        {
+            for (int i = 0; i < Control.Count; i++)
+            {
+                var control = Control[i];
+                control.Show();
+            }
+        }
+
+        private void RecordModifyProperty()
+        {
+            for (int i = 0; i < Control.Count; i++)
+            {
+                var control = Control[i];
+                var history = OperationControls[i];
+
+                history.MapsterCopyTo(control);
+            }
+        }
     }
 }

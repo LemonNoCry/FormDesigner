@@ -16,6 +16,5 @@ namespace FormDesinger.Core
         public Rectangle? MoveHistory { get; set; }
         public Control Control { get; set; }
         public int ZIndex { get; set; }
-
     }
 }

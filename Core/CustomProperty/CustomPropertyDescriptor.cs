@@ -26,6 +26,7 @@ namespace FormDesinger
             get { return _customProperty.GetType(); }
         }
 
+        [RefreshProperties(RefreshProperties.All)]
         public override object GetValue(object component)
         {
             return _customProperty.Value;
@@ -73,6 +74,7 @@ namespace FormDesinger
             }
         }
 
+        [RefreshProperties(RefreshProperties.All)]
         public override string DisplayName
         {
             get

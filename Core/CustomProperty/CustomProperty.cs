@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Reflection;
 
 namespace FormDesinger
@@ -9,20 +10,24 @@ namespace FormDesinger
     public class CustomProperty
     {
         #region 私有属性
+
         private string _name = string.Empty;
         private object _defaultValue = null;
         private object _value = null;
         private object _objectSource = null;
         private PropertyInfo[] _propertyInfos = null;
+
         #endregion
 
         #region 构造方法
+
         /// <summary>
         /// 自定义属性显示
         /// </summary>
         public CustomProperty()
         {
         }
+
         /// <summary>
         /// 自定义属性显示
         /// </summary>
@@ -34,6 +39,7 @@ namespace FormDesinger
             : this(name, name, null, category, description, objectSource, null)
         {
         }
+
         /// <summary>
         /// 自定义属性显示
         /// </summary>
@@ -46,6 +52,7 @@ namespace FormDesinger
             : this(name, propertyName, null, category, description, objectSource, null)
         {
         }
+
         /// <summary>
         /// 自定义属性显示
         /// </summary>
@@ -59,6 +66,7 @@ namespace FormDesinger
             : this(name, propertyName, null, category, description, objectSource, editorType)
         {
         }
+
         /// <summary>
         /// 自定义属性显示
         /// </summary>
@@ -71,9 +79,10 @@ namespace FormDesinger
         /// <param name="editorType">编辑器类型</param>
         public CustomProperty(string name, string propertyName, Type valueType, string category, string description,
             object objectSource, Type editorType)
-            : this(name, new string[] { propertyName }, valueType, null, null, false, true, category, description, objectSource, editorType)
+            : this(name, new string[] {propertyName}, valueType, null, null, false, true, category, description, objectSource, editorType)
         {
         }
+
         /// <summary>
         /// 自定义属性显示
         /// </summary>
@@ -86,6 +95,7 @@ namespace FormDesinger
             : this(name, propertyNames, category, description, objectSource, null)
         {
         }
+
         /// <summary>
         /// 自定义属性显示
         /// </summary>
@@ -99,6 +109,7 @@ namespace FormDesinger
             : this(name, propertyNames, null, category, description, objectSource, editorType)
         {
         }
+
         /// <summary>
         /// 自定义属性显示
         /// </summary>
@@ -114,6 +125,7 @@ namespace FormDesinger
             : this(name, propertyNames, valueType, null, null, false, true, category, description, objectSource, editorType)
         {
         }
+
         /// <summary>
         /// 自定义属性显示
         /// </summary>
@@ -143,9 +155,11 @@ namespace FormDesinger
             ObjectSource = objectSource;
             EditorType = editorType;
         }
+
         #endregion
 
         #region 公共属性
+
         /// <summary>
         /// 显示名
         /// </summary>
@@ -158,18 +172,21 @@ namespace FormDesinger
 
                 if (PropertyNames == null)
                 {
-                    PropertyNames = new string[] { _name };
+                    PropertyNames = new string[] {_name};
                 }
             }
         }
+
         /// <summary>
         /// 属性名
         /// </summary>
         public string[] PropertyNames { get; set; }
+
         /// <summary>
         /// 值类型
         /// </summary>
         public Type ValueType { get; set; }
+
         /// <summary>
         /// 默认值
         /// </summary>
@@ -186,6 +203,7 @@ namespace FormDesinger
                 }
             }
         }
+
         /// <summary>
         /// 值
         /// </summary>
@@ -199,22 +217,27 @@ namespace FormDesinger
                 OnValueChanged();
             }
         }
+
         /// <summary>
         /// 是否只读
         /// </summary>
         public bool IsReadOnly { get; set; }
+
         /// <summary>
         /// 描述
         /// </summary>
         public string Description { get; set; }
+
         /// <summary>
         /// 类型名(分组)
         /// </summary>
         public string Category { get; set; }
+
         /// <summary>
         /// 是否在设计器显示
         /// </summary>
         public bool IsBrowsable { get; set; }
+
         /// <summary>
         /// 控件源
         /// </summary>
@@ -227,10 +250,12 @@ namespace FormDesinger
                 OnObjectSourceChanged();
             }
         }
+
         /// <summary>
         /// 编辑器类型
         /// </summary>
         public Type EditorType { get; set; }
+
         #endregion
 
         #region 保护方法
@@ -254,7 +279,7 @@ namespace FormDesinger
             }
         }
 
-        protected PropertyInfo[] PropertyInfos
+        public PropertyInfo[] PropertyInfos
         {
             get
             {
@@ -267,16 +292,20 @@ namespace FormDesinger
                         _propertyInfos[i] = type.GetProperty(PropertyNames[i]);
                     }
                 }
+
                 return _propertyInfos;
             }
         }
+
         #endregion
 
         #region 公有方法
+
         public void ResetValue()
         {
             Value = DefaultValue;
         }
+
         #endregion
     }
 }
