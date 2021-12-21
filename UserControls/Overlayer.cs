@@ -95,7 +95,7 @@ namespace FormDesinger
 
         private void _propertyGrid_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
         {
-            recter.ModifyPropertyRecter(e,_operationControlHistory);
+            recter.ModifyPropertyRecter(e, _operationControlHistory);
             RefreshMoveControls();
         }
 

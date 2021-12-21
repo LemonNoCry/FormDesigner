@@ -112,7 +112,7 @@
       <DependentUpon>AddControlDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Core\ControlHelper.cs" />
-    <Compile Include="Core\Analysis.cs" />
+    <Compile Include="Core\MyAnalysis.cs" />
     <Compile Include="Core\ControlSave.cs" />
     <Compile Include="Core\GetFileEncoding.cs" />
     <Compile Include="Core\OldAnalysis.cs" />
@@ -232,7 +232,9 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="DataBase\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Icon\edit_128px_yellow.ico" />
     <Content Include="Icon\edit_72px_blue.ico" />

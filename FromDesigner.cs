@@ -176,7 +176,7 @@ namespace FormDesinger
                 string source = System.IO.File.ReadAllText(fileName);
                 //Core.OldAnalysis old = new Core.OldAnalysis(designerControl1._overlayer);
                 //old.of_LoaddwText(source);
-                Core.Analysis anl = new Core.Analysis(designerControl1._overlayer);
+                Core.MyAnalysis anl = new Core.MyAnalysis(designerControl1._overlayer);
                 anl.Load(source);
                 return;
             }
@@ -235,7 +235,7 @@ namespace FormDesinger
                 string source = System.IO.File.ReadAllText(fileName);
                 //Core.OldAnalysis old = new Core.OldAnalysis(designerControl1._overlayer);
                 //old.of_LoaddwText(source);
-                Core.Analysis anl = new Core.Analysis(dc._overlayer);
+                Core.MyAnalysis anl = new Core.MyAnalysis(dc._overlayer);
                 anl.Load(source);
 
                 frm.Show();

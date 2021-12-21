@@ -9,12 +9,12 @@ namespace FormDesinger.Core
     /// <summary>
     /// 解析
     /// </summary>
-    class Analysis
+    class MyAnalysis
     {
         Overlayer overlayer;
         public string ErrStr = string.Empty;
 
-        public Analysis(Overlayer overlayer)
+        public MyAnalysis(Overlayer overlayer)
         {
             this.overlayer = overlayer;
         }

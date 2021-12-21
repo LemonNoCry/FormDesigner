@@ -44,6 +44,7 @@ namespace FormDesinger.Core.Serializable
         public virtual CustomPropertyCollection GetCollections(Control control)
         {
             var collection = new CustomPropertyCollection();
+            collection.Add(new CustomProperty("Name", "Name", "数据", "控件的Name", control) {IsReadOnly = true});
             collection.Add(new CustomProperty("文本", "Text", "数据", "Text 要显示的内容。", control, typeof(System.ComponentModel.Design.MultilineStringEditor)));
             collection.Add(new CustomProperty("背景色", "BackColor", "外观", "BackColor 背景色。", control));
             collection.Add(new CustomProperty("颜色", "ForeColor", "外观", "ForeColor 前景色。", control));
