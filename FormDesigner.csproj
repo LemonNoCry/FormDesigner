@@ -232,10 +232,9 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="DataBase\" />
-  </ItemGroup>
-  <ItemGroup>
+    <Content Include="DataBase\layout_style.sql" />
     <Content Include="Icon\edit_128px_yellow.ico" />
     <Content Include="Icon\edit_72px_blue.ico" />
     <Content Include="Icon\notepad_128px_blue.ico" />
