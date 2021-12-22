@@ -1158,8 +1158,6 @@ namespace FormDesinger
         {
             Invalidate();
 
-            FlushSelectProperty();
-
             if (Parent != null) //更新父控件
             {
                 Rectangle rc = new Rectangle(this.Location, this.Size);
@@ -1168,6 +1166,7 @@ namespace FormDesinger
 
             if (mouseUp) //鼠标弹起 更新底层控件
             {
+                FlushSelectProperty();
                 if (recter.IsSelectFrom)
                 {
                     Rectangle r = recter.GetSelectRects()[0].Rectangle;
