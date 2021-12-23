@@ -4,6 +4,11 @@ namespace FormDesinger.Core.Serializable
 {
     public class CusFormSerializable : FormSerializable, IPropertyCollections<HostFrame>
     {
+        public override CustomPropertyCollection GetCollections(Control control)
+        {
+            return GetCollections(control as HostFrame);
+        }
+
         public CustomPropertyCollection GetCollections(HostFrame control)
         {
             var cpc = base.GetCollections(control);

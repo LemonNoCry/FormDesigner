@@ -78,6 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Collections.cs" />
+    <Compile Include="Core\ControlUtilityExpand.cs" />
     <Compile Include="Core\CustomProperty\CustomProperty.cs" />
     <Compile Include="Core\CustomProperty\CustomPropertyCollection.cs" />
     <Compile Include="Core\CustomProperty\CustomPropertyDescriptor.cs" />
@@ -105,6 +106,12 @@
     <Compile Include="Core\Serializable\MyTextBoxSerializable.cs" />
     <Compile Include="Core\Serializable\LabelSerializable.cs" />
     <Compile Include="Core\UndoAndRedo.cs" />
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\AddControlDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -164,6 +171,9 @@
     <Compile Include="UserControls\ToolMenuItems.Designer.cs">
       <DependentUpon>ToolMenuItems.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\AddControlDialog.resx">
       <DependentUpon>AddControlDialog.cs</DependentUpon>
       <SubType>Designer</SubType>

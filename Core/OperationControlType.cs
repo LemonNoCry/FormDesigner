@@ -3,6 +3,7 @@
     public enum OperationControlType
     {
         Move,
+        MoveParent,
         ModifySize,
         Add,
         Delete,

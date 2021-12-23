@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows.Forms;
 using System.Text;
 using System.Drawing;
@@ -31,6 +32,8 @@ namespace FormDesinger
         public bool IsSelectFrom => _selectRecters.Any() && IsForm;
         public int Count => _selectRecters.Count;
 
+        public bool IsMoving => _selectRecters
+            .Any(s => s.MoveHistory.HasValue && s.MoveHistory != s.Rectangle);
 
         /// <summary>
         /// 所有选中的控件
@@ -38,6 +41,11 @@ namespace FormDesinger
         public List<SelectRecter> GetSelectRects()
         {
             return _selectRecters;
+        }
+
+        public List<Control> GetSelectControls()
+        {
+            return _selectRecters.Select(s => s.Control).ToList();
         }
 
         public List<SelectRecter> GetSelectControlsRects()
@@ -305,9 +313,10 @@ namespace FormDesinger
 
         public void MoveRecterEnd(OperationControlHistory history)
         {
-            List<Control> cons = new List<Control>();
-            List<ControlSerializable> controlSerializables = new List<ControlSerializable>();
-            _selectRecters.ForEach(s =>
+            var cons = new List<Control>();
+            var controlSerializables = new List<ControlSerializable>();
+            var ot = OperationControlType.Move;
+            foreach (var s in _selectRecters)
             {
                 if (s.MoveHistory.HasValue)
                 {
@@ -317,24 +326,37 @@ namespace FormDesinger
 
                     var r = s.MoveHistory.Value;
                     r = Overlayer.RectangleToScreen(r);
-                    r = s.Control.Parent.RectangleToClient(r);
+                    if (s.Parent != null)
+                    {
+                        r = s.Parent.RectangleToClient(r);
+                    }
+                    else
+                    {
+                        r = s.Control.Parent.RectangleToClient(r);
+                    }
 
                     var point = new Point(r.X, r.Y);
                     if (point == cs.Location)
                     {
-                        return;
+                        continue;
                     }
 
                     cs.Location = point;
+                    if (s.Parent != null)
+                    {
+                        cs.ParentSerializable = s.Parent.MapsterCopyTo<ControlSerializable>();
+                        ot = OperationControlType.MoveParent;
+                    }
+
                     controlSerializables.Add(cs);
                 }
 
-                s.MoveHistory = null;
-            });
+                s.ClearHistory();
+            }
 
             if (controlSerializables.Count > 0)
             {
-                history.Push(new OperationControlRecord(Overlayer, OperationControlType.Move, cons, controlSerializables));
+                history.Push(new OperationControlRecord(Overlayer, ot, cons, controlSerializables));
             }
         }
 
@@ -363,7 +385,7 @@ namespace FormDesinger
                     controlSerializables.Add(cs);
                 }
 
-                s.MoveHistory = null;
+                s.ClearHistory();
             });
 
             if (controlSerializables.Count > 0)
@@ -372,18 +394,40 @@ namespace FormDesinger
             }
         }
 
+        private PropertyDescriptor[] GetMergeProperty(PropertyValueChangedEventArgs e)
+        {
+            System.Type propertyType = e.ChangedItem.PropertyDescriptor.GetType();
+            System.Reflection.FieldInfo fieldInfo = propertyType.GetField(
+                "descriptors",
+                System.Reflection.BindingFlags.NonPublic
+                | System.Reflection.BindingFlags.Instance
+            );
+            PropertyDescriptor[] descriptors =
+                (PropertyDescriptor[]) (fieldInfo.GetValue(e.ChangedItem.PropertyDescriptor));
+            return descriptors;
+        }
+
         public void ModifyPropertyRecter(PropertyValueChangedEventArgs e, OperationControlHistory history)
         {
-            var cpd = (CustomPropertyDescriptor) e.ChangedItem.PropertyDescriptor;
-            var cp = (CustomProperty) cpd.CustomProperty;
+            CustomProperty cp;
+            if (e.ChangedItem.PropertyDescriptor is CustomPropertyDescriptor cpd)
+            {
+                cp = cpd.CustomProperty;
+            }
+            else
+            {
+                var mps = GetMergeProperty(e);
+                cpd = (CustomPropertyDescriptor) mps[0];
+                cp = cpd.CustomProperty;
+            }
 
             List<Control> cons = new List<Control>();
             List<ControlSerializable> controlSerializables = new List<ControlSerializable>();
-            Type csType = typeof(ControlSerializable);
             foreach (var sel in _selectRecters)
             {
                 cons.Add(sel.Control);
-                var cs = sel.Control.MapsterCopyTo<ControlSerializable>();
+                var cs = Collections.ControlConvertSerializable(sel.Control);
+                var csType = cs.GetType();
                 foreach (var name in cp.PropertyNames)
                 {
                     var pro = csType.GetProperty(name);

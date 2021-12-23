@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Serialization;
@@ -30,6 +31,8 @@ namespace FormDesinger.Core.Serializable
         [XmlElement(Type = typeof(CustomizeSize))]
         public Size Size { get; set; }
 
+        public bool AutoSize { get; set; }
+
         [XmlElement(Type = typeof(CustomizeRectangle))]
         public Rectangle ClientRectangle { get; set; }
 
@@ -41,6 +44,9 @@ namespace FormDesinger.Core.Serializable
         public object Tag { get; set; }
         public int TabIndex { get; set; }
 
+        public ControlSerializable ParentSerializable { get; set; }
+        public List<ControlSerializable> ControlsSerializable { get; set; }
+
         public virtual CustomPropertyCollection GetCollections(Control control)
         {
             var collection = new CustomPropertyCollection();
@@ -51,6 +57,7 @@ namespace FormDesinger.Core.Serializable
             collection.Add(new CustomProperty("字体", "Font", "外观", "Font 字体。", control));
             collection.Add(new CustomProperty("位置", "Location", "布局", "Location 控件左上角相对于其容器左上角的坐标。", control));
             collection.Add(new CustomProperty("大小", "Size", "布局", "Size 控件的大小，以像素为单位。", control));
+            collection.Add(new CustomProperty("自动大小", "AutoSize", "布局", "自动调整大小以适应内容长度", control));
             collection.Add(new CustomProperty("边距", "Margin", "布局", "Margin 指定此控件与另一控件之间边距的距离。", control));
             collection.Add(new CustomProperty("锚", "Anchor", "布局", "Anchor 定义要绑定到容器的边缘，当控件锚定位到某个控件时，与指定边缘最接近的控件边缘与指定边缘之间的距离将保持不变。", control));
             collection.Add(new CustomProperty("停靠", "Dock", "布局", "Dock 定义要绑定到容器的控件边框。", control));

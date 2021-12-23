@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace FormDesinger
@@ -47,7 +48,7 @@ namespace FormDesinger
         /// </summary>
         public SelectRectangle selectRectangle = null;
 
-        readonly OperationControlHistory _operationControlHistory = new OperationControlHistory();
+        public readonly OperationControlHistory OperationControlHistory = new OperationControlHistory();
 
         Point _firstSelectPoint = new Point(); //鼠标移动前的第一个位置
         bool _selectMouseDown = false;         //鼠标是否按下并选择区域
@@ -87,15 +88,13 @@ namespace FormDesinger
         public void FlushSelectProperty()
         {
             if (_propertyGrid == null) return;
-            _propertyGrid.SelectedObjects = recter.GetSelectRects()
-                .Select(s => Collections.GetCollections(s.Control))
-                .ToArray();
+            _propertyGrid.SelectedObjects = Collections.GetCollections(this);
         }
 
 
         private void _propertyGrid_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
         {
-            recter.ModifyPropertyRecter(e, _operationControlHistory);
+            //recter.ModifyPropertyRecter(e, OperationControlHistory);
             RefreshMoveControls();
         }
 
@@ -113,7 +112,7 @@ namespace FormDesinger
         {
             var record = new OperationControlRecord(this, operation,
                 recter.GetSelectRects().Select(s => s.Control).ToList());
-            _operationControlHistory.Push(record);
+            OperationControlHistory.Push(record);
         }
 
         protected override CreateParams CreateParams
@@ -157,6 +156,42 @@ namespace FormDesinger
             selectRectangle?.Draw(e.Graphics); //绘制被操作控件周围的方框
         }
 
+        #region 控件通用操作
+
+        public Control FindControl(string name)
+        {
+            return FindControl(name, hostFrame);
+        }
+
+        public Control FindControl(string name, Control con)
+        {
+            if (con.Name == name)
+            {
+                return con;
+            }
+
+            foreach (Control c in con.Controls)
+            {
+                if (c.Name == name)
+                {
+                    return c;
+                }
+
+                if (c.HasChildren)
+                {
+                    var fc = FindControl(name, c);
+                    if (fc != null)
+                    {
+                        return fc;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        #endregion
+
         #region 按键钩子
 
         private KeyEventHandler _keyEventHandler = null; //按键钩子
@@ -197,7 +232,7 @@ namespace FormDesinger
         private Rectangle HostToOverlayerRectangle(Control con)
         {
             Rectangle r = con.Bounds;
-            r = hostFrame.RectangleToScreen(r);
+            r = (con.Parent ?? hostFrame).RectangleToScreen(r);
             r = this.RectangleToClient(r);
             return r;
         }
@@ -206,7 +241,7 @@ namespace FormDesinger
         {
             Rectangle r = con.Bounds;
             r = this.RectangleToClient(r);
-            r = hostFrame.RectangleToScreen(r);
+            r = con.Parent.RectangleToScreen(r);
             return r;
         }
 
@@ -434,21 +469,37 @@ namespace FormDesinger
             base.OnMouseMove(e);
         }
 
-        public IEnumerable<SelectRecter> GetClickControls(MouseEventArgs e)
+        public List<SelectRecter> GetClickControls(MouseEventArgs e)
         {
-            foreach (Control c in Controls) //遍历控件容器 看是否选中其中某一控件
+            return GetClickControls(Controls, e);
+        }
+
+        public List<SelectRecter> GetClickControls(ControlCollection controls, MouseEventArgs e, int spaceIndex = 1)
+        {
+            var sr = new List<SelectRecter>();
+            foreach (Control c in controls) //遍历控件容器 看是否选中其中某一控件
             {
                 Rectangle r = c.Bounds;
-                r = hostFrame.RectangleToScreen(r);
+                r = c.Parent.RectangleToScreen(r);
                 r = this.RectangleToClient(r);
                 Rectangle rr = r;
                 rr.Inflate(10, 10);
+
                 if (rr.Contains(e.Location))
                 {
-                    yield return new SelectRecter(c, r);
+                    sr.Add(new SelectRecter(c, r) {SpaceIndex = spaceIndex});
+                }
+
+                if (c.HasChildren)
+                {
+                    var clickControls = GetClickControls(c.Controls, e, spaceIndex + 1);
+                    sr.AddRange(clickControls);
                 }
             }
+
+            return sr;
         }
+
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
@@ -460,11 +511,14 @@ namespace FormDesinger
                     //选中最上面某一控件
                     if (new[] {Keys.Shift, Keys.Control}.Contains(ModifierKeys))
                     {
-                        var sel = cons.OrderByDescending(s => s.ZIndex).First();
+                        var sel = cons.OrderByDescending(s => s.SpaceIndex)
+                            .ThenByDescending(s => s.ZIndex)
+                            .First();
 
-                        Rectangle r = sel.Control.Bounds;
-                        r = hostFrame.RectangleToScreen(r);
-                        r = this.RectangleToClient(r);
+                        Rectangle r = HostToOverlayerRectangle(sel.Control);
+                        //Rectangle r = sel.Control.Bounds;
+                        //r = sel.Control.Parent.RectangleToScreen(r);
+                        //r = this.RectangleToClient(r);
 
                         recter.AddSelect(r, sel.Control);
 
@@ -473,13 +527,15 @@ namespace FormDesinger
                     }
                     else if (!recter.IsMultipleSelect)
                     {
-                        var sel = cons.OrderByDescending(s => s.ZIndex).First();
+                        var sel = cons.OrderByDescending(s => s.SpaceIndex)
+                            .ThenByDescending(s => s.ZIndex)
+                            .First();
 
-                        Rectangle r = sel.Control.Bounds;
-                        r = hostFrame.RectangleToScreen(r);
-                        r = this.RectangleToClient(r);
+                        Rectangle r = HostToOverlayerRectangle(sel.Control);
+                        //Rectangle r = sel.Control.Bounds;
+                        //r = sel.Control.Parent.RectangleToScreen(r);
+                        //r = this.RectangleToClient(r);
                         recter.SetSelect(r, sel.Control);
-
 
                         FlushSelectProperty();
                         Invalidate2(false);
@@ -518,6 +574,7 @@ namespace FormDesinger
 
             base.OnMouseDown(e);
         }
+
 
         private void MouseUpSelectControls(MouseEventArgs e)
         {
@@ -570,16 +627,16 @@ namespace FormDesinger
                 if (cons != null && cons.Any())
                 {
                     //选中最上面某一控件
-                    var sel = cons.OrderByDescending(s => s.ZIndex).First();
+                    var sel = cons.OrderByDescending(s => s.SpaceIndex)
+                        .ThenByDescending(s => s.ZIndex)
+                        .First();
                     if (recter.IsSelect && !recter.IsMultipleSelect
                                         && recter.GetSelectRects()[0].Control == sel.Control)
                     {
                         return;
                     }
 
-                    Rectangle r = sel.Control.Bounds;
-                    r = hostFrame.RectangleToScreen(r);
-                    r = this.RectangleToClient(r);
+                    Rectangle r = HostToOverlayerRectangle(sel.Control);
                     recter.SetSelect(r, sel.Control);
 
                     FlushSelectProperty();
@@ -591,9 +648,7 @@ namespace FormDesinger
                 }
                 else //没有控件被选中，判断是否选中控件容器
                 {
-                    Rectangle r = hostFrame.Bounds;
-                    r = Parent.RectangleToScreen(r);
-                    r = this.RectangleToClient(r);
+                    Rectangle r = HostToOverlayerRectangle(hostFrame);
                     if (r.Contains(e.Location))
                     {
                         SelectHost();
@@ -607,6 +662,41 @@ namespace FormDesinger
                     }
                 }
             }
+            else if (recter.IsMoving)
+            {
+                var cons = GetClickControls(e);
+                if (cons != null && cons.Any())
+                {
+                    //选中最上面的容器控件
+                    var sel = cons.Where(s => s.Control.IsContainerControl())
+                        .OrderByDescending(s => s.SpaceIndex)
+                        .ThenByDescending(s => s.ZIndex)
+                        .FirstOrDefault();
+                    if (sel == null)
+                    {
+                        //到Form控件
+                        foreach (var s in recter.GetSelectControlsRects())
+                        {
+                            if (s.Control.Parent != hostFrame)
+                            {
+                                s.Parent = s.Control.Parent;
+                                Controls.Add(s.Control);
+                            }
+                        }
+
+                        return;
+                    }
+
+                    foreach (var sc in recter.GetSelectControlsRects())
+                    {
+                        if (sc.Control != sel.Control && sc.Control.Parent != sel.Control)
+                        {
+                            sc.Parent = sc.Control.Parent;
+                            sel.Control.Controls.Add(sc.Control);
+                        }
+                    }
+                }
+            }
         }
 
         protected override void OnMouseUp(MouseEventArgs e)
@@ -615,8 +705,7 @@ namespace FormDesinger
             {
                 MouseUpSelectControls(e);
 
-                recter.ModifyRecterEnd(_dragType, _operationControlHistory);
-
+                recter.ModifyRecterEnd(_dragType, OperationControlHistory);
 
                 _firstSelectPoint = new Point();
                 _selectMouseDown = false;
@@ -665,6 +754,42 @@ namespace FormDesinger
             Invalidate2(false);
         }
 
+        public int GetControlId(Control con, Type findType)
+        {
+            int id = 0;
+            foreach (Control c in con.Controls)
+            {
+                if (c.GetType().FullName == findType.FullName)
+                {
+                    var ids = Convert.ToInt32(Regex.Replace(c.Name, @"[^0-9]+", ""));
+                    if (ids > id)
+                    {
+                        id = ids;
+                    }
+                }
+
+                if (c.HasChildren)
+                {
+                    var ids = GetControlId(c, findType);
+                    if (ids > id)
+                    {
+                        id = ids;
+                    }
+                }
+            }
+
+            return id;
+        }
+
+        public void SetControlName(Control con)
+        {
+            if (string.IsNullOrWhiteSpace(con.Name))
+            {
+                Type type = con.GetType();
+                con.Name = type.Name + (GetControlId(hostFrame, type) + 1);
+            }
+        }
+
         /// <summary>
         /// 拖拽
         /// </summary>
@@ -674,7 +799,7 @@ namespace FormDesinger
             {
                 string[] strs = (string[]) drgevent.Data.GetData(typeof(string[])); //获取拖拽数据
                 Control ctrl = ControlHelper.CreateControl(strs[1], strs[0]);       //实例化控件
-
+                SetControlName(ctrl);
                 ctrl.Location = hostFrame.PointToClient(new Point(drgevent.X, drgevent.Y)); //屏幕坐标转换成控件容器坐标
                 if (!new Rectangle(hostFrame.Location, hostFrame.Size).Contains(new Rectangle(ctrl.Location, ctrl.Size)))
                 {
@@ -720,7 +845,7 @@ namespace FormDesinger
             {
                 if (recter.IsSelect && !recter.IsSelectFrom)
                 {
-                    recter.DeleteRecter(_operationControlHistory);
+                    recter.DeleteRecter(OperationControlHistory);
                     SelectHost();
                     Invalidate2(false);
                 }
@@ -738,7 +863,7 @@ namespace FormDesinger
             if (!recter.IsSelect) return;
             if (e.Control && e.KeyCode == Keys.Z)
             {
-                _operationControlHistory.Record();
+                OperationControlHistory.Record();
             }
 
             switch (e.KeyValue)
@@ -1181,11 +1306,11 @@ namespace FormDesinger
                         //移动控件逻辑
                         Rectangle r = sel.Rectangle;
                         r = this.RectangleToScreen(r);
-                        r = hostFrame.RectangleToClient(r);
+                        r = sel.Control.Parent.RectangleToClient(r);
                         sel.Control.SetBounds(r.Left, r.Top, r.Width, r.Height);
 
                         r = sel.Control.Bounds;
-                        r = hostFrame.RectangleToScreen(r);
+                        r = sel.Control.Parent.RectangleToScreen(r);
                         r = this.RectangleToClient(r);
                         sel.Rectangle = r;
                     }
@@ -1227,7 +1352,7 @@ namespace FormDesinger
         ~Overlayer()
         {
             StopListen();
-            _operationControlHistory.Clear();
+            OperationControlHistory.Clear();
             recter.ClearSelect();
             recter = null;
             hostFrame = null;

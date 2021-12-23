@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using FormDesinger.Core.Serializable;
+using Mapster;
 
 namespace FormDesinger.Core
 {
@@ -35,6 +36,7 @@ namespace FormDesinger.Core
         public Overlayer Overlayer { get; set; }
         public List<Control> Control { get; set; }
         public List<ControlSerializable> OperationControls { get; set; }
+        public Control Parent { get; set; }
 
         public void Record()
         {
@@ -42,6 +44,9 @@ namespace FormDesinger.Core
             {
                 case OperationControlType.Move:
                     RecordMove();
+                    break;
+                case OperationControlType.MoveParent:
+                    RecordMoveParent();
                     break;
                 case OperationControlType.ModifySize:
                     RecordModifySize();
@@ -68,6 +73,19 @@ namespace FormDesinger.Core
                 var control = Control[i];
                 var history = OperationControls[i];
 
+                control.Location = history.Location;
+            }
+        }
+
+        private void RecordMoveParent()
+        {
+            for (int i = 0; i < Control.Count; i++)
+            {
+                var control = Control[i];
+                var history = OperationControls[i];
+
+                var parent = Overlayer.FindControl(history.ParentSerializable.Name);
+                parent.Controls.Add(control);
                 control.Location = history.Location;
             }
         }
@@ -99,7 +117,8 @@ namespace FormDesinger.Core
                 var control = Control[i];
                 var history = OperationControls[i];
 
-                history.MapsterCopyTo(control);
+                dynamic dyn = history;
+                TypeAdapter.Adapt(dyn, control);
             }
         }
     }

@@ -15,6 +15,18 @@ namespace FormDesinger.Core
         public Rectangle Rectangle { get; set; }
         public Rectangle? MoveHistory { get; set; }
         public Control Control { get; set; }
+        public Control Parent { get; set; }
         public int ZIndex { get; set; }
+
+        /// <summary>
+        /// 控件顺序 更复杂的Control.ZIndex
+        /// </summary>
+        public int SpaceIndex { get; set; }
+
+        public void ClearHistory()
+        {
+            MoveHistory = null;
+            Parent = null;
+        }
     }
 }

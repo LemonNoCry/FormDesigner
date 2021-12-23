@@ -6,14 +6,13 @@ namespace FormDesinger.Core
 {
     public static class MapsterExtension
     {
-        public static T MapsterCopyTo<T>(this T source, T target)
+        public static T MapsterCopyTo<T>(this object source, T target)
         {
             if (source == null)
                 throw new ArgumentNullException();
 
             return source.Adapt(target);
         }
-
 
         public static TTarget MapsterCopyTo<TSource, TTarget>(this TSource source, TTarget target)
         {

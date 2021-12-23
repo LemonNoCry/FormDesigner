@@ -11,6 +11,8 @@ namespace FormDesinger
     {
         #region ICustomTypeDescriptor 成员
 
+        public Overlayer Overlayer { get; set; }
+
         public AttributeCollection GetAttributes()
         {
             return TypeDescriptor.GetAttributes(this, true);
@@ -68,19 +70,22 @@ namespace FormDesinger
                 {
                     attrs.Add(new BrowsableAttribute(cp.IsBrowsable));
                 }
+
                 //[ReadOnly(true)]
                 if (cp.IsReadOnly)
                 {
                     attrs.Add(new ReadOnlyAttribute(cp.IsReadOnly));
                 }
+
                 //[Editor(typeof(editor),typeof(UITypeEditor))]
                 if (cp.EditorType != null)
                 {
                     attrs.Add(new EditorAttribute(cp.EditorType, typeof(System.Drawing.Design.UITypeEditor)));
                 }
 
-                properties.Add(new CustomPropertyDescriptor(cp, attrs.ToArray()));
+                properties.Add(new CustomPropertyDescriptor(Overlayer, cp, attrs.ToArray()));
             }
+
             return properties;
         }
 

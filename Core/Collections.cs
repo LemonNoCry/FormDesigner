@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
+using FormDesinger.Core;
 using FormDesinger.Core.Serializable;
 
 namespace FormDesinger
@@ -57,9 +58,33 @@ namespace FormDesinger
         /// <param name="control">控件对象</param>
         /// <param name="controlName">控件名</param>
         /// <returns>属性集合</returns>
-        public static CustomPropertyCollection GetCollections(Control control)
+        public static CustomPropertyCollection GetCollections(Control control, Overlayer overlayer)
         {
-            return GetBaseSerializable(control.GetType()).GetCollections(control);
+            var cpc = GetBaseSerializable(control.GetType()).GetCollections(control);
+            cpc.Overlayer = overlayer;
+            return cpc;
+        }
+
+        public static CustomPropertyCollection[] GetCollections(Overlayer overlayer)
+        {
+            return overlayer.recter.GetSelectRects()
+                .Select(s => GetCollections(s.Control, overlayer))
+                .ToArray();
+        }
+
+        /// <summary>
+        /// 显示指定的属性
+        /// <para>自定义属性必须定义ValueType</para>
+        /// </summary>
+        /// <param name="control">控件对象</param>
+        /// <param name="controlName">控件名</param>
+        /// <returns>属性集合</returns>
+        public static ControlSerializable ControlConvertSerializable(Control control)
+        {
+            var type = GetBaseSerializable(control.GetType()).GetType();
+            var cs = (ControlSerializable) Activator.CreateInstance(type);
+            control.MapsterCopyTo(cs);
+            return cs;
         }
     }
 }

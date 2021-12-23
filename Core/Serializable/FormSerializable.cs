@@ -18,6 +18,10 @@ namespace FormDesinger.Core.Serializable
     {
         public double Opacity { get; set; }
 
+        public override CustomPropertyCollection GetCollections(Control control)
+        {
+            return GetCollections(control as Form);
+        }
         public CustomPropertyCollection GetCollections(Form control)
         {
             var cpc = base.GetCollections(control);

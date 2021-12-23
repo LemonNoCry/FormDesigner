@@ -5,6 +5,10 @@ namespace FormDesinger.Core.Serializable
 {
     public class DateTimePickerSerializable : ControlSerializable, IPropertyCollections<DateTimePicker>
     {
+        public override CustomPropertyCollection GetCollections(Control control)
+        {
+            return GetCollections(control as DateTimePicker);
+        }
         public CustomPropertyCollection GetCollections(DateTimePicker control)
         {
             var cpc = base.GetCollections(control);
