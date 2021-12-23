@@ -64,7 +64,7 @@ namespace FormDesinger
         {
             using (OpenFileDialog of = new OpenFileDialog())
             {
-                of.Filter = "net程序集(*.dll)|*.dll";
+                of.Filter = "net程序集(*.dll)|*.dll|net exe|*.exe";
                 if (of.ShowDialog() == DialogResult.OK)
                 {
                     Assembly assem = null;
