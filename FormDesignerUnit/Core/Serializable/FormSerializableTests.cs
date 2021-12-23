@@ -1,19 +1,15 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using FormDesinger.Core.Serializable;
+﻿using Ivytalk.DataWindow.Serializable;
+using Ivytalk.DataWindow.Utility;
+using Mapster;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml;
 using System.Xml.Serialization;
-using ExpressionDebugger;
-using Mapster;
 
 namespace FormDesinger.Core.Serializable.Tests
 {
@@ -99,27 +95,6 @@ namespace FormDesinger.Core.Serializable.Tests
             Console.WriteLine(1);
         }
 
-        [TestMethod]
-        public void Method03()
-        {
-            TypeAdapterConfig.GlobalSettings.Compiler = exp => exp.CompileWithDebugInfo();
-
-            Control lbl = new Label()
-            {
-                AutoSize = false
-            };
-            Control lbl2 = new Label()
-            {
-                AutoSize = true
-            };
-            LabelSerializable ls = lbl.MapsterCopyTo<LabelSerializable>();
-           
-            ControlSerializable ls2 = lbl2.MapsterCopyTo<LabelSerializable>();
-
-            dynamic dyn = ls2;
-            TypeAdapter.Adapt(dyn, ls);
-
-            Console.WriteLine(ls.AutoSize);
-        }
+        
     }
 }

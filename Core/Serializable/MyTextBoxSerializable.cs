@@ -1,5 +1,7 @@
 ﻿using System.Windows.Forms;
 using FormDesinger.UserControls;
+using Ivytalk.DataWindow.CustomPropertys;
+using Ivytalk.DataWindow.Serializable;
 
 namespace FormDesinger.Core.Serializable
 {

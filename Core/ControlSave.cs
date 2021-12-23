@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
+using Ivytalk.DataWindow;
+using Ivytalk.DataWindow.DesignLayer;
 
 namespace FormDesinger.Core
 {
@@ -27,9 +29,7 @@ namespace FormDesinger.Core
             //保存From
             StringBuilder sb = new StringBuilder();
             sb.Append("[Form]\r\n");
-            sb.Append(string.Format("Width={0};Height={1};Text={2}\r\n", overlayer.DesingerFormSize.X, overlayer.DesingerFormSize.Y, overlayer.DesingerFormText));
-            sb.Append("[SQL]\r\n");
-            sb.Append(overlayer.DesingerForm.SQL + "\r\n");
+            sb.Append(string.Format("Width={0};Height={1};Text={2}\r\n", overlayer.DesignerFormSize.X, overlayer.DesignerFormSize.Y, overlayer.DesignerFormText));
             sb.Append("[ENDSQL]\r\n");
             foreach (Control c in overlayer.Controls)
             {

@@ -6,6 +6,12 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Reflection;
+using System.Windows.Forms.Design;
+using Ivytalk.DataWindow;
+using Ivytalk.DataWindow.Core;
+using Ivytalk.DataWindow.Core.OperationControl;
+using Ivytalk.DataWindow.DesignLayer;
+using Ivytalk.DataWindow.Utility;
 
 namespace FormDesinger
 {
@@ -14,8 +20,8 @@ namespace FormDesinger
         public FromDesigner()
         {
             InitializeComponent();
-            designerControl1._overlayer.Init(800, 500, "新建设计");
-            this.designerControl1._overlayer.PropertyGrid = this.propertyGrid1;
+            designerControl1.Overlayer.Init(800, 500, "新建设计");
+            this.designerControl1.Overlayer.PropertyGrid = this.propertyGrid1;
         }
 
         protected override CreateParams CreateParams
@@ -113,7 +119,7 @@ namespace FormDesinger
 
         private void 保存ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (designerControl1._overlayer.Controls.Count == 0)
+            if (designerControl1.Overlayer.Controls.Count == 0)
             {
                 MessageBox.Show("没有任何控件,不能保存.", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -127,15 +133,18 @@ namespace FormDesinger
             fileDialog.RestoreDirectory = true;
             if (fileDialog.ShowDialog() == DialogResult.OK)
             {
-                string text = new Core.ControlSave(designerControl1._overlayer).Save();
                 string fileName = fileDialog.FileName;
-                System.IO.File.WriteAllText(fileName, text, Encoding.UTF8);
+                //string text = new Core.ControlSave(designerControl1.Overlayer).Save();
+                //
+                //System.IO.File.WriteAllText(fileName, text, Encoding.UTF8);
+
+                DataWindowAnalysis.SerializationControls(designerControl1.Overlayer.DesignerForm, fileName);
             }
         }
 
         private void 新建ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (designerControl1._overlayer.Controls.Count != 0)
+            if (designerControl1.Overlayer.Controls.Count != 0)
             {
                 DialogResult dr = MessageBox.Show("当前设计将被覆盖,确定新建吗?\n建议先保存当前设计",
                     "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
@@ -143,7 +152,7 @@ namespace FormDesinger
                     return;
             }
 
-            designerControl1._overlayer.Init(800, 500, "新建设计");
+            designerControl1.Overlayer.Init(800, 500, "新建设计");
             //designerControl1._hostFrame.Controls.Clear();
             //designerControl1._hostFrame.Text = "新建设计";
             //designerControl1._hostFrame.Width = 800;
@@ -152,7 +161,7 @@ namespace FormDesinger
 
         private void 打开ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (designerControl1._overlayer.Controls.Count != 0)
+            if (designerControl1.Overlayer.Controls.Count != 0)
             {
                 DialogResult dr = MessageBox.Show("当前设计将被覆盖,确定新建吗?\n建议先保存当前设计",
                     "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
@@ -160,7 +169,7 @@ namespace FormDesinger
                     return;
             }
 
-            designerControl1._overlayer.Init(800, 500, "新建设计");
+            designerControl1.Overlayer.Init(800, 500, "新建设计");
             OpenFileDialog fileDialog = new OpenFileDialog();
             fileDialog.Multiselect = false;
             fileDialog.Title = "请选择文本文件";
@@ -168,7 +177,7 @@ namespace FormDesinger
             if (fileDialog.ShowDialog() == DialogResult.OK)
             {
                 string fileName = fileDialog.FileName;
-                designerControl1._overlayer.DesingerFormText = "自由型设计";
+                designerControl1.Overlayer.DesignerFormText = "自由型设计";
                 ContextMenuStrip menu = new ContextMenuStrip();
                 menu.Items.Add("编辑SQL");
                 designerControl1.ContextMenuStrip = menu;
@@ -176,7 +185,7 @@ namespace FormDesinger
                 string source = System.IO.File.ReadAllText(fileName);
                 //Core.OldAnalysis old = new Core.OldAnalysis(designerControl1._overlayer);
                 //old.of_LoaddwText(source);
-                Core.MyAnalysis anl = new Core.MyAnalysis(designerControl1._overlayer);
+                Core.MyAnalysis anl = new Core.MyAnalysis(designerControl1.Overlayer);
                 anl.Load(source);
                 return;
             }
@@ -185,19 +194,19 @@ namespace FormDesinger
         //微调
         private void tool_auto_Click(object sender, EventArgs e)
         {
-            designerControl1._overlayer.ControlAlginFineTune();
+            designerControl1.Overlayer.ControlAlignFineTune();
         }
 
         //左对齐
         private void toolStrip_center_left_Click(object sender, EventArgs e)
         {
-            designerControl1._overlayer.ControlAlgin(AlginType.Left);
+            designerControl1.Overlayer.ControlAlign(AlignType.Left);
         }
 
         //上对齐
         private void toolStrip_center_top_Click(object sender, EventArgs e)
         {
-            designerControl1._overlayer.ControlAlgin(AlginType.Top);
+            designerControl1.Overlayer.ControlAlign(AlignType.Top);
         }
 
         private void 设计器最大化ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -220,14 +229,14 @@ namespace FormDesinger
             fileDialog.Filter = "文本文件|*.txt|所有文件|*.*";
             if (fileDialog.ShowDialog() == DialogResult.OK)
             {
-                HostFrame frm = new HostFrame();
+                BaseDataWindow frm = new BaseDataWindow();
 
                 DesignerControl dc = new DesignerControl();
                 dc.Dock = DockStyle.Fill;
                 frm.Controls.Add(dc);
 
                 string fileName = fileDialog.FileName;
-                dc._overlayer.DesingerFormText = "自由型设计";
+                dc.Overlayer.DesignerFormText = "自由型设计";
                 ContextMenuStrip menu = new ContextMenuStrip();
                 menu.Items.Add("编辑SQL");
                 dc.ContextMenuStrip = menu;
@@ -235,7 +244,7 @@ namespace FormDesinger
                 string source = System.IO.File.ReadAllText(fileName);
                 //Core.OldAnalysis old = new Core.OldAnalysis(designerControl1._overlayer);
                 //old.of_LoaddwText(source);
-                Core.MyAnalysis anl = new Core.MyAnalysis(dc._overlayer);
+                Core.MyAnalysis anl = new Core.MyAnalysis(dc.Overlayer);
                 anl.Load(source);
 
                 frm.Show();

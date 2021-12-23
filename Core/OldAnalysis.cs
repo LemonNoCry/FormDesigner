@@ -5,6 +5,8 @@ using System.Drawing;
 using System.Collections;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
+using Ivytalk.DataWindow;
+using Ivytalk.DataWindow.DesignLayer;
 
 namespace FormDesinger.Core
 {
@@ -347,8 +349,7 @@ namespace FormDesinger.Core
             #endregion
             #endregion
 
-            overlayer.DesingerForm.SQL = Tools.GetSQLbyDwText(is_source);
-            overlayer.DesingerFormSize = new Point(totalWidth + 24, totalHeight + 50);
+            overlayer.DesignerFormSize = new Point(totalWidth + 24, totalHeight + 50);
         }
         #endregion
 

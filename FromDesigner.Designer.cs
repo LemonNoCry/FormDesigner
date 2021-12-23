@@ -1,4 +1,7 @@
-﻿namespace FormDesinger
+﻿using Ivytalk.DataWindow;
+using Ivytalk.DataWindow.DesignLayer;
+
+namespace FormDesinger
 {
     partial class FromDesigner
     {
@@ -52,7 +55,7 @@
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.splitter2 = new System.Windows.Forms.Splitter();
-            this.designerControl1 = new FormDesinger.DesignerControl();
+            this.designerControl1 = new DesignerControl();
             this.toolMenuItems_adds = new FormDesinger.UserControls.ToolMenuItems();
             this.toolMenuItems_tools_cus = new FormDesinger.UserControls.ToolMenuItems();
             this.toolMenuItems_label = new FormDesinger.UserControls.ToolMenuItems();

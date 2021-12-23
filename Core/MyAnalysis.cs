@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
+using Ivytalk.DataWindow;
+using Ivytalk.DataWindow.DesignLayer;
 
 namespace FormDesinger.Core
 {
@@ -39,8 +41,8 @@ namespace FormDesinger.Core
                     {
                         case "Form":
                             node = nodes[i + 1];
-                            overlayer.DesingerFormText = GetText(node);
-                            overlayer.DesingerFormSize = new Point(GetWidth(node), GetHeight(node));
+                            overlayer.DesignerFormText = GetText(node);
+                            overlayer.DesignerFormSize = new Point(GetWidth(node), GetHeight(node));
                             i++;
                             break;
                         case "SQL":
@@ -53,7 +55,6 @@ namespace FormDesinger.Core
                                 i++;
                                 node = nodes[i];
                             }
-                            overlayer.DesingerForm.SQL = sql.ToString();
                             break;
                         case "TextBox":
                             node = nodes[i + 1];
