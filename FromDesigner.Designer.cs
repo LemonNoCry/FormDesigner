@@ -34,7 +34,23 @@ namespace FormDesinger
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FromDesigner));
             this.panel_left = new System.Windows.Forms.Panel();
             this.panel_tools_cus = new System.Windows.Forms.Panel();
+            this.toolMenuItems_adds = new FormDesinger.UserControls.ToolMenuItems();
+            this.toolMenuItems_tools_cus = new FormDesinger.UserControls.ToolMenuItems();
             this.panel_tools = new System.Windows.Forms.Panel();
+            this.toolMenuItems_label = new FormDesinger.UserControls.ToolMenuItems();
+            this.toolMenuItems_panel = new FormDesinger.UserControls.ToolMenuItems();
+            this.toolMenuItems_tools = new FormDesinger.UserControls.ToolMenuItems();
+            this.toolMenuItems_checkbox = new FormDesinger.UserControls.ToolMenuItems();
+            this.toolMenuItems_treeview = new FormDesinger.UserControls.ToolMenuItems();
+            this.toolMenuItems_progressbar = new FormDesinger.UserControls.ToolMenuItems();
+            this.toolMenuItems_textbox = new FormDesinger.UserControls.ToolMenuItems();
+            this.toolMenuItems_picturebox = new FormDesinger.UserControls.ToolMenuItems();
+            this.toolMenuItems_button = new FormDesinger.UserControls.ToolMenuItems();
+            this.toolMenuItems_linklabel = new FormDesinger.UserControls.ToolMenuItems();
+            this.toolMenuItems_radiobutton = new FormDesinger.UserControls.ToolMenuItems();
+            this.toolMenuItems_datetimepicker = new FormDesinger.UserControls.ToolMenuItems();
+            this.toolMenuItems_combobox = new FormDesinger.UserControls.ToolMenuItems();
+            this.toolMenuItems_listbox = new FormDesinger.UserControls.ToolMenuItems();
             this.panel_top = new System.Windows.Forms.Panel();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.tool_auto = new System.Windows.Forms.ToolStripButton();
@@ -55,23 +71,7 @@ namespace FormDesinger
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.splitter2 = new System.Windows.Forms.Splitter();
-            this.designerControl1 = new DesignerControl();
-            this.toolMenuItems_adds = new FormDesinger.UserControls.ToolMenuItems();
-            this.toolMenuItems_tools_cus = new FormDesinger.UserControls.ToolMenuItems();
-            this.toolMenuItems_label = new FormDesinger.UserControls.ToolMenuItems();
-            this.toolMenuItems_panel = new FormDesinger.UserControls.ToolMenuItems();
-            this.toolMenuItems_tools = new FormDesinger.UserControls.ToolMenuItems();
-            this.toolMenuItems_checkbox = new FormDesinger.UserControls.ToolMenuItems();
-            this.toolMenuItems_treeview = new FormDesinger.UserControls.ToolMenuItems();
-            this.toolMenuItems_progressbar = new FormDesinger.UserControls.ToolMenuItems();
-            this.toolMenuItems_textbox = new FormDesinger.UserControls.ToolMenuItems();
-            this.toolMenuItems_picturebox = new FormDesinger.UserControls.ToolMenuItems();
-            this.toolMenuItems_button = new FormDesinger.UserControls.ToolMenuItems();
-            this.toolMenuItems_linklabel = new FormDesinger.UserControls.ToolMenuItems();
-            this.toolMenuItems_radiobutton = new FormDesinger.UserControls.ToolMenuItems();
-            this.toolMenuItems_datetimepicker = new FormDesinger.UserControls.ToolMenuItems();
-            this.toolMenuItems_combobox = new FormDesinger.UserControls.ToolMenuItems();
-            this.toolMenuItems_listbox = new FormDesinger.UserControls.ToolMenuItems();
+            this.designerControl1 = new Ivytalk.DataWindow.DesignLayer.DesignerControl();
             this.panel_left.SuspendLayout();
             this.panel_tools_cus.SuspendLayout();
             this.panel_tools.SuspendLayout();
@@ -102,215 +102,6 @@ namespace FormDesinger
             this.panel_tools_cus.Name = "panel_tools_cus";
             this.panel_tools_cus.Size = new System.Drawing.Size(138, 24);
             this.panel_tools_cus.TabIndex = 15;
-            // 
-            // panel_tools
-            // 
-            this.panel_tools.BackColor = System.Drawing.Color.Transparent;
-            this.panel_tools.Controls.Add(this.toolMenuItems_label);
-            this.panel_tools.Controls.Add(this.toolMenuItems_panel);
-            this.panel_tools.Controls.Add(this.toolMenuItems_tools);
-            this.panel_tools.Controls.Add(this.toolMenuItems_checkbox);
-            this.panel_tools.Controls.Add(this.toolMenuItems_treeview);
-            this.panel_tools.Controls.Add(this.toolMenuItems_progressbar);
-            this.panel_tools.Controls.Add(this.toolMenuItems_textbox);
-            this.panel_tools.Controls.Add(this.toolMenuItems_picturebox);
-            this.panel_tools.Controls.Add(this.toolMenuItems_button);
-            this.panel_tools.Controls.Add(this.toolMenuItems_linklabel);
-            this.panel_tools.Controls.Add(this.toolMenuItems_radiobutton);
-            this.panel_tools.Controls.Add(this.toolMenuItems_datetimepicker);
-            this.panel_tools.Controls.Add(this.toolMenuItems_combobox);
-            this.panel_tools.Controls.Add(this.toolMenuItems_listbox);
-            this.panel_tools.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel_tools.Location = new System.Drawing.Point(0, 0);
-            this.panel_tools.Name = "panel_tools";
-            this.panel_tools.Size = new System.Drawing.Size(138, 322);
-            this.panel_tools.TabIndex = 13;
-            // 
-            // panel_top
-            // 
-            this.panel_top.Controls.Add(this.toolStrip1);
-            this.panel_top.Controls.Add(this.menuStrip1);
-            this.panel_top.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel_top.Location = new System.Drawing.Point(0, 0);
-            this.panel_top.Name = "panel_top";
-            this.panel_top.Size = new System.Drawing.Size(1224, 52);
-            this.panel_top.TabIndex = 1;
-            // 
-            // toolStrip1
-            // 
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tool_auto,
-            this.toolStrip_align});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 25);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1224, 25);
-            this.toolStrip1.TabIndex = 2;
-            this.toolStrip1.Text = "toolStrip1";
-            // 
-            // tool_auto
-            // 
-            this.tool_auto.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tool_auto.Image = global::FormDesinger.Properties.Resources.reset_tune_72px;
-            this.tool_auto.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tool_auto.Name = "tool_auto";
-            this.tool_auto.Size = new System.Drawing.Size(23, 22);
-            this.tool_auto.Text = "微调";
-            this.tool_auto.Click += new System.EventHandler(this.tool_auto_Click);
-            // 
-            // toolStrip_align
-            // 
-            this.toolStrip_align.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStrip_align.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStrip_center_left,
-            this.toolStrip_center_top});
-            this.toolStrip_align.Image = global::FormDesinger.Properties.Resources.align_left_72px;
-            this.toolStrip_align.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStrip_align.Name = "toolStrip_align";
-            this.toolStrip_align.Size = new System.Drawing.Size(29, 22);
-            this.toolStrip_align.Text = "对齐";
-            // 
-            // toolStrip_center_left
-            // 
-            this.toolStrip_center_left.Image = ((System.Drawing.Image)(resources.GetObject("toolStrip_center_left.Image")));
-            this.toolStrip_center_left.Name = "toolStrip_center_left";
-            this.toolStrip_center_left.Size = new System.Drawing.Size(112, 22);
-            this.toolStrip_center_left.Text = "左对齐";
-            this.toolStrip_center_left.Click += new System.EventHandler(this.toolStrip_center_left_Click);
-            // 
-            // toolStrip_center_top
-            // 
-            this.toolStrip_center_top.Image = global::FormDesinger.Properties.Resources.align_top_72px;
-            this.toolStrip_center_top.Name = "toolStrip_center_top";
-            this.toolStrip_center_top.Size = new System.Drawing.Size(112, 22);
-            this.toolStrip_center_top.Text = "上对齐";
-            this.toolStrip_center_top.Click += new System.EventHandler(this.toolStrip_center_top_Click);
-            // 
-            // menuStrip1
-            // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.操作ToolStripMenuItem,
-            this.视图ToolStripMenuItem,
-            this.operToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1224, 25);
-            this.menuStrip1.TabIndex = 1;
-            this.menuStrip1.Text = "menuStrip1";
-            // 
-            // 操作ToolStripMenuItem
-            // 
-            this.操作ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.新建ToolStripMenuItem,
-            this.打开ToolStripMenuItem,
-            this.保存ToolStripMenuItem,
-            this.退出ToolStripMenuItem});
-            this.操作ToolStripMenuItem.Name = "操作ToolStripMenuItem";
-            this.操作ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
-            this.操作ToolStripMenuItem.Text = "菜单";
-            // 
-            // 新建ToolStripMenuItem
-            // 
-            this.新建ToolStripMenuItem.Name = "新建ToolStripMenuItem";
-            this.新建ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
-            this.新建ToolStripMenuItem.Text = "新建";
-            this.新建ToolStripMenuItem.Click += new System.EventHandler(this.新建ToolStripMenuItem_Click);
-            // 
-            // 打开ToolStripMenuItem
-            // 
-            this.打开ToolStripMenuItem.Name = "打开ToolStripMenuItem";
-            this.打开ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
-            this.打开ToolStripMenuItem.Text = "打开";
-            this.打开ToolStripMenuItem.Click += new System.EventHandler(this.打开ToolStripMenuItem_Click);
-            // 
-            // 保存ToolStripMenuItem
-            // 
-            this.保存ToolStripMenuItem.Name = "保存ToolStripMenuItem";
-            this.保存ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
-            this.保存ToolStripMenuItem.Text = "保存";
-            this.保存ToolStripMenuItem.Click += new System.EventHandler(this.保存ToolStripMenuItem_Click);
-            // 
-            // 退出ToolStripMenuItem
-            // 
-            this.退出ToolStripMenuItem.Name = "退出ToolStripMenuItem";
-            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
-            this.退出ToolStripMenuItem.Text = "退出";
-            // 
-            // 视图ToolStripMenuItem
-            // 
-            this.视图ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.设计器最大化ToolStripMenuItem,
-            this.还原ToolStripMenuItem});
-            this.视图ToolStripMenuItem.Name = "视图ToolStripMenuItem";
-            this.视图ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
-            this.视图ToolStripMenuItem.Text = "视图";
-            // 
-            // 设计器最大化ToolStripMenuItem
-            // 
-            this.设计器最大化ToolStripMenuItem.Name = "设计器最大化ToolStripMenuItem";
-            this.设计器最大化ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
-            this.设计器最大化ToolStripMenuItem.Text = "设计器最大化";
-            this.设计器最大化ToolStripMenuItem.Click += new System.EventHandler(this.设计器最大化ToolStripMenuItem_Click);
-            // 
-            // 还原ToolStripMenuItem
-            // 
-            this.还原ToolStripMenuItem.Name = "还原ToolStripMenuItem";
-            this.还原ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
-            this.还原ToolStripMenuItem.Text = "还原";
-            this.还原ToolStripMenuItem.Click += new System.EventHandler(this.还原ToolStripMenuItem_Click);
-            // 
-            // operToolStripMenuItem
-            // 
-            this.operToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.formToolStripMenuItem});
-            this.operToolStripMenuItem.Name = "operToolStripMenuItem";
-            this.operToolStripMenuItem.Size = new System.Drawing.Size(50, 21);
-            this.operToolStripMenuItem.Text = "Oper";
-            // 
-            // formToolStripMenuItem
-            // 
-            this.formToolStripMenuItem.Name = "formToolStripMenuItem";
-            this.formToolStripMenuItem.Size = new System.Drawing.Size(106, 22);
-            this.formToolStripMenuItem.Text = "Form";
-            this.formToolStripMenuItem.Click += new System.EventHandler(this.formToolStripMenuItem_Click);
-            // 
-            // propertyGrid1
-            // 
-            this.propertyGrid1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.propertyGrid1.Location = new System.Drawing.Point(985, 52);
-            this.propertyGrid1.Name = "propertyGrid1";
-            this.propertyGrid1.Size = new System.Drawing.Size(239, 593);
-            this.propertyGrid1.TabIndex = 3;
-            // 
-            // splitter1
-            // 
-            this.splitter1.BackColor = System.Drawing.Color.LightGray;
-            this.splitter1.Location = new System.Drawing.Point(138, 52);
-            this.splitter1.MinSize = 0;
-            this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(2, 593);
-            this.splitter1.TabIndex = 5;
-            this.splitter1.TabStop = false;
-            // 
-            // splitter2
-            // 
-            this.splitter2.BackColor = System.Drawing.Color.LightGray;
-            this.splitter2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.splitter2.Location = new System.Drawing.Point(983, 52);
-            this.splitter2.MinSize = 0;
-            this.splitter2.Name = "splitter2";
-            this.splitter2.Size = new System.Drawing.Size(2, 593);
-            this.splitter2.TabIndex = 6;
-            this.splitter2.TabStop = false;
-            // 
-            // designerControl1
-            // 
-            this.designerControl1.AutoScroll = true;
-            this.designerControl1.BackColor = System.Drawing.Color.White;
-            this.designerControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.designerControl1.Location = new System.Drawing.Point(138, 52);
-            this.designerControl1.Name = "designerControl1";
-            this.designerControl1.Size = new System.Drawing.Size(847, 593);
-            this.designerControl1.TabIndex = 4;
             // 
             // toolMenuItems_adds
             // 
@@ -349,6 +140,29 @@ namespace FormDesinger
             this.toolMenuItems_tools_cus.ToolName = "自定义控件";
             this.toolMenuItems_tools_cus.ToolTag = null;
             this.toolMenuItems_tools_cus.ToolTip = "从.net程序集添加外部控件";
+            // 
+            // panel_tools
+            // 
+            this.panel_tools.BackColor = System.Drawing.Color.Transparent;
+            this.panel_tools.Controls.Add(this.toolMenuItems_label);
+            this.panel_tools.Controls.Add(this.toolMenuItems_panel);
+            this.panel_tools.Controls.Add(this.toolMenuItems_tools);
+            this.panel_tools.Controls.Add(this.toolMenuItems_checkbox);
+            this.panel_tools.Controls.Add(this.toolMenuItems_treeview);
+            this.panel_tools.Controls.Add(this.toolMenuItems_progressbar);
+            this.panel_tools.Controls.Add(this.toolMenuItems_textbox);
+            this.panel_tools.Controls.Add(this.toolMenuItems_picturebox);
+            this.panel_tools.Controls.Add(this.toolMenuItems_button);
+            this.panel_tools.Controls.Add(this.toolMenuItems_linklabel);
+            this.panel_tools.Controls.Add(this.toolMenuItems_radiobutton);
+            this.panel_tools.Controls.Add(this.toolMenuItems_datetimepicker);
+            this.panel_tools.Controls.Add(this.toolMenuItems_combobox);
+            this.panel_tools.Controls.Add(this.toolMenuItems_listbox);
+            this.panel_tools.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel_tools.Location = new System.Drawing.Point(0, 0);
+            this.panel_tools.Name = "panel_tools";
+            this.panel_tools.Size = new System.Drawing.Size(138, 322);
+            this.panel_tools.TabIndex = 13;
             // 
             // toolMenuItems_label
             // 
@@ -630,6 +444,192 @@ namespace FormDesinger
             this.toolMenuItems_listbox.ToolTag = null;
             this.toolMenuItems_listbox.ToolTip = "显示用户可以从中选择项的列表";
             this.toolMenuItems_listbox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.toolMenuItems_MouseDown);
+            // 
+            // panel_top
+            // 
+            this.panel_top.Controls.Add(this.toolStrip1);
+            this.panel_top.Controls.Add(this.menuStrip1);
+            this.panel_top.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel_top.Location = new System.Drawing.Point(0, 0);
+            this.panel_top.Name = "panel_top";
+            this.panel_top.Size = new System.Drawing.Size(1224, 52);
+            this.panel_top.TabIndex = 1;
+            // 
+            // toolStrip1
+            // 
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tool_auto,
+            this.toolStrip_align});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 25);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(1224, 25);
+            this.toolStrip1.TabIndex = 2;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // tool_auto
+            // 
+            this.tool_auto.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tool_auto.Image = global::FormDesinger.Properties.Resources.reset_tune_72px;
+            this.tool_auto.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tool_auto.Name = "tool_auto";
+            this.tool_auto.Size = new System.Drawing.Size(23, 22);
+            this.tool_auto.Text = "微调";
+            this.tool_auto.Click += new System.EventHandler(this.tool_auto_Click);
+            // 
+            // toolStrip_align
+            // 
+            this.toolStrip_align.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStrip_align.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStrip_center_left,
+            this.toolStrip_center_top});
+            this.toolStrip_align.Image = global::FormDesinger.Properties.Resources.align_left_72px;
+            this.toolStrip_align.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStrip_align.Name = "toolStrip_align";
+            this.toolStrip_align.Size = new System.Drawing.Size(29, 22);
+            this.toolStrip_align.Text = "对齐";
+            // 
+            // toolStrip_center_left
+            // 
+            this.toolStrip_center_left.Image = ((System.Drawing.Image)(resources.GetObject("toolStrip_center_left.Image")));
+            this.toolStrip_center_left.Name = "toolStrip_center_left";
+            this.toolStrip_center_left.Size = new System.Drawing.Size(112, 22);
+            this.toolStrip_center_left.Text = "左对齐";
+            this.toolStrip_center_left.Click += new System.EventHandler(this.toolStrip_center_left_Click);
+            // 
+            // toolStrip_center_top
+            // 
+            this.toolStrip_center_top.Image = global::FormDesinger.Properties.Resources.align_top_72px;
+            this.toolStrip_center_top.Name = "toolStrip_center_top";
+            this.toolStrip_center_top.Size = new System.Drawing.Size(112, 22);
+            this.toolStrip_center_top.Text = "上对齐";
+            this.toolStrip_center_top.Click += new System.EventHandler(this.toolStrip_center_top_Click);
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.操作ToolStripMenuItem,
+            this.视图ToolStripMenuItem,
+            this.operToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(1224, 25);
+            this.menuStrip1.TabIndex = 1;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // 操作ToolStripMenuItem
+            // 
+            this.操作ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.新建ToolStripMenuItem,
+            this.打开ToolStripMenuItem,
+            this.保存ToolStripMenuItem,
+            this.退出ToolStripMenuItem});
+            this.操作ToolStripMenuItem.Name = "操作ToolStripMenuItem";
+            this.操作ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
+            this.操作ToolStripMenuItem.Text = "菜单";
+            // 
+            // 新建ToolStripMenuItem
+            // 
+            this.新建ToolStripMenuItem.Name = "新建ToolStripMenuItem";
+            this.新建ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.新建ToolStripMenuItem.Text = "新建";
+            this.新建ToolStripMenuItem.Click += new System.EventHandler(this.新建ToolStripMenuItem_Click);
+            // 
+            // 打开ToolStripMenuItem
+            // 
+            this.打开ToolStripMenuItem.Name = "打开ToolStripMenuItem";
+            this.打开ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.打开ToolStripMenuItem.Text = "打开";
+            this.打开ToolStripMenuItem.Click += new System.EventHandler(this.打开ToolStripMenuItem_Click);
+            // 
+            // 保存ToolStripMenuItem
+            // 
+            this.保存ToolStripMenuItem.Name = "保存ToolStripMenuItem";
+            this.保存ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.保存ToolStripMenuItem.Text = "保存";
+            this.保存ToolStripMenuItem.Click += new System.EventHandler(this.保存ToolStripMenuItem_Click);
+            // 
+            // 退出ToolStripMenuItem
+            // 
+            this.退出ToolStripMenuItem.Name = "退出ToolStripMenuItem";
+            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.退出ToolStripMenuItem.Text = "退出";
+            // 
+            // 视图ToolStripMenuItem
+            // 
+            this.视图ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.设计器最大化ToolStripMenuItem,
+            this.还原ToolStripMenuItem});
+            this.视图ToolStripMenuItem.Name = "视图ToolStripMenuItem";
+            this.视图ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
+            this.视图ToolStripMenuItem.Text = "视图";
+            // 
+            // 设计器最大化ToolStripMenuItem
+            // 
+            this.设计器最大化ToolStripMenuItem.Name = "设计器最大化ToolStripMenuItem";
+            this.设计器最大化ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.设计器最大化ToolStripMenuItem.Text = "设计器最大化";
+            this.设计器最大化ToolStripMenuItem.Click += new System.EventHandler(this.设计器最大化ToolStripMenuItem_Click);
+            // 
+            // 还原ToolStripMenuItem
+            // 
+            this.还原ToolStripMenuItem.Name = "还原ToolStripMenuItem";
+            this.还原ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.还原ToolStripMenuItem.Text = "还原";
+            this.还原ToolStripMenuItem.Click += new System.EventHandler(this.还原ToolStripMenuItem_Click);
+            // 
+            // operToolStripMenuItem
+            // 
+            this.operToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.formToolStripMenuItem});
+            this.operToolStripMenuItem.Name = "operToolStripMenuItem";
+            this.operToolStripMenuItem.Size = new System.Drawing.Size(50, 21);
+            this.operToolStripMenuItem.Text = "Oper";
+            // 
+            // formToolStripMenuItem
+            // 
+            this.formToolStripMenuItem.Name = "formToolStripMenuItem";
+            this.formToolStripMenuItem.Size = new System.Drawing.Size(106, 22);
+            this.formToolStripMenuItem.Text = "Form";
+            this.formToolStripMenuItem.Click += new System.EventHandler(this.formToolStripMenuItem_Click);
+            // 
+            // propertyGrid1
+            // 
+            this.propertyGrid1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.propertyGrid1.Location = new System.Drawing.Point(985, 52);
+            this.propertyGrid1.Name = "propertyGrid1";
+            this.propertyGrid1.Size = new System.Drawing.Size(239, 593);
+            this.propertyGrid1.TabIndex = 3;
+            // 
+            // splitter1
+            // 
+            this.splitter1.BackColor = System.Drawing.Color.LightGray;
+            this.splitter1.Location = new System.Drawing.Point(138, 52);
+            this.splitter1.MinSize = 0;
+            this.splitter1.Name = "splitter1";
+            this.splitter1.Size = new System.Drawing.Size(2, 593);
+            this.splitter1.TabIndex = 5;
+            this.splitter1.TabStop = false;
+            // 
+            // splitter2
+            // 
+            this.splitter2.BackColor = System.Drawing.Color.LightGray;
+            this.splitter2.Dock = System.Windows.Forms.DockStyle.Right;
+            this.splitter2.Location = new System.Drawing.Point(983, 52);
+            this.splitter2.MinSize = 0;
+            this.splitter2.Name = "splitter2";
+            this.splitter2.Size = new System.Drawing.Size(2, 593);
+            this.splitter2.TabIndex = 6;
+            this.splitter2.TabStop = false;
+            // 
+            // designerControl1
+            // 
+            this.designerControl1.AutoScroll = true;
+            this.designerControl1.BackColor = System.Drawing.Color.White;
+            this.designerControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.designerControl1.Location = new System.Drawing.Point(138, 52);
+            this.designerControl1.Name = "designerControl1";
+            this.designerControl1.Size = new System.Drawing.Size(847, 593);
+            this.designerControl1.TabIndex = 4;
             // 
             // FromDesigner
             // 
