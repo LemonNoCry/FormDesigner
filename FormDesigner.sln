@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FormDesigner", "FormDesigne
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FormDesignerUnit", "FormDesignerUnit\FormDesignerUnit.csproj", "{99CEAB94-E279-4B70-9972-B92310942D7D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ivytalk.DataWindow", "..\Ivytalk.DataWindow\Ivytalk.DataWindow.csproj", "{F191CC88-44ED-4BD6-A669-7723CE12F66B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ivytalk.DataWindow", "Ivytalk.DataWindow\Ivytalk.DataWindow.csproj", "{F191CC88-44ED-4BD6-A669-7723CE12F66B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

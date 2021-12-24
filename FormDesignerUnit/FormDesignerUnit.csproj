@@ -212,13 +212,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Ivytalk.DataWindow\Ivytalk.DataWindow.csproj">
-      <Project>{F191CC88-44ED-4BD6-A669-7723CE12F66B}</Project>
-      <Name>Ivytalk.DataWindow</Name>
-    </ProjectReference>
     <ProjectReference Include="..\FormDesigner.csproj">
       <Project>{03DF5694-BC60-4030-B66E-0304F0A63059}</Project>
       <Name>FormDesigner</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ivytalk.DataWindow\Ivytalk.DataWindow.csproj">
+      <Project>{F191CC88-44ED-4BD6-A669-7723CE12F66B}</Project>
+      <Name>Ivytalk.DataWindow</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

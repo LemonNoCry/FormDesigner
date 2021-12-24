@@ -65,7 +65,7 @@ namespace FormDesinger.Core.Serializable.Tests
             FormSerializable frm = new FormSerializable();
             frm.Text = "asd";
 
-            frm = frm2.MapsterCopyTo(frm);
+            frm2.MapsterCopyTo(frm);
             Console.WriteLine(SerializeXml(frm));
         }
 

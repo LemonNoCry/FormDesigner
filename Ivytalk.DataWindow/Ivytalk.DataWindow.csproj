@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F191CC88-44ED-4BD6-A669-7723CE12F66B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Ivytalk.DataWindow</RootNamespace>
+    <AssemblyName>Ivytalk.DataWindow</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Mapster, Version=7.2.0.0, Culture=neutral, PublicKeyToken=2f39883af23c29a8, processorArchitecture=MSIL">
+      <HintPath>..\FormDesigner\packages\Mapster.7.2.0\lib\net40\Mapster.dll</HintPath>
+    </Reference>
+    <Reference Include="Mapster.Core, Version=1.2.0.0, Culture=neutral, PublicKeyToken=e64997d676a9c1d3, processorArchitecture=MSIL">
+      <HintPath>..\FormDesigner\packages\Mapster.Core.1.2.0\lib\net40\Mapster.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Core\Collections.cs" />
+    <Compile Include="Core\DataWindowAnalysis.cs" />
+    <Compile Include="Core\MessageFilter\MessageFilter.cs" />
+    <Compile Include="Core\OperationControl\AlignType.cs" />
+    <Compile Include="Core\OperationControl\DragType.cs" />
+    <Compile Include="Core\OperationControl\History\OperationControlHistory.cs" />
+    <Compile Include="Core\OperationControl\History\OperationControlRecord.cs" />
+    <Compile Include="Core\OperationControl\History\OperationControlType.cs" />
+    <Compile Include="Core\OperationControl\Recter.cs" />
+    <Compile Include="Core\OperationControl\SelectRectangle.cs" />
+    <Compile Include="Core\OperationControl\SelectRecter.cs" />
+    <Compile Include="CustomConverter\CustomConvertersFactory.cs" />
+    <Compile Include="CustomConverter\ICustomConverter.cs" />
+    <Compile Include="CustomConverter\ConvertFactory.cs" />
+    <Compile Include="DesignLayer\DesignerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DesignLayer\DesignerControl.Designer.cs">
+      <DependentUpon>DesignerControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DesignLayer\BaseDataWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DesignLayer\Overlayer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DesignLayer\Overlayer.Designer.cs">
+      <DependentUpon>Overlayer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Serializable\CustomizeProperty\CustomizeFont.cs" />
+    <Compile Include="Serializable\CustomizeProperty\CustomizePadding.cs" />
+    <Compile Include="Serializable\CustomizeProperty\CustomizePoint.cs" />
+    <Compile Include="Serializable\CustomizeProperty\CustomizeRectangle.cs" />
+    <Compile Include="Serializable\CustomizeProperty\CustomizeSize.cs" />
+    <Compile Include="Serializable\CustomizeProperty\XmlColor.cs" />
+    <Compile Include="CustomPropertys\CustomProperty.cs" />
+    <Compile Include="CustomPropertys\CustomPropertyCollection.cs" />
+    <Compile Include="CustomPropertys\CustomPropertyDescriptor.cs" />
+    <Compile Include="CustomPropertys\IPropertyCollections.cs" />
+    <Compile Include="Serializable\ControlSerializable.cs" />
+    <Compile Include="Serializable\BaseDataWindowSerializable.cs" />
+    <Compile Include="Serializable\DateTimePickerSerializable.cs" />
+    <Compile Include="Serializable\FormSerializable.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utility\ControlHelper.cs" />
+    <Compile Include="Utility\ControlUtilityExpand.cs" />
+    <Compile Include="Utility\MapsterExtension.cs" />
+    <Compile Include="Utility\Win32\KeyboardHook.cs" />
+    <Compile Include="Utility\XmlSerializeUtility.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DesignLayer\DesignerControl.resx">
+      <DependentUpon>DesignerControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DesignLayer\Overlayer.resx">
+      <DependentUpon>Overlayer.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="ReadMe.md" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FormDesinger</RootNamespace>
     <AssemblyName>FormDesinger</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -58,12 +58,6 @@
     <ApplicationIcon>Icon\edit_128px_blue.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Mapster, Version=7.2.0.0, Culture=neutral, PublicKeyToken=2f39883af23c29a8, processorArchitecture=MSIL">
-      <HintPath>packages\Mapster.7.2.0\lib\net45\Mapster.dll</HintPath>
-    </Reference>
-    <Reference Include="Mapster.Core, Version=1.2.0.0, Culture=neutral, PublicKeyToken=e64997d676a9c1d3, processorArchitecture=MSIL">
-      <HintPath>packages\Mapster.Core.1.2.0\lib\net45\Mapster.Core.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="SyntaxTextBox">
       <HintPath>lib\SyntaxTextBox.dll</HintPath>
@@ -153,7 +147,6 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="app.config" />
-    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -181,7 +174,6 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="DataBase\layout_style.sql" />
     <Content Include="Icon\edit_128px_yellow.ico" />
@@ -236,7 +228,7 @@
     <None Include="Icon\tools_24px.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Ivytalk.DataWindow\Ivytalk.DataWindow.csproj">
+    <ProjectReference Include="Ivytalk.DataWindow\Ivytalk.DataWindow.csproj">
       <Project>{F191CC88-44ED-4BD6-A669-7723CE12F66B}</Project>
       <Name>Ivytalk.DataWindow</Name>
     </ProjectReference>
