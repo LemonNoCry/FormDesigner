@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 using Ivytalk.DataWindow.Core.MessageFilter;
+using Ivytalk.DataWindow.Utility;
 
 namespace Ivytalk.DataWindow.DesignLayer
 {
@@ -46,12 +47,12 @@ namespace Ivytalk.DataWindow.DesignLayer
         public DesignerControl(BaseDataWindow baseDataWindow)
         {
             InitializeComponent();
-
+            
             BaseDataWindow = baseDataWindow;
             BaseDataWindow.DesignStatus = true;
             BaseDataWindow.TopLevel = false; //当做子控件添加到设计面板
             BaseDataWindow.Location = new Point(10, 10);
-            BaseDataWindow.Text = "设计界面";
+            BaseDataWindow.Text = baseDataWindow.Name;
             Controls.Add(BaseDataWindow);
             BaseDataWindow.Show();
 

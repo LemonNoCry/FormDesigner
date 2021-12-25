@@ -33,7 +33,7 @@ namespace Ivytalk.DataWindow.Serializable
         public Size Size { get; set; }
 
         public bool AutoSize { get; set; }
-
+       
         [XmlElement(Type = typeof(CustomizeRectangle))]
         public Rectangle ClientRectangle { get; set; }
 

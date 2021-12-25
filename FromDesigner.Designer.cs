@@ -100,7 +100,7 @@ namespace FormDesinger
             this.panel_tools_cus.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel_tools_cus.Location = new System.Drawing.Point(0, 322);
             this.panel_tools_cus.Name = "panel_tools_cus";
-            this.panel_tools_cus.Size = new System.Drawing.Size(138, 24);
+            this.panel_tools_cus.Size = new System.Drawing.Size(138, 25);
             this.panel_tools_cus.TabIndex = 15;
             // 
             // toolMenuItems_adds

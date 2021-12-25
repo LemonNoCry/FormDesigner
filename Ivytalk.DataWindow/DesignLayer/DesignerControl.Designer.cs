@@ -36,7 +36,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.Name = "DesignerControl";
-            this.Size = new System.Drawing.Size(137, 142);
+            this.Size = new System.Drawing.Size(147, 176);
             this.ResumeLayout(false);
 
         }
