@@ -1,4 +1,5 @@
-﻿using Ivytalk.DataWindow.Core.OperationControl.History;
+﻿using System;
+using Ivytalk.DataWindow.Core.OperationControl.History;
 using Ivytalk.DataWindow.DesignLayer;
 using Ivytalk.DataWindow.Serializable;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 using Ivytalk.DataWindow.CustomPropertys;
 using Ivytalk.DataWindow.Utility;
@@ -24,6 +26,10 @@ namespace Ivytalk.DataWindow.Core.OperationControl
 
         public Overlayer Overlayer;
         private readonly List<SelectRecter> _selectRecters = new List<SelectRecter>();
+
+        public delegate void SelectControlChangedHandler(object sender, Recter selectRecter);
+
+        public event SelectControlChangedHandler SelectControlChanged;
 
         ///是否为窗体周围的方框（如果是，则位置不可改变，且只有从下、右、右下三个方向改变大小）
         private bool IsForm;
@@ -60,27 +66,33 @@ namespace Ivytalk.DataWindow.Core.OperationControl
             ClearSelect();
             _selectRecters.Add(new SelectRecter(c, r));
             IsForm = c is Form;
+            SelectControlChanged?.Invoke(Overlayer, this);
         }
 
         public void AddSelect(Rectangle r, Control c)
         {
             _selectRecters.Add(new SelectRecter(c, r));
             IsForm = _selectRecters.Count == 0 && c is Form;
+            SelectControlChanged?.Invoke(Overlayer, this);
         }
 
 
         public void RemoveSelect(Rectangle r)
         {
             var sel = _selectRecters.FirstOrDefault(s => s.Rectangle.Contains(r));
-            if (sel != null)
-                _selectRecters.Remove(sel);
+            if (sel == null) return;
+
+            _selectRecters.Remove(sel);
+            SelectControlChanged?.Invoke(Overlayer, this);
         }
 
         public void RemoveSelect(Control c)
         {
             var sel = _selectRecters.FirstOrDefault(s => s.Control == c);
-            if (sel != null)
-                _selectRecters.Remove(sel);
+            if (sel == null) return;
+
+            _selectRecters.Remove(sel);
+            SelectControlChanged?.Invoke(Overlayer, this);
         }
 
         public void RemoveSelect(List<Rectangle> rs)
@@ -100,6 +112,7 @@ namespace Ivytalk.DataWindow.Core.OperationControl
         {
             _selectRecters.Clear();
             IsForm = false;
+            SelectControlChanged?.Invoke(Overlayer, this);
         }
 
 
@@ -397,11 +410,11 @@ namespace Ivytalk.DataWindow.Core.OperationControl
 
         private PropertyDescriptor[] GetMergeProperty(PropertyValueChangedEventArgs e)
         {
-            System.Type propertyType = e.ChangedItem.PropertyDescriptor.GetType();
-            System.Reflection.FieldInfo fieldInfo = propertyType.GetField(
+            Type propertyType = e.ChangedItem.PropertyDescriptor.GetType();
+            FieldInfo fieldInfo = propertyType.GetField(
                 "descriptors",
-                System.Reflection.BindingFlags.NonPublic
-                | System.Reflection.BindingFlags.Instance
+                BindingFlags.NonPublic
+                | BindingFlags.Instance
             );
             PropertyDescriptor[] descriptors =
                 (PropertyDescriptor[]) (fieldInfo.GetValue(e.ChangedItem.PropertyDescriptor));

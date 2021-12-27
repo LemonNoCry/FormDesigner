@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Reflection;
 using System.Windows.Forms.Design;
+using FormDesinger.Core;
 using Ivytalk.DataWindow;
 using Ivytalk.DataWindow.Core;
 using Ivytalk.DataWindow.Core.OperationControl;
 using Ivytalk.DataWindow.DesignLayer;
+using Ivytalk.DataWindow.Events.EventArg;
 using Ivytalk.DataWindow.Utility;
 
 namespace FormDesinger
@@ -21,24 +24,11 @@ namespace FormDesinger
         {
             InitializeComponent();
 
-            BaseDataWindow dw = new BaseDataWindow();
-            dw.Width = 1920;
-            dw.Height = 1080;
-            dw.Text = "Hello";
-
-            designerControl1.Dispose();
-            this.Controls.Remove(this.designerControl1);
-            designerControl1 = new DesignerControl(dw);
-            designerControl1.Dock = DockStyle.Fill;
-            designerControl1.Overlayer.PropertyGrid = this.propertyGrid1;
-
-            this.Controls.Add(designerControl1);
-            designerControl1.BringToFront();
-
-
-            //designerControl1.Overlayer.Init(800, 500, "新建设计");
+            designerControl1.Overlayer.Init(800, 500, "新建设计");
             this.designerControl1.Overlayer.PropertyGrid = this.propertyGrid1;
         }
+
+        BindingList<DisplayControl> displayControls = new BindingList<DisplayControl>();
 
         protected override CreateParams CreateParams
         {
@@ -270,6 +260,59 @@ namespace FormDesinger
 
         private void toolMenuItems_label_Load(object sender, EventArgs e)
         {
+        }
+
+        private void designerControl1_SelectControlChanged(object sender, Recter selectRecter)
+        {
+            var sel = selectRecter.GetSelectControls();
+            if (sel.Count == 1 && displayControls.Count > 0)
+            {
+                cbAllControls.SelectedItem = displayControls.FirstOrDefault(s => s.Control == sel[0]);
+            }
+            else
+            {
+                cbAllControls.SelectedItem = null;
+            }
+        }
+
+        private void designerControl1_BaseDataWindowControlChanged(BaseDataWindow sender, BaseDataWindowControlEventArgs e)
+        {
+            if (e.IsChanged)
+            {
+                if (e.IsAdd)
+                {
+                    displayControls.Add(new DisplayControl(e.AddControl));
+                }
+                else if (e.IsRemove)
+                {
+                    displayControls.Remove(displayControls.First(s => s.Control == e.RemoveControl));
+                }
+            }
+            else
+            {
+                if (cbAllControls.DataSource == null)
+                {
+                    cbAllControls.DataSource = displayControls;
+                    cbAllControls.ValueMember = "Name";
+                    cbAllControls.DisplayMember = "ShowTitle";
+                }
+
+                displayControls.Clear();
+                foreach (var con in e.AllControls)
+                {
+                    displayControls.Add(new DisplayControl(con));
+                }
+            }
+
+            designerControl1_SelectControlChanged(null, designerControl1.Overlayer.Recter);
+        }
+
+        private void cbAllControls_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            if (cbAllControls.SelectedItem is DisplayControl dc)
+            {
+                designerControl1.Overlayer.SetSelectControl(dc.Control);
+            }
         }
     }
 }

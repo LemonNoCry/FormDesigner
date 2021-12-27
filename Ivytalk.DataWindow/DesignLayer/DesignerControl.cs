@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using Ivytalk.DataWindow.Core.MessageFilter;
+using Ivytalk.DataWindow.Core.OperationControl;
+using Ivytalk.DataWindow.Events.EventArg;
 using Ivytalk.DataWindow.Utility;
 
 namespace Ivytalk.DataWindow.DesignLayer
@@ -68,5 +72,21 @@ namespace Ivytalk.DataWindow.DesignLayer
             SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true);
         }
 
+        #region 自定义事件
+
+        public event Recter.SelectControlChangedHandler SelectControlChanged
+        {
+            add => Overlayer.Recter.SelectControlChanged += value;
+            remove => Overlayer.Recter.SelectControlChanged -= value;
+        }
+
+
+        public event BaseDataWindowControlChangedHandle BaseDataWindowControlChanged
+        {
+            add => Overlayer.BaseDataWindowControlChanged += value;
+            remove => Overlayer.BaseDataWindowControlChanged -= value;
+        }
+
+        #endregion
     }
 }

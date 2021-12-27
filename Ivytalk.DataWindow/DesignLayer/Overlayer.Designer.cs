@@ -32,6 +32,8 @@
             this.cms = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmiControlPotTop = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiControlPotBottom = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiSelectControlStart = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiSelectControlEnd = new System.Windows.Forms.ToolStripSeparator();
             this.cms.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -39,23 +41,35 @@
             // 
             this.cms.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiControlPotTop,
-            this.tsmiControlPotBottom});
+            this.tsmiControlPotBottom,
+            this.tsmiSelectControlStart,
+            this.tsmiSelectControlEnd});
             this.cms.Name = "cms";
-            this.cms.Size = new System.Drawing.Size(125, 48);
+            this.cms.Size = new System.Drawing.Size(181, 82);
             // 
             // tsmiControlPotTop
             // 
             this.tsmiControlPotTop.Name = "tsmiControlPotTop";
-            this.tsmiControlPotTop.Size = new System.Drawing.Size(124, 22);
+            this.tsmiControlPotTop.Size = new System.Drawing.Size(180, 22);
             this.tsmiControlPotTop.Text = "置于顶层";
             this.tsmiControlPotTop.Click += new System.EventHandler(this.tsmiControlPotTop_Click);
             // 
             // tsmiControlPotBottom
             // 
             this.tsmiControlPotBottom.Name = "tsmiControlPotBottom";
-            this.tsmiControlPotBottom.Size = new System.Drawing.Size(124, 22);
+            this.tsmiControlPotBottom.Size = new System.Drawing.Size(180, 22);
             this.tsmiControlPotBottom.Text = "置于底层";
             this.tsmiControlPotBottom.Click += new System.EventHandler(this.tsmiControlPotBottom_Click);
+            // 
+            // tsmiSelectControlStart
+            // 
+            this.tsmiSelectControlStart.Name = "tsmiSelectControlStart";
+            this.tsmiSelectControlStart.Size = new System.Drawing.Size(177, 6);
+            // 
+            // tsmiSelectControlEnd
+            // 
+            this.tsmiSelectControlEnd.Name = "tsmiSelectControlEnd";
+            this.tsmiSelectControlEnd.Size = new System.Drawing.Size(177, 6);
             // 
             // Overlayer
             // 
@@ -72,5 +86,7 @@
         public System.Windows.Forms.ContextMenuStrip cms;
         private System.Windows.Forms.ToolStripMenuItem tsmiControlPotTop;
         private System.Windows.Forms.ToolStripMenuItem tsmiControlPotBottom;
+        private System.Windows.Forms.ToolStripSeparator tsmiSelectControlStart;
+        private System.Windows.Forms.ToolStripSeparator tsmiSelectControlEnd;
     }
 }

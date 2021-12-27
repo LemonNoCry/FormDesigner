@@ -1,5 +1,7 @@
-﻿using Ivytalk.DataWindow;
+﻿using FormDesinger.Core;
+using Ivytalk.DataWindow;
 using Ivytalk.DataWindow.DesignLayer;
+using Ivytalk.DataWindow.Events.EventArg;
 
 namespace FormDesinger
 {
@@ -68,16 +70,19 @@ namespace FormDesinger
             this.还原ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.operToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.formToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.splitter2 = new System.Windows.Forms.Splitter();
             this.designerControl1 = new Ivytalk.DataWindow.DesignLayer.DesignerControl();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
+            this.cbAllControls = new System.Windows.Forms.ComboBox();
             this.panel_left.SuspendLayout();
             this.panel_tools_cus.SuspendLayout();
             this.panel_tools.SuspendLayout();
             this.panel_top.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel_left
@@ -592,14 +597,6 @@ namespace FormDesinger
             this.formToolStripMenuItem.Text = "Form";
             this.formToolStripMenuItem.Click += new System.EventHandler(this.formToolStripMenuItem_Click);
             // 
-            // propertyGrid1
-            // 
-            this.propertyGrid1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.propertyGrid1.Location = new System.Drawing.Point(985, 52);
-            this.propertyGrid1.Name = "propertyGrid1";
-            this.propertyGrid1.Size = new System.Drawing.Size(239, 593);
-            this.propertyGrid1.TabIndex = 3;
-            // 
             // splitter1
             // 
             this.splitter1.BackColor = System.Drawing.Color.LightGray;
@@ -614,7 +611,7 @@ namespace FormDesinger
             // 
             this.splitter2.BackColor = System.Drawing.Color.LightGray;
             this.splitter2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.splitter2.Location = new System.Drawing.Point(983, 52);
+            this.splitter2.Location = new System.Drawing.Point(979, 52);
             this.splitter2.MinSize = 0;
             this.splitter2.Name = "splitter2";
             this.splitter2.Size = new System.Drawing.Size(2, 593);
@@ -626,21 +623,53 @@ namespace FormDesinger
             this.designerControl1.AutoScroll = true;
             this.designerControl1.BackColor = System.Drawing.Color.White;
             this.designerControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.designerControl1.Location = new System.Drawing.Point(138, 52);
+            this.designerControl1.Location = new System.Drawing.Point(140, 52);
             this.designerControl1.Name = "designerControl1";
-            this.designerControl1.Size = new System.Drawing.Size(847, 593);
+            this.designerControl1.Size = new System.Drawing.Size(839, 593);
             this.designerControl1.TabIndex = 4;
+            this.designerControl1.SelectControlChanged += new Ivytalk.DataWindow.Core.OperationControl.Recter.SelectControlChangedHandler(this.designerControl1_SelectControlChanged);
+            this.designerControl1.BaseDataWindowControlChanged += new Ivytalk.DataWindow.Events.EventArg.BaseDataWindowControlChangedHandle(this.designerControl1_BaseDataWindowControlChanged);
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.propertyGrid1);
+            this.panel1.Controls.Add(this.cbAllControls);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panel1.Location = new System.Drawing.Point(981, 52);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(243, 593);
+            this.panel1.TabIndex = 7;
+            // 
+            // propertyGrid1
+            // 
+            this.propertyGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.propertyGrid1.Location = new System.Drawing.Point(0, 25);
+            this.propertyGrid1.Name = "propertyGrid1";
+            this.propertyGrid1.Size = new System.Drawing.Size(243, 568);
+            this.propertyGrid1.TabIndex = 4;
+            // 
+            // cbAllControls
+            // 
+            this.cbAllControls.Dock = System.Windows.Forms.DockStyle.Top;
+            this.cbAllControls.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbAllControls.Font = new System.Drawing.Font("微软雅黑", 9F);
+            this.cbAllControls.FormattingEnabled = true;
+            this.cbAllControls.Location = new System.Drawing.Point(0, 0);
+            this.cbAllControls.Name = "cbAllControls";
+            this.cbAllControls.Size = new System.Drawing.Size(243, 25);
+            this.cbAllControls.TabIndex = 5;
+            this.cbAllControls.SelectionChangeCommitted += new System.EventHandler(this.cbAllControls_SelectionChangeCommitted);
             // 
             // FromDesigner
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1224, 645);
-            this.Controls.Add(this.splitter2);
-            this.Controls.Add(this.splitter1);
             this.Controls.Add(this.designerControl1);
+            this.Controls.Add(this.splitter2);
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.splitter1);
             this.Controls.Add(this.panel_left);
-            this.Controls.Add(this.propertyGrid1);
             this.Controls.Add(this.panel_top);
             this.KeyPreview = true;
             this.Name = "FromDesigner";
@@ -654,6 +683,7 @@ namespace FormDesinger
             this.toolStrip1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -662,7 +692,6 @@ namespace FormDesinger
 
         private System.Windows.Forms.Panel panel_left;
         private System.Windows.Forms.Panel panel_top;
-        public System.Windows.Forms.PropertyGrid propertyGrid1;
         private DesignerControl designerControl1;
         private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.Splitter splitter2;
@@ -700,5 +729,8 @@ namespace FormDesinger
         private UserControls.ToolMenuItems toolMenuItems_label;
         private System.Windows.Forms.ToolStripMenuItem operToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem formToolStripMenuItem;
+        private System.Windows.Forms.Panel panel1;
+        public System.Windows.Forms.PropertyGrid propertyGrid1;
+        private System.Windows.Forms.ComboBox cbAllControls;
     }
 }

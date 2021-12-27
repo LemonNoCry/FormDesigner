@@ -10,6 +10,7 @@ using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using Ivytalk.DataWindow.Events.EventArg;
 
 namespace Ivytalk.DataWindow.DesignLayer
 {
@@ -24,16 +25,18 @@ namespace Ivytalk.DataWindow.DesignLayer
             SetStyle(ControlStyles.ResizeRedraw, true);
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+           
+            BaseDataWindow = host; //默认被操作的是控件容器
 
             //StartListen();
-
+            Init();
             Recter = new Recter(this);
-
-            BaseDataWindow = host; //默认被操作的是控件容器
             SelectHost();
 
             InitializeComponent();
         }
+
+        public readonly List<Control> DataWindowControls = new List<Control>();
 
         /// <summary>
         /// 被遮罩的控件容器，通过Overlayer操作该容器（以及其中的子控件）
@@ -89,6 +92,12 @@ namespace Ivytalk.DataWindow.DesignLayer
             }
         }
 
+        private void Init()
+        {
+            BaseDataWindow.ControlAdded += BaseDataWindow_ControlAdded;
+            BaseDataWindow.ControlRemoved += BaseDataWindow_ControlRemoved;
+        }
+
         public void FlushSelectProperty()
         {
             if (_propertyGrid == null) return;
@@ -109,12 +118,20 @@ namespace Ivytalk.DataWindow.DesignLayer
             FlushSelectProperty();
         }
 
+        public void SetSelectControl(Control control)
+        {
+            Rectangle r = HostToOverlayerRectangle(control);
+            Recter.SetSelect(r, control);
+            Invalidate2(false);
+        }
+
         private void PushOperationHistory(OperationControlType operation)
         {
             var record = new OperationControlRecord(this, operation,
                 Recter.GetSelectRects().Select(s => s.Control).ToList());
             OperationControlHistory.Push(record);
         }
+
 
         protected override CreateParams CreateParams
         {
@@ -157,7 +174,36 @@ namespace Ivytalk.DataWindow.DesignLayer
             SelectRectangle?.Draw(e.Graphics); //绘制被操作控件周围的方框
         }
 
+        protected override void OnVisibleChanged(EventArgs e)
+        {
+            base.OnVisibleChanged(e);
+            if (this.Visible)
+            {
+                DataWindowControls.Clear();
+                DataWindowControls.Add(BaseDataWindow);
+                EachDataWindowControls(BaseDataWindow, c => { DataWindowControls.Add(c); });
+                var args = new BaseDataWindowControlEventArgs()
+                {
+                    AllControls = DataWindowControls,
+                };
+                BaseDataWindowControlChanged?.Invoke(BaseDataWindow, args);
+            }
+        }
+
+
         #region 控件通用操作
+
+        public void EachDataWindowControls(Control control, Action<Control> action)
+        {
+            foreach (Control con in control.Controls)
+            {
+                action?.Invoke(con);
+                if (con.HasChildren)
+                {
+                    EachDataWindowControls(con, action);
+                }
+            }
+        }
 
         public Control FindControl(string name)
         {
@@ -192,6 +238,7 @@ namespace Ivytalk.DataWindow.DesignLayer
         }
 
         #endregion
+
 
         #region 按键钩子
 
@@ -729,6 +776,7 @@ namespace Ivytalk.DataWindow.DesignLayer
             }
             else if (e.Button == MouseButtons.Right)
             {
+                RefreshClickControlsMenu(e);
                 Recter.GetSelectControlsRects()
                     .ForEach(s =>
                     {
@@ -791,12 +839,18 @@ namespace Ivytalk.DataWindow.DesignLayer
             return id;
         }
 
-        public void SetControlName(Control con)
+        public void SetControlProperty(Control con)
         {
             if (string.IsNullOrWhiteSpace(con.Name))
             {
                 Type type = con.GetType();
                 con.Name = type.Name + (GetControlId(BaseDataWindow, type) + 1);
+            }
+
+            if (con.IsContainerControl())
+            {
+                con.ControlAdded += BaseDataWindow_ControlAdded;
+                con.ControlRemoved += BaseDataWindow_ControlRemoved;
             }
         }
 
@@ -809,7 +863,7 @@ namespace Ivytalk.DataWindow.DesignLayer
             {
                 string[] strs = (string[]) drgevent.Data.GetData(typeof(string[])); //获取拖拽数据
                 Control ctrl = ControlHelper.CreateControl(strs[1], strs[0]);       //实例化控件
-                SetControlName(ctrl);
+                SetControlProperty(ctrl);
                 ctrl.Location = BaseDataWindow.PointToClient(new Point(drgevent.X, drgevent.Y)); //屏幕坐标转换成控件容器坐标
                 if (!new Rectangle(BaseDataWindow.Location, BaseDataWindow.Size).Contains(new Rectangle(ctrl.Location, ctrl.Size)))
                 {
@@ -916,6 +970,35 @@ namespace Ivytalk.DataWindow.DesignLayer
 
         #endregion
 
+        #region 代理事件
+
+        public event BaseDataWindowControlChangedHandle BaseDataWindowControlChanged;
+
+        public void BaseDataWindow_ControlAdded(object sender, ControlEventArgs e)
+        {
+            DataWindowControls.Add(e.Control);
+            var args = new BaseDataWindowControlEventArgs()
+            {
+                AllControls = DataWindowControls,
+                AddControl = e.Control,
+            };
+            BaseDataWindowControlChanged?.Invoke(BaseDataWindow, args);
+        }
+
+        public void BaseDataWindow_ControlRemoved(object sender, ControlEventArgs e)
+        {
+            DataWindowControls.Remove(e.Control);
+
+            var args = new BaseDataWindowControlEventArgs()
+            {
+                AllControls = DataWindowControls,
+                RemoveControl = e.Control,
+            };
+            BaseDataWindowControlChanged?.Invoke(BaseDataWindow, args);
+        }
+
+        #endregion
+
         #region 提供用户访问
 
         /// <summary>
@@ -965,7 +1048,8 @@ namespace Ivytalk.DataWindow.DesignLayer
             BaseDataWindow.Width = formWidth;
             BaseDataWindow.Height = formHeight;
             BaseDataWindow.Text = formText;
-            Recter = new Recter(this);
+
+            Recter.ClearSelect();
             SelectRectangle = null;
             _firstSelectPoint = new Point();
             _selectMouseDown = false;
@@ -1254,6 +1338,30 @@ namespace Ivytalk.DataWindow.DesignLayer
         #endregion
 
         #region 右键菜单
+
+        private void RefreshClickControlsMenu(MouseEventArgs e)
+        {
+            int startIndex = cms.Items.IndexOfKey("tsmiSelectControlStart");
+            int endIndex = cms.Items.IndexOfKey("tsmiSelectControlEnd");
+            if (endIndex - 1 != startIndex)
+            {
+                while (!startIndex.Equals(endIndex - 1))
+                {
+                    cms.Items.RemoveAt(startIndex + 1);
+                    endIndex = cms.Items.IndexOfKey("tsmiSelectControlEnd");
+                }
+            }
+
+            var clickControls = GetClickControls(e).OrderBy(s => s.SpaceIndex);
+
+            foreach (var con in clickControls)
+            {
+                ToolStripItem tsi = new ToolStripMenuItem(con.Control.Name);
+                tsi.Click += (sender, args) => { SetSelectControl(con.Control); };
+                cms.Items.Insert(endIndex, tsi);
+            }
+        }
+
 
         private void tsmiControlPotTop_Click(object sender, EventArgs e)
         {

@@ -79,6 +79,7 @@
     <Compile Include="DesignLayer\Overlayer.Designer.cs">
       <DependentUpon>Overlayer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Events\EventArg\BaseDataWindowControlEventArgs.cs" />
     <Compile Include="Serializable\CustomizeProperty\CustomizeFont.cs" />
     <Compile Include="Serializable\CustomizeProperty\CustomizePadding.cs" />
     <Compile Include="Serializable\CustomizeProperty\CustomizePoint.cs" />
