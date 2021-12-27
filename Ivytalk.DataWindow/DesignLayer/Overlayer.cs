@@ -733,8 +733,7 @@ namespace Ivytalk.DataWindow.DesignLayer
                     .ForEach(s =>
                     {
                         Rectangle r = HostToOverlayerRectangle(s.Control);
-                        s.Control.ContextMenuStrip.Show(s.Control,
-                            e.X - r.Left, e.Y - r.Top);
+                        cms.Show(s.Control, e.X - r.Left, e.Y - r.Top);
                     });
             }
 

@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using Ivytalk.DataWindow.Core.MessageFilter;
 using Ivytalk.DataWindow.Utility;
@@ -47,12 +48,12 @@ namespace Ivytalk.DataWindow.DesignLayer
         public DesignerControl(BaseDataWindow baseDataWindow)
         {
             InitializeComponent();
-            
+
             BaseDataWindow = baseDataWindow;
             BaseDataWindow.DesignStatus = true;
             BaseDataWindow.TopLevel = false; //当做子控件添加到设计面板
             BaseDataWindow.Location = new Point(10, 10);
-            BaseDataWindow.Text = baseDataWindow.Name;
+            BaseDataWindow.Text = baseDataWindow.Text;
             Controls.Add(BaseDataWindow);
             BaseDataWindow.Show();
 
@@ -66,5 +67,6 @@ namespace Ivytalk.DataWindow.DesignLayer
             Application.AddMessageFilter(new MessageFilter(BaseDataWindow, this)); // 过滤控件容器中所有子控件的WM_PAINT消息 减少重绘操作
             SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true);
         }
+
     }
 }

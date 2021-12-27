@@ -20,7 +20,23 @@ namespace FormDesinger
         public FromDesigner()
         {
             InitializeComponent();
-            designerControl1.Overlayer.Init(800, 500, "新建设计");
+
+            BaseDataWindow dw = new BaseDataWindow();
+            dw.Width = 1920;
+            dw.Height = 1080;
+            dw.Text = "Hello";
+
+            designerControl1.Dispose();
+            this.Controls.Remove(this.designerControl1);
+            designerControl1 = new DesignerControl(dw);
+            designerControl1.Dock = DockStyle.Fill;
+            designerControl1.Overlayer.PropertyGrid = this.propertyGrid1;
+
+            this.Controls.Add(designerControl1);
+            designerControl1.BringToFront();
+
+
+            //designerControl1.Overlayer.Init(800, 500, "新建设计");
             this.designerControl1.Overlayer.PropertyGrid = this.propertyGrid1;
         }
 

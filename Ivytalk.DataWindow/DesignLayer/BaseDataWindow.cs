@@ -17,7 +17,7 @@ namespace Ivytalk.DataWindow.DesignLayer
         /// <summary>
         /// 控件必须
         /// </summary>
-        public List<Control> MustEditControls = new List<Control>();
+        public readonly List<Control> MustEditControls = new List<Control>();
 
         public void AddMustControls(params Control[] cons)
         {

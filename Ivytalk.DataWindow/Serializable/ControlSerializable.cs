@@ -45,6 +45,8 @@ namespace Ivytalk.DataWindow.Serializable
         public object Tag { get; set; }
         public int TabIndex { get; set; }
 
+        public bool Visible { get; set; }
+
         public ControlSerializable ParentSerializable { get; set; }
         public List<ControlSerializable> ControlsSerializable { get; set; }
 
@@ -63,6 +65,7 @@ namespace Ivytalk.DataWindow.Serializable
             collection.Add(new CustomProperty("锚", "Anchor", "布局", "Anchor 定义要绑定到容器的边缘，当控件锚定位到某个控件时，与指定边缘最接近的控件边缘与指定边缘之间的距离将保持不变。", control));
             collection.Add(new CustomProperty("停靠", "Dock", "布局", "Dock 定义要绑定到容器的控件边框。", control));
             collection.Add(new CustomProperty("Tab索引", "TabIndex", "行为", "TabIndex 确定此控件将占用的 Tab 键顺序索引。", control));
+            collection.Add(new CustomProperty("显示", "Visible", "外观", "是否显示", control));
 
             control.Tag = control.Tag ?? "";
             collection.Add(new CustomProperty("Tag", "Tag", "行为", "与用户关联的自定义数据", control));
