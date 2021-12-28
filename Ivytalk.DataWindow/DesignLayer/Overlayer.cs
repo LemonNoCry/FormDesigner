@@ -25,7 +25,7 @@ namespace Ivytalk.DataWindow.DesignLayer
             SetStyle(ControlStyles.ResizeRedraw, true);
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-           
+
             BaseDataWindow = host; //默认被操作的是控件容器
 
             //StartListen();
@@ -123,6 +123,7 @@ namespace Ivytalk.DataWindow.DesignLayer
             Rectangle r = HostToOverlayerRectangle(control);
             Recter.SetSelect(r, control);
             Invalidate2(false);
+            FlushSelectProperty();
         }
 
         private void PushOperationHistory(OperationControlType operation)
@@ -190,7 +191,6 @@ namespace Ivytalk.DataWindow.DesignLayer
             }
         }
 
-
         #region 控件通用操作
 
         public void EachDataWindowControls(Control control, Action<Control> action)
@@ -238,7 +238,6 @@ namespace Ivytalk.DataWindow.DesignLayer
         }
 
         #endregion
-
 
         #region 按键钩子
 
@@ -574,63 +573,73 @@ namespace Ivytalk.DataWindow.DesignLayer
         {
             if (e.Button == MouseButtons.Left) //左键
             {
-                var cons = GetClickControls(e);
-                if (cons != null && cons.Any())
-                {
-                    //选中最上面某一控件
-                    if (new[] {Keys.Shift, Keys.Control}.Contains(ModifierKeys))
-                    {
-                        var sel = cons.OrderByDescending(s => s.SpaceIndex)
-                            .ThenByDescending(s => s.ZIndex)
-                            .First();
-
-                        Rectangle r = HostToOverlayerRectangle(sel.Control);
-
-                        Recter.AddSelect(r, sel.Control);
-
-                        FlushSelectProperty();
-                        Invalidate2(false);
-                    }
-                    else if (!Recter.IsMultipleSelect)
-                    {
-                        var sel = cons.OrderByDescending(s => s.SpaceIndex)
-                            .ThenByDescending(s => s.ZIndex)
-                            .First();
-
-                        Rectangle r = HostToOverlayerRectangle(sel.Control);
-
-                        Recter.SetSelect(r, sel.Control);
-
-                        FlushSelectProperty();
-                        Invalidate2(false);
-                    }
-
-                    _firstSelectPoint = new Point();
-                    _selectMouseDown = false;
-                    SelectRectangle = null;
-                }
-                else //没有控件被选中，判断是否选中控件容器
-                {
-                    Rectangle r = HostToOverlayerRectangle(BaseDataWindow);
-                    if (r.Contains(e.Location))
-                    {
-                        SelectHost();
-
-                        //只有在设计器内部才可以选中区域
-                        _firstSelectPoint = e.Location;
-                        _selectMouseDown = true;
-                        SelectRectangle = null;
-
-                        Invalidate2(false);
-                    }
-                }
-
                 DragType dt = Recter.GetMouseDragType(e.Location); //判断是否可以进行鼠标操作
                 if (dt != DragType.None)
                 {
                     _mouseDown = true;
                     _firstPoint = e.Location;
                     _dragType = dt;
+                }
+                else
+                {
+                    var cons = GetClickControls(e);
+                    if (cons != null && cons.Any())
+                    {
+                        //选中最上面某一控件
+                        if (new[] {Keys.Shift, Keys.Control}.Contains(ModifierKeys))
+                        {
+                            var sel = cons.OrderByDescending(s => s.SpaceIndex)
+                                .ThenByDescending(s => s.ZIndex)
+                                .First();
+
+                            Rectangle r = HostToOverlayerRectangle(sel.Control);
+
+                            Recter.AddSelect(r, sel.Control);
+
+                            FlushSelectProperty();
+                            Invalidate2(false);
+                        }
+                        else if (!Recter.IsMultipleSelect)
+                        {
+                            var sel = cons.OrderByDescending(s => s.SpaceIndex)
+                                .ThenByDescending(s => s.ZIndex)
+                                .First();
+
+                            Rectangle r = HostToOverlayerRectangle(sel.Control);
+
+                            Recter.SetSelect(r, sel.Control);
+
+                            FlushSelectProperty();
+                            Invalidate2(false);
+                        }
+
+                        _firstSelectPoint = new Point();
+                        _selectMouseDown = false;
+                        SelectRectangle = null;
+                    }
+                    else //没有控件被选中，判断是否选中控件容器
+                    {
+                        Rectangle r = HostToOverlayerRectangle(BaseDataWindow);
+                        if (r.Contains(e.Location))
+                        {
+                            SelectHost();
+
+                            //只有在设计器内部才可以选中区域
+                            _firstSelectPoint = e.Location;
+                            _selectMouseDown = true;
+                            SelectRectangle = null;
+
+                            Invalidate2(false);
+                        }
+                    }
+
+                    dt = Recter.GetMouseDragType(e.Location); //判断是否可以进行鼠标操作
+                    if (dt != DragType.None)
+                    {
+                        _mouseDown = true;
+                        _firstPoint = e.Location;
+                        _dragType = dt;
+                    }
                 }
             }
 
@@ -728,6 +737,41 @@ namespace Ivytalk.DataWindow.DesignLayer
                 {
                     //选中最上面的容器控件
                     var sel = cons.Where(s => s.Control.IsContainerControl())
+                        .Where(s =>
+                        {
+                            //过滤是自己的控件
+                            if (Recter.GetSelectControls().Contains(s.Control))
+                            {
+                                return false;
+                            }
+
+                            //过滤父控件是自己
+                            var isParent = false;
+                            foreach (var sc in Recter.GetSelectControlsRects())
+                            {
+                                if (isParent)
+                                {
+                                    break;
+                                }
+
+                                EachDataWindowControls(sc.Control, c =>
+                                {
+                                    if (isParent)
+                                    {
+                                        return;
+                                    }
+
+                                    isParent = c == s.Control;
+                                });
+                            }
+
+                            if (isParent)
+                            {
+                                return false;
+                            }
+
+                            return true;
+                        })
                         .OrderByDescending(s => s.SpaceIndex)
                         .ThenByDescending(s => s.ZIndex)
                         .FirstOrDefault();
@@ -748,11 +792,20 @@ namespace Ivytalk.DataWindow.DesignLayer
 
                     foreach (var sc in Recter.GetSelectControlsRects())
                     {
-                        if (sc.Control != sel.Control && sc.Control.Parent != sel.Control)
+                        //无法将自己移入自己容器内
+                        if (sc.Control == sel.Control)
                         {
-                            sc.Parent = sc.Control.Parent;
-                            sel.Control.Controls.Add(sc.Control);
+                            continue;
                         }
+
+                        //已经是在容器内了
+                        if (sc.Control.Parent == sel.Control)
+                        {
+                            continue;
+                        }
+
+                        sc.Parent = sc.Control.Parent;
+                        sel.Control.Controls.Add(sc.Control);
                     }
                 }
             }

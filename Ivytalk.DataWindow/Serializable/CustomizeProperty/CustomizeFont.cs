@@ -15,7 +15,7 @@ namespace Ivytalk.DataWindow.Serializable.CustomizeProperty
 
         public static implicit operator Font(CustomizeFont x)
         {
-            return x.MapsterCopyTo<Font>();
+            return new Font(x.Name, x.Size, x.Style, x.Unit);
         }
 
         public static implicit operator CustomizeFont(Font c)

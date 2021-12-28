@@ -36,7 +36,7 @@ namespace Ivytalk.DataWindow.Core
                 if (enumerable.Any())
                 {
                     var controlType = enumerable.Last();
-                   
+
                     AllControlSerializable.Add(controlType.GetGenericArguments()[0].Name,
                         (ControlSerializable) Activator.CreateInstance(type));
                 }
@@ -48,6 +48,11 @@ namespace Ivytalk.DataWindow.Core
             if (!AllControlSerializable.TryGetValue(type.Name, out var serializable))
             {
                 serializable = GetBaseSerializable(type.BaseType);
+            }
+
+            if (serializable != null)
+            {
+                serializable.Type = type;
             }
 
             return serializable;
@@ -86,6 +91,7 @@ namespace Ivytalk.DataWindow.Core
             var type = GetBaseSerializable(control.GetType()).GetType();
             var cs = (ControlSerializable) Activator.CreateInstance(type);
             control.MapsterCopyTo(cs);
+            cs.Type = control.GetType();
             return cs;
         }
     }

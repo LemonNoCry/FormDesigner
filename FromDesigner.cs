@@ -175,7 +175,6 @@ namespace FormDesinger
                     return;
             }
 
-            designerControl1.Overlayer.Init(800, 500, "新建设计");
             OpenFileDialog fileDialog = new OpenFileDialog();
             fileDialog.Multiselect = false;
             fileDialog.Title = "请选择文本文件";

@@ -13,7 +13,7 @@ namespace Ivytalk.DataWindow.Serializable.CustomizeProperty
 
         public static implicit operator Size(CustomizeSize x)
         {
-            return x.MapsterCopyTo<Size>();
+            return new Size(x.Width,x.Height);
         }
 
         public static implicit operator CustomizeSize(Size c)

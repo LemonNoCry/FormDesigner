@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Drawing;
+using System.Reflection.Emit;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 using Ivytalk.DataWindow.CustomPropertys;
@@ -16,6 +17,10 @@ namespace Ivytalk.DataWindow.Serializable
     public class ControlSerializable : IPropertyCollections<Control>
     {
         public string Name { get; set; }
+
+        [XmlElement(Type = typeof(XmlType))]
+        public Type Type { get; set; }
+
         public string Text { get; set; }
 
         [XmlElement(Type = typeof(XmlColor))]
@@ -33,7 +38,7 @@ namespace Ivytalk.DataWindow.Serializable
         public Size Size { get; set; }
 
         public bool AutoSize { get; set; }
-       
+
         [XmlElement(Type = typeof(CustomizeRectangle))]
         public Rectangle ClientRectangle { get; set; }
 

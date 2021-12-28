@@ -32,7 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>false</SignAssembly>
+    <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>Ivytalk.pfx</AssemblyOriginatorKeyFile>
@@ -86,6 +86,7 @@
     <Compile Include="Serializable\CustomizeProperty\CustomizeRectangle.cs" />
     <Compile Include="Serializable\CustomizeProperty\CustomizeSize.cs" />
     <Compile Include="Serializable\CustomizeProperty\XmlColor.cs" />
+    <Compile Include="Serializable\CustomizeProperty\XmlType.cs" />
     <Compile Include="CustomPropertys\CustomProperty.cs" />
     <Compile Include="CustomPropertys\CustomPropertyCollection.cs" />
     <Compile Include="CustomPropertys\CustomPropertyDescriptor.cs" />

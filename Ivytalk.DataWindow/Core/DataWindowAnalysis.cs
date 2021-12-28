@@ -15,18 +15,23 @@ namespace Ivytalk.DataWindow.Core
 
         public static ControlSerializable GetSerializationControls(Control control)
         {
-            var controlSerializable = Collections.ControlConvertSerializable(control);
+            var sc = Collections.ControlConvertSerializable(control);
+            if (control.Parent != null)
+            {
+                sc.ParentSerializable = Collections.ControlConvertSerializable(control.Parent);
+            }
+
             if (control.HasChildren)
             {
-                controlSerializable.ControlsSerializable = new List<ControlSerializable>();
+                sc.ControlsSerializable = new List<ControlSerializable>();
                 foreach (Control con in control.Controls)
                 {
                     var cs = GetSerializationControls(con);
-                    controlSerializable.ControlsSerializable.Add(cs);
+                    sc.ControlsSerializable.Add(cs);
                 }
             }
 
-            return controlSerializable;
+            return sc;
         }
 
         #region 序列化
@@ -58,6 +63,8 @@ namespace Ivytalk.DataWindow.Core
 
         #endregion
 
+        #region 解析xml
 
+        #endregion
     }
 }
