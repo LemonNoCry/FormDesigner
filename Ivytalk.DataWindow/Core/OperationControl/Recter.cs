@@ -124,46 +124,99 @@ namespace Ivytalk.DataWindow.Core.OperationControl
         {
             foreach (var sel in _selectRecters)
             {
-                DrawReciter(g, sel.Rectangle);
+                DrawReciter(g, sel);
             }
         }
 
-        private void DrawReciter(Graphics g, Rectangle rect)
+        private void DrawReciter(Graphics g, SelectRecter sel)
         {
             using (Pen p = new Pen(Brushes.Black, 1))
             {
                 p.DashStyle = DashStyle.Dot;
+                var rect = sel.Rectangle;
+
                 rect.Inflate(new Size(+1, +1));
                 g.DrawRectangle(p, rect); //方框
 
                 p.DashStyle = DashStyle.Solid;
 
                 //8个方块
-                if (!IsForm)
+                foreach (var value in Enum.GetValues(typeof(DragType)))
                 {
-                    g.FillRectangle(Brushes.White, new Rectangle(rect.Left - 6, rect.Top - 6, 6, 6));
-                    g.FillRectangle(Brushes.White, new Rectangle(rect.Left + rect.Width / 2 - 3, rect.Top - 6, 6, 6));
-                    g.FillRectangle(Brushes.White, new Rectangle(rect.Left + rect.Width, rect.Top - 6, 6, 6));
+                    DrawOperRecter((DragType) value, g, sel, p);
+                }
+                //if (!IsForm)
+                //{
+                //    g.FillRectangle(Brushes.White, new Rectangle(rect.Left - 6, rect.Top - 6, 6, 6));
+                //    g.FillRectangle(Brushes.White, new Rectangle(rect.Left + rect.Width / 2 - 3, rect.Top - 6, 6, 6));
+                //    g.FillRectangle(Brushes.White, new Rectangle(rect.Left + rect.Width, rect.Top - 6, 6, 6));
+                //    g.FillRectangle(Brushes.White, new Rectangle(rect.Left - 6, rect.Top + rect.Height / 2 - 3, 6, 6));
+                //    g.FillRectangle(Brushes.White, new Rectangle(rect.Left - 6, rect.Top + rect.Height, 6, 6));
+                //}
+
+                //g.FillRectangle(Brushes.White, new Rectangle(rect.Left + rect.Width, rect.Top + rect.Height / 2 - 3, 6, 6));
+                //g.FillRectangle(Brushes.White, new Rectangle(rect.Left + rect.Width / 2 - 3, rect.Top + rect.Height, 6, 6));
+                //g.FillRectangle(Brushes.White, new Rectangle(rect.Left + rect.Width, rect.Top + rect.Height, 6, 6));
+
+                //if (!IsForm)
+                //{
+                //    g.DrawRectangle(p, new Rectangle(rect.Left - 6, rect.Top - 6, 6, 6));
+                //    g.DrawRectangle(p, new Rectangle(rect.Left + rect.Width / 2 - 3, rect.Top - 6, 6, 6));
+                //    g.DrawRectangle(p, new Rectangle(rect.Left + rect.Width, rect.Top - 6, 6, 6));
+                //    g.DrawRectangle(p, new Rectangle(rect.Left - 6, rect.Top + rect.Height / 2 - 3, 6, 6));
+                //    g.DrawRectangle(p, new Rectangle(rect.Left - 6, rect.Top + rect.Height, 6, 6));
+                //}
+
+                //g.DrawRectangle(p, new Rectangle(rect.Left + rect.Width, rect.Top + rect.Height / 2 - 3, 6, 6));
+                //g.DrawRectangle(p, new Rectangle(rect.Left + rect.Width / 2 - 3, rect.Top + rect.Height, 6, 6));
+                //g.DrawRectangle(p, new Rectangle(rect.Left + rect.Width, rect.Top + rect.Height, 6, 6));
+            }
+        }
+
+        #region 操作框
+
+        private void DrawOperRecter(DragType type, Graphics g, SelectRecter sel, Pen p)
+        {
+            var rect = sel.Rectangle;
+            if (!CheckOperDragType(type, sel))
+            {
+                return;
+            }
+
+            switch (type)
+            {
+                case DragType.Left:
                     g.FillRectangle(Brushes.White, new Rectangle(rect.Left - 6, rect.Top + rect.Height / 2 - 3, 6, 6));
-                    g.FillRectangle(Brushes.White, new Rectangle(rect.Left - 6, rect.Top + rect.Height, 6, 6));
-                }
-
-                g.FillRectangle(Brushes.White, new Rectangle(rect.Left + rect.Width, rect.Top + rect.Height / 2 - 3, 6, 6));
-                g.FillRectangle(Brushes.White, new Rectangle(rect.Left + rect.Width / 2 - 3, rect.Top + rect.Height, 6, 6));
-                g.FillRectangle(Brushes.White, new Rectangle(rect.Left + rect.Width, rect.Top + rect.Height, 6, 6));
-
-                if (!IsForm)
-                {
-                    g.DrawRectangle(p, new Rectangle(rect.Left - 6, rect.Top - 6, 6, 6));
-                    g.DrawRectangle(p, new Rectangle(rect.Left + rect.Width / 2 - 3, rect.Top - 6, 6, 6));
-                    g.DrawRectangle(p, new Rectangle(rect.Left + rect.Width, rect.Top - 6, 6, 6));
                     g.DrawRectangle(p, new Rectangle(rect.Left - 6, rect.Top + rect.Height / 2 - 3, 6, 6));
+                    break;
+                case DragType.LeftTop:
+                    g.FillRectangle(Brushes.White, new Rectangle(rect.Left - 6, rect.Top - 6, 6, 6));
+                    g.DrawRectangle(p, new Rectangle(rect.Left - 6, rect.Top - 6, 6, 6));
+                    break;
+                case DragType.LeftBottom:
+                    g.FillRectangle(Brushes.White, new Rectangle(rect.Left - 6, rect.Top + rect.Height, 6, 6));
                     g.DrawRectangle(p, new Rectangle(rect.Left - 6, rect.Top + rect.Height, 6, 6));
-                }
-
-                g.DrawRectangle(p, new Rectangle(rect.Left + rect.Width, rect.Top + rect.Height / 2 - 3, 6, 6));
-                g.DrawRectangle(p, new Rectangle(rect.Left + rect.Width / 2 - 3, rect.Top + rect.Height, 6, 6));
-                g.DrawRectangle(p, new Rectangle(rect.Left + rect.Width, rect.Top + rect.Height, 6, 6));
+                    break;
+                case DragType.Top:
+                    g.FillRectangle(Brushes.White, new Rectangle(rect.Left + rect.Width / 2 - 3, rect.Top - 6, 6, 6));
+                    g.DrawRectangle(p, new Rectangle(rect.Left + rect.Width / 2 - 3, rect.Top - 6, 6, 6));
+                    break;
+                case DragType.Right:
+                    g.FillRectangle(Brushes.White, new Rectangle(rect.Left + rect.Width, rect.Top + rect.Height / 2 - 3, 6, 6));
+                    g.DrawRectangle(p, new Rectangle(rect.Left + rect.Width, rect.Top + rect.Height / 2 - 3, 6, 6));
+                    break;
+                case DragType.RightTop:
+                    g.FillRectangle(Brushes.White, new Rectangle(rect.Left + rect.Width, rect.Top - 6, 6, 6));
+                    g.DrawRectangle(p, new Rectangle(rect.Left + rect.Width, rect.Top - 6, 6, 6));
+                    break;
+                case DragType.RightBottom:
+                    g.FillRectangle(Brushes.White, new Rectangle(rect.Left + rect.Width, rect.Top + rect.Height, 6, 6));
+                    g.DrawRectangle(p, new Rectangle(rect.Left + rect.Width, rect.Top + rect.Height, 6, 6));
+                    break;
+                case DragType.Bottom:
+                    g.FillRectangle(Brushes.White, new Rectangle(rect.Left + rect.Width / 2 - 3, rect.Top + rect.Height, 6, 6));
+                    g.DrawRectangle(p, new Rectangle(rect.Left + rect.Width / 2 - 3, rect.Top + rect.Height, 6, 6));
+                    break;
             }
         }
 
@@ -174,64 +227,209 @@ namespace Ivytalk.DataWindow.Core.OperationControl
         /// <returns></returns>
         public DragType GetMouseDragType(Point p)
         {
-            return _selectRecters.Select(sel => GetMouseDragType(sel.Rectangle, p))
+            return _selectRecters.Select(sel => GetMouseDragType(sel, p))
                 .FirstOrDefault(dragType => dragType != DragType.None);
         }
 
-        public DragType GetMouseDragType(Rectangle rect, Point p)
+        public DragType GetMouseDragType(SelectRecter sel, Point p)
         {
+            var rect = sel.Rectangle;
             rect.Inflate(new Size(3, 3));
             if (new Rectangle(rect.Left - 2, rect.Top - 2, 4, 4).Contains(p)
                 && !IsForm)
             {
+                if (!CheckOperDragType(DragType.LeftTop, sel))
+                {
+                    return DragType.None;
+                }
+
                 return DragType.LeftTop;
             }
 
             if (new Rectangle(rect.Left + 2, rect.Top - 2, rect.Width - 4, 4).Contains(p)
                 && !IsForm)
             {
+                if (!CheckOperDragType(DragType.Top, sel))
+                {
+                    return DragType.None;
+                }
+
                 return DragType.Top;
             }
 
             if (new Rectangle(rect.Left - 2, rect.Top + 2, 4, rect.Height - 4).Contains(p)
                 && !IsForm)
             {
+                if (!CheckOperDragType(DragType.Left, sel))
+                {
+                    return DragType.None;
+                }
+
                 return DragType.Left;
             }
 
             if (new Rectangle(rect.Left - 2, rect.Top + rect.Height - 2, 4, 4).Contains(p)
                 && !IsForm)
             {
+                if (!CheckOperDragType(DragType.LeftBottom, sel))
+                {
+                    return DragType.None;
+                }
+
                 return DragType.LeftBottom;
             }
 
             if (new Rectangle(rect.Left + 2, rect.Top + rect.Height - 2, rect.Width - 4, 4).Contains(p))
             {
+                if (!CheckOperDragType(DragType.Bottom, sel))
+                {
+                    return DragType.None;
+                }
+
                 return DragType.Bottom;
             }
 
             if (new Rectangle(rect.Left + rect.Width - 2, rect.Top + rect.Height - 2, 4, 4).Contains(p))
             {
+                if (!CheckOperDragType(DragType.RightBottom, sel))
+                {
+                    return DragType.None;
+                }
+
                 return DragType.RightBottom;
             }
 
             if (new Rectangle(rect.Left + rect.Width - 2, rect.Top + 2, 4, rect.Height - 4).Contains(p))
             {
+                if (!CheckOperDragType(DragType.Right, sel))
+                {
+                    return DragType.None;
+                }
+
                 return DragType.Right;
             }
 
             if (new Rectangle(rect.Left + rect.Width - 2, rect.Top - 2, 4, 4).Contains(p) && !IsForm)
             {
+                if (!CheckOperDragType(DragType.RightTop, sel))
+                {
+                    return DragType.None;
+                }
+
                 return DragType.RightTop;
             }
 
             if (new Rectangle(rect.Left + 2, rect.Top + 2, rect.Width - 4, rect.Height - 4).Contains(p) && !IsForm)
             {
+                if (!CheckOperDragType(DragType.Center, sel) || sel.Control.Dock != DockStyle.None)
+                {
+                    return DragType.None;
+                }
+
                 return DragType.Center;
             }
 
             return DragType.None;
         }
+
+        public bool CheckOperDragType(DragType dragType, SelectRecter sel)
+        {
+            if (sel.Control.Dock == DockStyle.Fill)
+            {
+                return false;
+            }
+
+            switch (dragType)
+            {
+                case DragType.Left:
+                    if (IsForm)
+                    {
+                        return false;
+                    }
+
+                    if (new[] {DockStyle.Left, DockStyle.Top, DockStyle.Bottom}.Contains(sel.Control.Dock))
+                    {
+                        return false;
+                    }
+
+                    break;
+                case DragType.LeftTop:
+                    if (IsForm)
+                    {
+                        return false;
+                    }
+
+                    if (new[] {DockStyle.Left, DockStyle.Top, DockStyle.Bottom, DockStyle.Right}.Contains(sel.Control.Dock))
+                    {
+                        return false;
+                    }
+
+                    break;
+                case DragType.LeftBottom:
+                    if (IsForm)
+                    {
+                        return false;
+                    }
+
+                    if (new[] {DockStyle.Left, DockStyle.Top, DockStyle.Bottom, DockStyle.Right}.Contains(sel.Control.Dock))
+                    {
+                        return false;
+                    }
+
+                    break;
+                case DragType.Top:
+                    if (IsForm)
+                    {
+                        return false;
+                    }
+
+                    if (new[] {DockStyle.Left, DockStyle.Top, DockStyle.Right}.Contains(sel.Control.Dock))
+                    {
+                        return false;
+                    }
+
+                    break;
+                case DragType.Right:
+                    if (new[] {DockStyle.Top, DockStyle.Bottom, DockStyle.Right}.Contains(sel.Control.Dock))
+                    {
+                        return false;
+                    }
+
+
+                    break;
+                case DragType.RightTop:
+                    if (IsForm)
+                    {
+                        return false;
+                    }
+
+                    if (new[] {DockStyle.Left, DockStyle.Top, DockStyle.Bottom, DockStyle.Right}.Contains(sel.Control.Dock))
+                    {
+                        return false;
+                    }
+
+                    break;
+                case DragType.RightBottom:
+                    if (new[] {DockStyle.Left, DockStyle.Top, DockStyle.Bottom, DockStyle.Right}.Contains(sel.Control.Dock))
+                    {
+                        return false;
+                    }
+
+                    break;
+                case DragType.Bottom:
+                    if (new[] {DockStyle.Left, DockStyle.Bottom, DockStyle.Right}.Contains(sel.Control.Dock))
+                    {
+                        return false;
+                    }
+
+                    break;
+            }
+
+            return true;
+        }
+
+        #endregion
+
 
         public void RefreshRecterRectangle()
         {

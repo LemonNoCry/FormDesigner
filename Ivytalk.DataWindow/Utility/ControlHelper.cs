@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Windows.Forms;
+using Ivytalk.DataWindow.Serializable;
 
 namespace Ivytalk.DataWindow.Utility
 {
@@ -93,6 +94,14 @@ namespace Ivytalk.DataWindow.Utility
             {
                 return new Control();
             }	
+        }
+
+        public static Control CreateControl(ControlSerializable cs)
+        {
+            var control = (Control)cs.Type.Assembly.CreateInstance(cs.Type.FullName);
+            cs.MapsterCopyTo(control);
+
+            return control;
         }
     }
 }

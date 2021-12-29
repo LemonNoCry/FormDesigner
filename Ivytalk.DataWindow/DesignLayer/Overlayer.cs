@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Ivytalk.DataWindow.Events.EventArg;
+using Ivytalk.DataWindow.Serializable;
 
 namespace Ivytalk.DataWindow.DesignLayer
 {
@@ -179,15 +180,9 @@ namespace Ivytalk.DataWindow.DesignLayer
         {
             base.OnVisibleChanged(e);
             if (this.Visible)
+
             {
-                DataWindowControls.Clear();
-                DataWindowControls.Add(BaseDataWindow);
-                EachDataWindowControls(BaseDataWindow, c => { DataWindowControls.Add(c); });
-                var args = new BaseDataWindowControlEventArgs()
-                {
-                    AllControls = DataWindowControls,
-                };
-                BaseDataWindowControlChanged?.Invoke(BaseDataWindow, args);
+                RefreshWindowControls();
             }
         }
 
@@ -235,6 +230,18 @@ namespace Ivytalk.DataWindow.DesignLayer
             }
 
             return null;
+        }
+
+        public void RefreshWindowControls()
+        {
+            DataWindowControls.Clear();
+            DataWindowControls.Add(BaseDataWindow);
+            EachDataWindowControls(BaseDataWindow, c => { DataWindowControls.Add(c); });
+            var args = new BaseDataWindowControlEventArgs()
+            {
+                AllControls = DataWindowControls,
+            };
+            BaseDataWindowControlChanged?.Invoke(BaseDataWindow, args);
         }
 
         #endregion
@@ -841,11 +848,6 @@ namespace Ivytalk.DataWindow.DesignLayer
             base.OnMouseUp(e);
         }
 
-        protected override void OnDragEnter(DragEventArgs drgevent)
-        {
-            drgevent.Effect = DragDropEffects.Copy;
-            base.OnDragEnter(drgevent);
-        }
 
         /// <summary>
         /// 移动控件
@@ -907,45 +909,6 @@ namespace Ivytalk.DataWindow.DesignLayer
             }
         }
 
-        /// <summary>
-        /// 拖拽
-        /// </summary>
-        protected override void OnDragDrop(DragEventArgs drgevent)
-        {
-            try
-            {
-                string[] strs = (string[]) drgevent.Data.GetData(typeof(string[])); //获取拖拽数据
-                Control ctrl = ControlHelper.CreateControl(strs[1], strs[0]);       //实例化控件
-                SetControlProperty(ctrl);
-                ctrl.Location = BaseDataWindow.PointToClient(new Point(drgevent.X, drgevent.Y)); //屏幕坐标转换成控件容器坐标
-                if (!new Rectangle(BaseDataWindow.Location, BaseDataWindow.Size).Contains(new Rectangle(ctrl.Location, ctrl.Size)))
-                {
-                    MessageBox.Show("你不能在设计器外面创建控件", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                if (!(ctrl is DateTimePicker))
-                {
-                    ctrl.Text = strs[1];
-                }
-
-                BaseDataWindow.Controls.Add(ctrl);
-                ctrl.ContextMenuStrip = cms;
-                ctrl.BringToFront();
-
-                //将控件容器坐标转换为Overlayer坐标
-                Rectangle r = HostToOverlayerRectangle(ctrl);
-                Recter.SetSelect(r, ctrl);
-                FlushSelectProperty();
-                Invalidate2(false);
-            }
-            catch
-            {
-                // ignored
-            }
-
-            base.OnDragDrop(drgevent);
-        }
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
@@ -1019,6 +982,80 @@ namespace Ivytalk.DataWindow.DesignLayer
             }
 
             base.OnPreviewKeyDown(e);
+        }
+
+        #endregion
+
+        #region 拖拽控件到设计层
+
+        private void DragControlToDataWindow(DragEventArgs drgevent)
+        {
+            ControlSerializable cs = drgevent.Data.GetData(typeof(ControlSerializable)) as ControlSerializable;
+            if (cs == null)
+            {
+                throw new ArgumentNullException($@"请拖拽有效的控件");
+            }
+
+            Control control;
+            if (string.IsNullOrWhiteSpace(cs.Name))
+            {
+                //新加控件
+                control = ControlHelper.CreateControl(cs);
+               
+            }
+            else
+            {
+                //操作现有的控件
+                control=List<>
+            }
+
+            SetControlProperty(newCon);
+        }
+
+        protected override void OnDragEnter(DragEventArgs drgevent)
+        {
+            drgevent.Effect = DragDropEffects.Copy;
+            base.OnDragEnter(drgevent);
+        }
+
+        /// <summary>
+        /// 拖拽
+        /// </summary>
+        protected override void OnDragDrop(DragEventArgs drgevent)
+        {
+            try
+            {
+                string[] strs = (string[]) drgevent.Data.GetData(typeof(string[])); //获取拖拽数据
+                Control ctrl = ControlHelper.CreateControl(strs[1], strs[0]);       //实例化控件
+                SetControlProperty(ctrl);
+                ctrl.Location = BaseDataWindow.PointToClient(new Point(drgevent.X, drgevent.Y)); //屏幕坐标转换成控件容器坐标
+                if (!new Rectangle(BaseDataWindow.Location, BaseDataWindow.Size).Contains(new Rectangle(ctrl.Location, ctrl.Size)))
+                {
+                    MessageBox.Show("你不能在设计器外面创建控件", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (!(ctrl is DateTimePicker))
+                {
+                    ctrl.Text = strs[1];
+                }
+
+                BaseDataWindow.Controls.Add(ctrl);
+                ctrl.ContextMenuStrip = cms;
+                ctrl.BringToFront();
+
+                //将控件容器坐标转换为Overlayer坐标
+                Rectangle r = HostToOverlayerRectangle(ctrl);
+                Recter.SetSelect(r, ctrl);
+                FlushSelectProperty();
+                Invalidate2(false);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($@"添加控件异常:{ex.Message}");
+            }
+
+            base.OnDragDrop(drgevent);
         }
 
         #endregion
@@ -1409,7 +1446,7 @@ namespace Ivytalk.DataWindow.DesignLayer
 
             foreach (var con in clickControls)
             {
-                ToolStripItem tsi = new ToolStripMenuItem(con.Control.Name);
+                ToolStripItem tsi = new ToolStripMenuItem($@"选择'{con.Control.Name}'");
                 tsi.Click += (sender, args) => { SetSelectControl(con.Control); };
                 cms.Items.Insert(endIndex, tsi);
             }
@@ -1420,14 +1457,14 @@ namespace Ivytalk.DataWindow.DesignLayer
         {
             Recter.GetSelectControlsRects()
                 .ForEach(s => s.Control.SendToBack());
-            Invalidate2(false);
+            Invalidate2(true);
         }
 
         private void tsmiControlPotBottom_Click(object sender, EventArgs e)
         {
             Recter.GetSelectControlsRects()
                 .ForEach(s => s.Control.BringToFront());
-            Invalidate2(false);
+            Invalidate2(true);
         }
 
         #endregion
