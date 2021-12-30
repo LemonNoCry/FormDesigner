@@ -758,7 +758,7 @@ namespace Ivytalk.DataWindow.DesignLayer
                     }
                 }
             }
-            else if (Recter.IsMoving)
+            else if (_dragType==DragType.Center&&Recter.IsMoving)
             {
                 var cons = GetClickControls(e);
                 if (cons != null && cons.Any())
@@ -810,6 +810,8 @@ namespace Ivytalk.DataWindow.DesignLayer
                         {
                             if (s.Control.Parent != BaseDataWindow)
                             {
+                                s.IsMoveParent = true;
+                                s.Control.Visible = false;
                                 s.Parent = s.Control.Parent;
                                 Controls.Add(s.Control);
                             }
@@ -832,6 +834,8 @@ namespace Ivytalk.DataWindow.DesignLayer
                             continue;
                         }
 
+                        sc.IsMoveParent = true;
+                        sc.Control.Visible = false;
                         sc.Parent = sc.Control.Parent;
                         sel.Control.Controls.Add(sc.Control);
                     }
@@ -1563,6 +1567,12 @@ namespace Ivytalk.DataWindow.DesignLayer
                         Rectangle r = OverlayerToHostRectangle(sel.Control, sel.Rectangle);
                         sel.Control.SetBounds(r.Left, r.Top, r.Width, r.Height);
 
+                        if (sel.IsMoveParent)
+                        {
+                            sel.Control.Visible = true;
+                            sel.IsMoveParent = false;
+                        }
+                        
                         r = HostToOverlayerRectangle(sel.Control);
                         sel.Rectangle = r;
                     }

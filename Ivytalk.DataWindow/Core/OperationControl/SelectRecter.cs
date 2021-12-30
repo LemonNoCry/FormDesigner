@@ -23,6 +23,8 @@ namespace Ivytalk.DataWindow.Core.OperationControl
         /// </summary>
         public int SpaceIndex { get; set; }
 
+        public bool IsMoveParent { get; set; }
+
         public void ClearHistory()
         {
             MoveHistory = null;
