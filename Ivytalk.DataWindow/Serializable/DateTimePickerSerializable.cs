@@ -11,6 +11,7 @@ namespace Ivytalk.DataWindow.Serializable
         {
             return GetCollections(control as DateTimePicker);
         }
+
         public CustomPropertyCollection GetCollections(DateTimePicker control)
         {
             var cpc = base.GetCollections(control);

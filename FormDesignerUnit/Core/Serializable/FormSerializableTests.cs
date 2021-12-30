@@ -10,17 +10,19 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml.Serialization;
+using Ivytalk.DataWindow.Core;
+using Ivytalk.DataWindow.DesignLayer;
 
 namespace FormDesinger.Core.Serializable.Tests
 {
     [TestClass()]
     public class FormSerializableTests
     {
-        public static string SerializeXml(object data)
+        public static string SerializeXml(ControlSerializable data)
         {
             using (var sw = new StringWriter())
             {
-                var xz = new XmlSerializer(data.GetType());
+                var xz = Collections.GetXmlSerializer();
                 xz.Serialize(sw, data);
                 return sw.ToString();
             }
@@ -72,7 +74,8 @@ namespace FormDesinger.Core.Serializable.Tests
         [TestMethod]
         public void Method02()
         {
-            Form frm2 = new Form()
+            Form frm = new Form();
+            BaseDataWindow frm2 = new BaseDataWindow()
             {
                 Name = "asd",
                 Text = "asdasd",
@@ -81,13 +84,20 @@ namespace FormDesinger.Core.Serializable.Tests
                 Location = new Point(10, 10),
                 Font = new Font("宋体", 12, FontStyle.Bold)
             };
+            frm2.Controls.Add(new Label());
+            frm2.Controls.Add(new TextBox());
 
-            ControlSerializable controlSerializable = new FormSerializable();
-            frm2.MapsterCopyTo(controlSerializable);
+            frm2.TopLevel = false;
+            frm.Controls.Add(frm2);
 
-            var xml = SerializeXml(controlSerializable);
+            ControlSerializable controlSerializable = DataWindowAnalysis.GetSerializationControls(frm2);
+            var xml = DataWindowAnalysis.SerializationControls(frm2);
+
             Console.WriteLine(xml);
 
+            ControlSerializable cs = DataWindowAnalysis.DeserializeControls(xml);
+
+            Console.WriteLine(cs.GetType());
             //var ser = DeserializeXml<FormSerializable>(xml);
             //Form frm3 = new Form();
             //frm3 = ser.MapsterCopyTo(frm3);
@@ -96,6 +106,11 @@ namespace FormDesinger.Core.Serializable.Tests
             //Console.WriteLine(1);
         }
 
+        [TestMethod]
+        public void Method0111()
+        {
+            Console.WriteLine(new LabelSerializable().TextAlign);
+        }
         [TestMethod]
         public void Method011()
         {

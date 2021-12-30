@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 using Ivytalk.DataWindow.CustomPropertys;
 using Ivytalk.DataWindow.Utility;
 
@@ -65,6 +66,47 @@ namespace Ivytalk.DataWindow.Core
         /// <param name="control">控件对象</param>
         /// <param name="controlName">控件名</param>
         /// <returns>属性集合</returns>
+        public static ControlSerializable ControlConvertSerializable(Control control)
+        {
+            var type = GetBaseSerializable(control.GetType()).GetType();
+            var cs = (ControlSerializable) Activator.CreateInstance(type);
+            control.MapsterCopyTo(cs);
+            cs.Type = control.GetType();
+            return cs;
+        }
+
+        public static XmlSerializer XmlSerializer;
+
+        public static XmlSerializer GetXmlSerializer()
+        {
+            if (XmlSerializer == null)
+            {
+                Type[] types = AllControlSerializable.Values.Select(s => s.GetType()).ToArray();
+                XmlSerializer = new XmlSerializer(typeof(ControlSerializable), types);
+
+                //XmlAttributeOverrides aor = new XmlAttributeOverrides();
+                //XmlAttributes xas = new XmlAttributes();
+                //foreach (var controlSerializable in AllControlSerializable)
+                //{
+                //    xas.XmlElements.Add(new XmlElementAttribute(controlSerializable.Value.GetType().Name,
+                //        controlSerializable.Value.GetType()));
+                //}
+
+                //aor.Add(typeof(ControlSerializable), "ControlsSerializable", xas);
+            }
+
+            return XmlSerializer;
+        }
+
+        #region 获取自定义属性
+
+        /// <summary>
+        /// 显示指定的属性
+        /// <para>自定义属性必须定义ValueType</para>
+        /// </summary>
+        /// <param name="control">控件对象</param>
+        /// <param name="controlName">控件名</param>
+        /// <returns>属性集合</returns>
         public static CustomPropertyCollection GetCollections(Control control, Overlayer overlayer)
         {
             var cpc = GetBaseSerializable(control.GetType()).GetCollections(control);
@@ -79,20 +121,6 @@ namespace Ivytalk.DataWindow.Core
                 .ToArray();
         }
 
-        /// <summary>
-        /// 显示指定的属性
-        /// <para>自定义属性必须定义ValueType</para>
-        /// </summary>
-        /// <param name="control">控件对象</param>
-        /// <param name="controlName">控件名</param>
-        /// <returns>属性集合</returns>
-        public static ControlSerializable ControlConvertSerializable(Control control)
-        {
-            var type = GetBaseSerializable(control.GetType()).GetType();
-            var cs = (ControlSerializable) Activator.CreateInstance(type);
-            control.MapsterCopyTo(cs);
-            cs.Type = control.GetType();
-            return cs;
-        }
+        #endregion
     }
 }

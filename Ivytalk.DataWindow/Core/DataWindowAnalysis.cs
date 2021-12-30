@@ -1,25 +1,27 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
+using Ivytalk.DataWindow.DesignLayer;
 using Ivytalk.DataWindow.Serializable;
 using Ivytalk.DataWindow.Utility;
 
 namespace Ivytalk.DataWindow.Core
 {
-    public class DataWindowAnalysis
+    public static class DataWindowAnalysis
     {
         public static Encoding Encoding = Encoding.UTF8;
 
         public static ControlSerializable GetSerializationControls(Control control)
         {
             var sc = Collections.ControlConvertSerializable(control);
-            if (control.Parent != null)
-            {
-                sc.ParentSerializable = Collections.ControlConvertSerializable(control.Parent);
-            }
+            //if (control.Parent != null)
+            //{
+            //    sc.ParentSerializable = Collections.ControlConvertSerializable(control.Parent);
+            //}
 
             if (control.HasChildren)
             {
@@ -64,6 +66,32 @@ namespace Ivytalk.DataWindow.Core
         #endregion
 
         #region 解析xml
+
+        public static void ResolveToOverlayer(ControlSerializable cs, Overlayer overlayer)
+        {
+            overlayer.Reset();
+
+            cs.ControlSerializableToControl(overlayer.BaseDataWindow);
+            ResolveToOverlayerChild(cs.ControlsSerializable, overlayer.BaseDataWindow, overlayer);
+        }
+
+        public static void ResolveToOverlayerChild(List<ControlSerializable> css, Control control, Overlayer overlayer)
+        {
+            foreach (var child in css)
+            {
+                var con = overlayer.BaseDataWindow.GetInherentControl(child.Name) ?? ControlHelper.CreateControl(child);
+
+                child.ControlSerializableToControl(con);
+
+                overlayer.SetControlProperty(con);
+                control.Controls.Add(con);
+
+                if (child.ControlsSerializable != null && child.ControlsSerializable.Any())
+                {
+                    ResolveToOverlayerChild(child.ControlsSerializable, con, overlayer);
+                }
+            }
+        }
 
         #endregion
     }

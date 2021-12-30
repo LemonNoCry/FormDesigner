@@ -81,6 +81,8 @@ namespace Ivytalk.DataWindow.DesignLayer
         /// </summary>
         public new ControlCollection Controls => BaseDataWindow.Controls;
 
+        public List<Control> InherentControls => BaseDataWindow.InherentControls;
+
         private PropertyGrid _propertyGrid;
 
         public PropertyGrid PropertyGrid
@@ -97,6 +99,16 @@ namespace Ivytalk.DataWindow.DesignLayer
         {
             BaseDataWindow.ControlAdded += BaseDataWindow_ControlAdded;
             BaseDataWindow.ControlRemoved += BaseDataWindow_ControlRemoved;
+        }
+
+        public void Reset()
+        {
+            Controls.Clear();
+            RefreshWindowControls();
+
+            Recter.ClearSelect();
+            SelectRectangle = null;
+            OperationControlHistory.Clear();
         }
 
         public void FlushSelectProperty()
@@ -187,7 +199,6 @@ namespace Ivytalk.DataWindow.DesignLayer
         {
             base.OnVisibleChanged(e);
             if (this.Visible)
-
             {
                 RefreshWindowControls();
             }
@@ -758,7 +769,7 @@ namespace Ivytalk.DataWindow.DesignLayer
                     }
                 }
             }
-            else if (_dragType==DragType.Center&&Recter.IsMoving)
+            else if (_dragType == DragType.Center && Recter.IsMoving)
             {
                 var cons = GetClickControls(e);
                 if (cons != null && cons.Any())
@@ -929,6 +940,9 @@ namespace Ivytalk.DataWindow.DesignLayer
 
             if (con.IsContainerControl())
             {
+                con.ControlAdded -= BaseDataWindow_ControlAdded;
+                con.ControlRemoved -= BaseDataWindow_ControlRemoved;
+
                 con.ControlAdded += BaseDataWindow_ControlAdded;
                 con.ControlRemoved += BaseDataWindow_ControlRemoved;
             }
@@ -1572,7 +1586,7 @@ namespace Ivytalk.DataWindow.DesignLayer
                             sel.Control.Visible = true;
                             sel.IsMoveParent = false;
                         }
-                        
+
                         r = HostToOverlayerRectangle(sel.Control);
                         sel.Rectangle = r;
                     }

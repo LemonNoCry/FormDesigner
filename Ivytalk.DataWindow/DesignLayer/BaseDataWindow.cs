@@ -46,6 +46,11 @@ namespace Ivytalk.DataWindow.DesignLayer
             return InherentControls.Contains(con);
         }
 
+        public Control GetInherentControl(string name)
+        {
+            return InherentControls.SingleOrDefault(s => s.Name.Equals(name));
+        }
+
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);

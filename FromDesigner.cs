@@ -15,6 +15,7 @@ using Ivytalk.DataWindow.Core;
 using Ivytalk.DataWindow.Core.OperationControl;
 using Ivytalk.DataWindow.DesignLayer;
 using Ivytalk.DataWindow.Events.EventArg;
+using Ivytalk.DataWindow.Serializable;
 using Ivytalk.DataWindow.Utility;
 using Form = System.Windows.Forms.Form;
 
@@ -59,9 +60,13 @@ namespace FormDesinger
             var type = con.Tag.ToString();
             Assembly ass = typeof(Form).Assembly;
             var control = (Control) ass.CreateInstance(type);
+            SetControlDefault.SetDefault(control);
 
-            var cs = Collections.ControlConvertSerializable(control);
-            DoDragDrop(cs, DragDropEffects.Copy);
+            ControlSerializable cs = Collections.ControlConvertSerializable(control);
+
+            DataObject obj = new DataObject();
+            obj.SetData(typeof(ControlSerializable).FullName, cs);
+            DoDragDrop(obj, DragDropEffects.Copy);
 
             //ToolStripItem ctrl = sender as ToolStripItem;
             //if (ctrl != null)
@@ -79,6 +84,7 @@ namespace FormDesinger
             //    }
             //}
         }
+        
 
         private Point LastAddToolsLocation = new Point(-1, -1);
 
@@ -149,17 +155,13 @@ namespace FormDesinger
 
             SaveFileDialog fileDialog = new SaveFileDialog();
             fileDialog.Title = "请选择保存路径与文件名";
-            fileDialog.Filter = "文本文件|*.txt|所有文件|*.*"; //设置要选择的文件的类型
-            fileDialog.FileName = "*.txt";
+            fileDialog.Filter = "文本文件|*.ivydesign"; //设置要选择的文件的类型
+            fileDialog.FileName = $@"{designerControl1.BaseDataWindow.Text}.ivydesign";
             fileDialog.FilterIndex = 1;
             fileDialog.RestoreDirectory = true;
             if (fileDialog.ShowDialog() == DialogResult.OK)
             {
                 string fileName = fileDialog.FileName;
-                //string text = new Core.ControlSave(designerControl1.Overlayer).Save();
-                //
-                //System.IO.File.WriteAllText(fileName, text, Encoding.UTF8);
-
                 DataWindowAnalysis.SerializationControls(designerControl1.Overlayer.DesignerForm, fileName);
             }
         }
@@ -193,22 +195,12 @@ namespace FormDesinger
 
             OpenFileDialog fileDialog = new OpenFileDialog();
             fileDialog.Multiselect = false;
-            fileDialog.Title = "请选择文本文件";
-            fileDialog.Filter = "文本文件|*.txt|所有文件|*.*";
+            fileDialog.Title = "请选择样式文件";
+            fileDialog.Filter = "样式文件|*.ivydesign";
             if (fileDialog.ShowDialog() == DialogResult.OK)
             {
-                string fileName = fileDialog.FileName;
-                designerControl1.Overlayer.DesignerFormText = "自由型设计";
-                ContextMenuStrip menu = new ContextMenuStrip();
-                menu.Items.Add("编辑SQL");
-                designerControl1.ContextMenuStrip = menu;
-
-                string source = System.IO.File.ReadAllText(fileName);
-                //Core.OldAnalysis old = new Core.OldAnalysis(designerControl1._overlayer);
-                //old.of_LoaddwText(source);
-                Core.MyAnalysis anl = new Core.MyAnalysis(designerControl1.Overlayer);
-                anl.Load(source);
-                return;
+                var cs = DataWindowAnalysis.DeserializeControlsForPath(fileDialog.FileName);
+                DataWindowAnalysis.ResolveToOverlayer(cs, designerControl1.Overlayer);
             }
         }
 
@@ -300,7 +292,7 @@ namespace FormDesinger
                 }
                 else if (e.IsRemove)
                 {
-                    displayControls.Remove(displayControls.First(s => s.Control == e.RemoveControl));
+                    displayControls.Remove(displayControls.FirstOrDefault(s => s.Control == e.RemoveControl));
                 }
             }
             else

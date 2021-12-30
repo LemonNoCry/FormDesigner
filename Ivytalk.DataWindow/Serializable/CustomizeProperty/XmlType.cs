@@ -17,11 +17,19 @@ namespace Ivytalk.DataWindow.Serializable.CustomizeProperty
 
         public XmlType(Type c)
         {
-            type = c;
+            if (c != null)
+            {
+                type = c;
+            }
         }
 
         public static implicit operator Type(XmlType x)
         {
+            if (x == null)
+            {
+                return typeof(Control);
+            }
+
             return Type.GetType(x.TypeFullName);
         }
 

@@ -73,6 +73,7 @@
   <ItemGroup>
     <Compile Include="Core\DisplayControl.cs" />
     <Compile Include="Core\Serializable\MyTextBoxSerializable.cs" />
+    <Compile Include="Core\SetControlDefault.cs" />
     <Compile Include="Core\UndoAndRedo.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>

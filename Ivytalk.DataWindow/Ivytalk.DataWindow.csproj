@@ -81,6 +81,7 @@
       <DependentUpon>Overlayer.cs</DependentUpon>
     </Compile>
     <Compile Include="Events\EventArg\BaseDataWindowControlEventArgs.cs" />
+    <Compile Include="Serializable\PanelSerializable.cs" />
     <Compile Include="Serializable\CustomizeProperty\CustomizeFont.cs" />
     <Compile Include="Serializable\CustomizeProperty\CustomizePadding.cs" />
     <Compile Include="Serializable\CustomizeProperty\CustomizePoint.cs" />
@@ -97,6 +98,11 @@
     <Compile Include="Serializable\DateTimePickerSerializable.cs" />
     <Compile Include="Serializable\FormSerializable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Serializable\LabelSerializable.cs" />
+    <Compile Include="Serializable\ButtonSerializable.cs" />
+    <Compile Include="Serializable\CheckBoxSerializable.cs" />
+    <Compile Include="Serializable\ComboBoxSerializable.cs" />
+    <Compile Include="Serializable\TextBoxSerializable.cs" />
     <Compile Include="Utility\ControlHelper.cs" />
     <Compile Include="Utility\ControlUtilityExpand.cs" />
     <Compile Include="Utility\MapsterExtension.cs" />

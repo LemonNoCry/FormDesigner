@@ -9,7 +9,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace FormDesignerUnit.Core.Serializable
 {
     [TestClass()]
-     class DrawTest
+    public class DrawTest
     {
         [TestMethod]
         public void Method01()

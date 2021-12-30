@@ -3,19 +3,21 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
+using Ivytalk.DataWindow.Core;
+using Ivytalk.DataWindow.Serializable;
 
 namespace Ivytalk.DataWindow.Utility
 {
     public static class XmlSerializeUtility
     {
-        private static void XmlSerializeInternal<T>(Stream stream, T o, Encoding encoding)
+        private static void XmlSerializeInternal(Stream stream, ControlSerializable o, Encoding encoding)
         {
             if (o == null)
                 throw new ArgumentNullException(nameof(o));
             if (encoding == null)
                 throw new ArgumentNullException(nameof(encoding));
 
-            XmlSerializer serializer = new XmlSerializer(typeof(T));
+            XmlSerializer serializer = Collections.GetXmlSerializer();//new XmlSerializer(typeof(ControlSerializable));
 
             XmlWriterSettings settings = new XmlWriterSettings();
             settings.Indent = true;
@@ -36,7 +38,7 @@ namespace Ivytalk.DataWindow.Utility
         /// <param name="obj">要序列化的对象</param>
         /// <param name="encoding">编码方式</param>
         /// <returns>序列化产生的XML字符串</returns>
-        public static string XmlSerialize<T>(this T obj, Encoding encoding)
+        public static string XmlSerialize(this ControlSerializable obj, Encoding encoding)
         {
             if (obj == null)
                 throw new ArgumentNullException(nameof(obj));
@@ -61,7 +63,7 @@ namespace Ivytalk.DataWindow.Utility
         /// <param name="obj">要序列化的对象</param>
         /// <param name="path">保存文件路径</param>
         /// <param name="encoding">编码方式</param>
-        public static void XmlSerializeToFile<T>(this T obj, string path, Encoding encoding)
+        public static void XmlSerializeToFile(this ControlSerializable obj, string path, Encoding encoding)
         {
             if (obj == null)
                 throw new ArgumentNullException(nameof(obj));
@@ -90,7 +92,7 @@ namespace Ivytalk.DataWindow.Utility
             if (encoding == null)
                 throw new ArgumentNullException(nameof(encoding));
 
-            XmlSerializer mySerializer = new XmlSerializer(typeof(T));
+            XmlSerializer mySerializer = Collections.GetXmlSerializer();
             using (MemoryStream ms = new MemoryStream(encoding.GetBytes(xml)))
             {
                 using (StreamReader sr = new StreamReader(ms, encoding))
