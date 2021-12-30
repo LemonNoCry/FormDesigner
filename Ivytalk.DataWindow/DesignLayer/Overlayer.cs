@@ -101,6 +101,7 @@ namespace Ivytalk.DataWindow.DesignLayer
 
         public void FlushSelectProperty()
         {
+            this.Focus();
             if (_propertyGrid == null) return;
             _propertyGrid.SelectedObjects = Collections.GetCollections(this);
         }
@@ -131,6 +132,12 @@ namespace Ivytalk.DataWindow.DesignLayer
         {
             var record = new OperationControlRecord(this, operation,
                 Recter.GetSelectRects().Select(s => s.Control).ToList());
+            OperationControlHistory.Push(record);
+        }
+
+        private void PushOperationHistory(OperationControlType operation, List<Control> controls, List<ControlSerializable> controlSerializables)
+        {
+            var record = new OperationControlRecord(this, operation, controls, controlSerializables);
             OperationControlHistory.Push(record);
         }
 
@@ -288,7 +295,7 @@ namespace Ivytalk.DataWindow.DesignLayer
         /// </summary>
         /// <param name="con"></param>
         /// <returns></returns>
-        private Rectangle HostToOverlayerRectangle(Control con)
+        public Rectangle HostToOverlayerRectangle(Control con)
         {
             Rectangle r = con.Bounds;
             r = (con.Parent ?? BaseDataWindow).RectangleToScreen(r);
@@ -301,7 +308,7 @@ namespace Ivytalk.DataWindow.DesignLayer
         /// </summary>
         /// <param name="con"></param>
         /// <returns></returns>
-        private Rectangle OverlayerToHostRectangle(Control con)
+        public Rectangle OverlayerToHostRectangle(Control con)
         {
             Rectangle r = con.Bounds;
             r = this.RectangleToScreen(r);
@@ -549,6 +556,20 @@ namespace Ivytalk.DataWindow.DesignLayer
         public List<SelectRecter> GetClickControls(MouseEventArgs e)
         {
             return GetClickControls(Controls, e);
+        }
+
+        public SelectRecter GetClickTopContainerControl(MouseEventArgs e)
+        {
+            var cons = GetClickControls(e);
+            if (cons != null && cons.Any())
+            {
+                return cons.Where(s => s.Control.IsContainerControl())
+                    .OrderByDescending(s => s.SpaceIndex)
+                    .ThenByDescending(s => s.ZIndex)
+                    .First();
+            }
+
+            return default;
         }
 
         public List<SelectRecter> GetClickControls(ControlCollection controls, MouseEventArgs e, int spaceIndex = 1)
@@ -988,28 +1009,84 @@ namespace Ivytalk.DataWindow.DesignLayer
 
         #region 拖拽控件到设计层
 
-        private void DragControlToDataWindow(DragEventArgs drgevent)
+        private void DragControlToDataWindow(DragEventArgs dea)
         {
-            ControlSerializable cs = drgevent.Data.GetData(typeof(ControlSerializable)) as ControlSerializable;
+            ControlSerializable cs = dea.Data.GetData(typeof(ControlSerializable)) as ControlSerializable;
             if (cs == null)
             {
                 throw new ArgumentNullException($@"请拖拽有效的控件");
             }
 
+            List<Control> cons = new List<Control>();
+            List<ControlSerializable> css = new List<ControlSerializable>();
             Control control;
+            ControlSerializable oldSc = null;
             if (string.IsNullOrWhiteSpace(cs.Name))
             {
                 //新加控件
                 control = ControlHelper.CreateControl(cs);
-               
             }
             else
             {
                 //操作现有的控件
-                control=List<>
+                control = BaseDataWindow.InherentControls.Find(s => s.Name == cs.Name);
+                oldSc = control.ControlConvertSerializable();
+                if (control.Parent != null)
+                {
+                    oldSc.ParentSerializable = control.Parent.ControlConvertSerializable();
+                }
+
+                css.Add(oldSc);
             }
 
-            SetControlProperty(newCon);
+            cons.Add(control);
+
+            SetControlProperty(control);
+            var point = BaseDataWindow.PointToClient(new Point(dea.X, dea.Y));
+            var sr = GetClickTopContainerControl(new MouseEventArgs(MouseButtons.Left, 1, point.X, point.Y, 1));
+            if (sr == null)
+            {
+                //添加到Form
+                control.Location = BaseDataWindow.PointToClient(new Point(dea.X, dea.Y)); //屏幕坐标转换成控件容器坐标
+                if (control.Parent != BaseDataWindow)
+                {
+                    BaseDataWindow.Controls.Add(control);
+                }
+            }
+            else
+            {
+                //添加到对应的控件上
+                control.Location = sr.Control.PointToClient(new Point(dea.X, dea.Y)); //屏幕坐标转换成控件容器坐标
+                if (control.Parent != sr.Control)
+                {
+                    sr.Control.Controls.Add(control);
+                }
+            }
+
+            control.Visible = true;
+            control.ContextMenuStrip = cms;
+            control.BringToFront();
+
+            Rectangle r = HostToOverlayerRectangle(control);
+            Recter.SetSelect(r, control);
+            FlushSelectProperty();
+            Invalidate2(false);
+
+            if (oldSc == null)
+            {
+                PushOperationHistory(OperationControlType.Add, cons, css);
+            }
+            else
+            {
+                if (oldSc.Visible)
+                {
+                    PushOperationHistory(OperationControlType.Move, cons, css);
+                }
+                else
+                {
+                    PushOperationHistory(OperationControlType.MoveShow, cons, css);
+                }
+            }
         }
 
         protected override void OnDragEnter(DragEventArgs drgevent)
@@ -1025,30 +1102,14 @@ namespace Ivytalk.DataWindow.DesignLayer
         {
             try
             {
-                string[] strs = (string[]) drgevent.Data.GetData(typeof(string[])); //获取拖拽数据
-                Control ctrl = ControlHelper.CreateControl(strs[1], strs[0]);       //实例化控件
-                SetControlProperty(ctrl);
-                ctrl.Location = BaseDataWindow.PointToClient(new Point(drgevent.X, drgevent.Y)); //屏幕坐标转换成控件容器坐标
-                if (!new Rectangle(BaseDataWindow.Location, BaseDataWindow.Size).Contains(new Rectangle(ctrl.Location, ctrl.Size)))
+                var point = BaseDataWindow.PointToClient(new Point(drgevent.X, drgevent.Y));
+                if (!BaseDataWindow.ClientRectangle.Contains(point.X, point.Y))
                 {
                     MessageBox.Show("你不能在设计器外面创建控件", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                if (!(ctrl is DateTimePicker))
-                {
-                    ctrl.Text = strs[1];
-                }
-
-                BaseDataWindow.Controls.Add(ctrl);
-                ctrl.ContextMenuStrip = cms;
-                ctrl.BringToFront();
-
-                //将控件容器坐标转换为Overlayer坐标
-                Rectangle r = HostToOverlayerRectangle(ctrl);
-                Recter.SetSelect(r, ctrl);
-                FlushSelectProperty();
-                Invalidate2(false);
+                DragControlToDataWindow(drgevent);
             }
             catch (Exception ex)
             {
@@ -1056,6 +1117,7 @@ namespace Ivytalk.DataWindow.DesignLayer
             }
 
             base.OnDragDrop(drgevent);
+            this.Focus();
         }
 
         #endregion
@@ -1474,6 +1536,7 @@ namespace Ivytalk.DataWindow.DesignLayer
         /// </summary>
         public void Invalidate2(bool mouseUp)
         {
+            this.Focus();
             Invalidate();
 
             if (Parent != null) //更新父控件

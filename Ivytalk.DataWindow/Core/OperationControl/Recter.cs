@@ -433,12 +433,15 @@ namespace Ivytalk.DataWindow.Core.OperationControl
 
         public void RefreshRecterRectangle()
         {
-            foreach (var selectRecter in _selectRecters)
+            for (var index = _selectRecters.Count - 1; index >= 0; index--)
             {
-                var r = selectRecter.Control.Bounds;
-                r = selectRecter.Control.Parent.RectangleToScreen(r);
-                r = Overlayer.RectangleToClient(r);
-
+                var selectRecter = _selectRecters[index];
+                if (selectRecter.Control.Parent==null)
+                {
+                    _selectRecters.Remove(selectRecter);
+                    continue;
+                }
+                var r = Overlayer.HostToOverlayerRectangle(selectRecter.Control);
                 selectRecter.Rectangle = r;
             }
         }
@@ -556,7 +559,7 @@ namespace Ivytalk.DataWindow.Core.OperationControl
                     cs.Location = point;
                     if (s.Parent != null)
                     {
-                        cs.ParentSerializable = s.Parent.MapsterCopyTo<ControlSerializable>();
+                        cs.ParentSerializable = s.Parent.ControlConvertSerializable();
                         ot = OperationControlType.MoveParent;
                     }
 
@@ -657,13 +660,16 @@ namespace Ivytalk.DataWindow.Core.OperationControl
 
         public void DeleteRecter(OperationControlHistory history)
         {
+            List<ControlSerializable> css = new List<ControlSerializable>();
             foreach (var sel in _selectRecters)
             {
-                sel.Control.Hide();
-                // hostFrame.Controls.Remove(sel.Control);
+                var cs = sel.Control.ControlConvertSerializable();
+                cs.ParentSerializable = sel.Control.Parent.ControlConvertSerializable();
+                css.Add(cs);
+                sel.Control.Parent.Controls.Remove(sel.Control);
             }
 
-            history.Push(new OperationControlRecord(Overlayer, OperationControlType.Delete, _selectRecters.Select(s => s.Control).ToList(), default));
+            history.Push(new OperationControlRecord(Overlayer, OperationControlType.Delete, _selectRecters.Select(s => s.Control).ToList(), css));
         }
     }
 }

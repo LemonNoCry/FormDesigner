@@ -9,12 +9,14 @@ using System.Windows.Forms;
 using System.Reflection;
 using System.Windows.Forms.Design;
 using FormDesinger.Core;
+using FormDesinger.UserControls;
 using Ivytalk.DataWindow;
 using Ivytalk.DataWindow.Core;
 using Ivytalk.DataWindow.Core.OperationControl;
 using Ivytalk.DataWindow.DesignLayer;
 using Ivytalk.DataWindow.Events.EventArg;
 using Ivytalk.DataWindow.Utility;
+using Form = System.Windows.Forms.Form;
 
 namespace FormDesinger
 {
@@ -47,21 +49,35 @@ namespace FormDesinger
         /// </summary>
         private void toolMenuItems_MouseDown(object sender, MouseEventArgs e)
         {
-            ToolStripItem ctrl = sender as ToolStripItem;
-            if (ctrl != null)
+            ToolMenuItems con = sender as ToolMenuItems;
+            if (con.ToolTag == null)
             {
-                string[] strs = {ctrl.Tag == null ? "" : ctrl.Tag.ToString(), ctrl.Text};
-                DoDragDrop(strs, DragDropEffects.Copy);
+                MessageBox.Show("当前控件类型错误");
+                return;
             }
-            else
-            {
-                UserControls.ToolMenuItems tool = sender as UserControls.ToolMenuItems;
-                if (tool != null)
-                {
-                    string[] strs = {tool.Tag == null ? "" : tool.Tag.ToString(), tool.Text};
-                    DoDragDrop(strs, DragDropEffects.Copy);
-                }
-            }
+
+            var type = con.Tag.ToString();
+            Assembly ass = typeof(Form).Assembly;
+            var control = (Control) ass.CreateInstance(type);
+
+            var cs = Collections.ControlConvertSerializable(control);
+            DoDragDrop(cs, DragDropEffects.Copy);
+
+            //ToolStripItem ctrl = sender as ToolStripItem;
+            //if (ctrl != null)
+            //{
+            //    string[] strs = {ctrl.Tag == null ? "" : ctrl.Tag.ToString(), ctrl.Text};
+            //    DoDragDrop(strs, DragDropEffects.Copy);
+            //}
+            //else
+            //{
+            //    UserControls.ToolMenuItems tool = sender as UserControls.ToolMenuItems;
+            //    if (tool != null)
+            //    {
+            //        string[] strs = {tool.Tag == null ? "" : tool.Tag.ToString(), tool.Text};
+            //        DoDragDrop(strs, DragDropEffects.Copy);
+            //    }
+            //}
         }
 
         private Point LastAddToolsLocation = new Point(-1, -1);

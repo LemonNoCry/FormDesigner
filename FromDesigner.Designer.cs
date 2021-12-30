@@ -36,23 +36,7 @@ namespace FormDesinger
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FromDesigner));
             this.panel_left = new System.Windows.Forms.Panel();
             this.panel_tools_cus = new System.Windows.Forms.Panel();
-            this.toolMenuItems_adds = new FormDesinger.UserControls.ToolMenuItems();
-            this.toolMenuItems_tools_cus = new FormDesinger.UserControls.ToolMenuItems();
             this.panel_tools = new System.Windows.Forms.Panel();
-            this.toolMenuItems_label = new FormDesinger.UserControls.ToolMenuItems();
-            this.toolMenuItems_panel = new FormDesinger.UserControls.ToolMenuItems();
-            this.toolMenuItems_tools = new FormDesinger.UserControls.ToolMenuItems();
-            this.toolMenuItems_checkbox = new FormDesinger.UserControls.ToolMenuItems();
-            this.toolMenuItems_treeview = new FormDesinger.UserControls.ToolMenuItems();
-            this.toolMenuItems_progressbar = new FormDesinger.UserControls.ToolMenuItems();
-            this.toolMenuItems_textbox = new FormDesinger.UserControls.ToolMenuItems();
-            this.toolMenuItems_picturebox = new FormDesinger.UserControls.ToolMenuItems();
-            this.toolMenuItems_button = new FormDesinger.UserControls.ToolMenuItems();
-            this.toolMenuItems_linklabel = new FormDesinger.UserControls.ToolMenuItems();
-            this.toolMenuItems_radiobutton = new FormDesinger.UserControls.ToolMenuItems();
-            this.toolMenuItems_datetimepicker = new FormDesinger.UserControls.ToolMenuItems();
-            this.toolMenuItems_combobox = new FormDesinger.UserControls.ToolMenuItems();
-            this.toolMenuItems_listbox = new FormDesinger.UserControls.ToolMenuItems();
             this.panel_top = new System.Windows.Forms.Panel();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.tool_auto = new System.Windows.Forms.ToolStripButton();
@@ -72,10 +56,26 @@ namespace FormDesinger
             this.formToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.splitter2 = new System.Windows.Forms.Splitter();
-            this.designerControl1 = new Ivytalk.DataWindow.DesignLayer.DesignerControl();
             this.panel1 = new System.Windows.Forms.Panel();
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             this.cbAllControls = new System.Windows.Forms.ComboBox();
+            this.designerControl1 = new Ivytalk.DataWindow.DesignLayer.DesignerControl();
+            this.toolMenuItems_adds = new FormDesinger.UserControls.ToolMenuItems();
+            this.toolMenuItems_tools_cus = new FormDesinger.UserControls.ToolMenuItems();
+            this.toolMenuItems_label = new FormDesinger.UserControls.ToolMenuItems();
+            this.toolMenuItems_panel = new FormDesinger.UserControls.ToolMenuItems();
+            this.toolMenuItems_tools = new FormDesinger.UserControls.ToolMenuItems();
+            this.toolMenuItems_checkbox = new FormDesinger.UserControls.ToolMenuItems();
+            this.toolMenuItems_treeview = new FormDesinger.UserControls.ToolMenuItems();
+            this.toolMenuItems_progressbar = new FormDesinger.UserControls.ToolMenuItems();
+            this.toolMenuItems_textbox = new FormDesinger.UserControls.ToolMenuItems();
+            this.toolMenuItems_picturebox = new FormDesinger.UserControls.ToolMenuItems();
+            this.toolMenuItems_button = new FormDesinger.UserControls.ToolMenuItems();
+            this.toolMenuItems_linklabel = new FormDesinger.UserControls.ToolMenuItems();
+            this.toolMenuItems_radiobutton = new FormDesinger.UserControls.ToolMenuItems();
+            this.toolMenuItems_datetimepicker = new FormDesinger.UserControls.ToolMenuItems();
+            this.toolMenuItems_combobox = new FormDesinger.UserControls.ToolMenuItems();
+            this.toolMenuItems_listbox = new FormDesinger.UserControls.ToolMenuItems();
             this.panel_left.SuspendLayout();
             this.panel_tools_cus.SuspendLayout();
             this.panel_tools.SuspendLayout();
@@ -108,44 +108,6 @@ namespace FormDesinger
             this.panel_tools_cus.Size = new System.Drawing.Size(138, 25);
             this.panel_tools_cus.TabIndex = 15;
             // 
-            // toolMenuItems_adds
-            // 
-            this.toolMenuItems_adds.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.toolMenuItems_adds.BackColor = System.Drawing.Color.White;
-            this.toolMenuItems_adds.Location = new System.Drawing.Point(0, 24);
-            this.toolMenuItems_adds.Name = "toolMenuItems_adds";
-            this.toolMenuItems_adds.Size = new System.Drawing.Size(138, 22);
-            this.toolMenuItems_adds.TabIndex = 12;
-            this.toolMenuItems_adds.ToolBackColor = System.Drawing.Color.White;
-            this.toolMenuItems_adds.ToolFocusColor = System.Drawing.Color.DodgerBlue;
-            this.toolMenuItems_adds.ToolFocusForeColor = System.Drawing.Color.White;
-            this.toolMenuItems_adds.ToolImage = global::FormDesinger.Properties.Resources.tools_add_24px;
-            this.toolMenuItems_adds.ToolIsMenu = null;
-            this.toolMenuItems_adds.ToolIsMenuHeight = 0;
-            this.toolMenuItems_adds.ToolName = "从程序集添加...";
-            this.toolMenuItems_adds.ToolTag = null;
-            this.toolMenuItems_adds.ToolTip = "单击从.net程序集添加外部控件";
-            this.toolMenuItems_adds.Click += new System.EventHandler(this.toolMenuItems_adds_Click);
-            // 
-            // toolMenuItems_tools_cus
-            // 
-            this.toolMenuItems_tools_cus.BackColor = System.Drawing.Color.LightGoldenrodYellow;
-            this.toolMenuItems_tools_cus.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.toolMenuItems_tools_cus.Location = new System.Drawing.Point(0, 1);
-            this.toolMenuItems_tools_cus.Name = "toolMenuItems_tools_cus";
-            this.toolMenuItems_tools_cus.Size = new System.Drawing.Size(138, 22);
-            this.toolMenuItems_tools_cus.TabIndex = 16;
-            this.toolMenuItems_tools_cus.ToolBackColor = System.Drawing.Color.LightGoldenrodYellow;
-            this.toolMenuItems_tools_cus.ToolFocusColor = System.Drawing.Color.Khaki;
-            this.toolMenuItems_tools_cus.ToolFocusForeColor = System.Drawing.Color.DimGray;
-            this.toolMenuItems_tools_cus.ToolImage = global::FormDesinger.Properties.Resources.tools_open;
-            this.toolMenuItems_tools_cus.ToolIsMenu = this.panel_tools_cus;
-            this.toolMenuItems_tools_cus.ToolIsMenuHeight = 100;
-            this.toolMenuItems_tools_cus.ToolName = "自定义控件";
-            this.toolMenuItems_tools_cus.ToolTag = null;
-            this.toolMenuItems_tools_cus.ToolTip = "从.net程序集添加外部控件";
-            // 
             // panel_tools
             // 
             this.panel_tools.BackColor = System.Drawing.Color.Transparent;
@@ -168,287 +130,6 @@ namespace FormDesinger
             this.panel_tools.Name = "panel_tools";
             this.panel_tools.Size = new System.Drawing.Size(138, 322);
             this.panel_tools.TabIndex = 13;
-            // 
-            // toolMenuItems_label
-            // 
-            this.toolMenuItems_label.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.toolMenuItems_label.BackColor = System.Drawing.Color.White;
-            this.toolMenuItems_label.Location = new System.Drawing.Point(0, 25);
-            this.toolMenuItems_label.Name = "toolMenuItems_label";
-            this.toolMenuItems_label.Size = new System.Drawing.Size(138, 22);
-            this.toolMenuItems_label.TabIndex = 15;
-            this.toolMenuItems_label.ToolBackColor = System.Drawing.Color.White;
-            this.toolMenuItems_label.ToolFocusColor = System.Drawing.Color.DodgerBlue;
-            this.toolMenuItems_label.ToolFocusForeColor = System.Drawing.Color.White;
-            this.toolMenuItems_label.ToolImage = global::FormDesinger.Properties.Resources.tools_label_48px;
-            this.toolMenuItems_label.ToolIsMenu = null;
-            this.toolMenuItems_label.ToolIsMenuHeight = 0;
-            this.toolMenuItems_label.ToolName = "Label";
-            this.toolMenuItems_label.ToolTag = null;
-            this.toolMenuItems_label.ToolTip = "为控件提供说明性文字";
-            this.toolMenuItems_label.Load += new System.EventHandler(this.toolMenuItems_label_Load);
-            this.toolMenuItems_label.MouseDown += new System.Windows.Forms.MouseEventHandler(this.toolMenuItems_MouseDown);
-            // 
-            // toolMenuItems_panel
-            // 
-            this.toolMenuItems_panel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.toolMenuItems_panel.BackColor = System.Drawing.Color.White;
-            this.toolMenuItems_panel.Location = new System.Drawing.Point(0, 300);
-            this.toolMenuItems_panel.Name = "toolMenuItems_panel";
-            this.toolMenuItems_panel.Size = new System.Drawing.Size(138, 22);
-            this.toolMenuItems_panel.TabIndex = 14;
-            this.toolMenuItems_panel.ToolBackColor = System.Drawing.Color.White;
-            this.toolMenuItems_panel.ToolFocusColor = System.Drawing.Color.DodgerBlue;
-            this.toolMenuItems_panel.ToolFocusForeColor = System.Drawing.Color.White;
-            this.toolMenuItems_panel.ToolImage = global::FormDesinger.Properties.Resources.tools_panel_24px;
-            this.toolMenuItems_panel.ToolIsMenu = null;
-            this.toolMenuItems_panel.ToolIsMenuHeight = 0;
-            this.toolMenuItems_panel.ToolName = "Panel";
-            this.toolMenuItems_panel.ToolTag = null;
-            this.toolMenuItems_panel.ToolTip = "允许对控件集合分组";
-            this.toolMenuItems_panel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.toolMenuItems_MouseDown);
-            // 
-            // toolMenuItems_tools
-            // 
-            this.toolMenuItems_tools.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.toolMenuItems_tools.BackColor = System.Drawing.Color.LightGoldenrodYellow;
-            this.toolMenuItems_tools.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.toolMenuItems_tools.Location = new System.Drawing.Point(0, 1);
-            this.toolMenuItems_tools.Name = "toolMenuItems_tools";
-            this.toolMenuItems_tools.Size = new System.Drawing.Size(138, 22);
-            this.toolMenuItems_tools.TabIndex = 13;
-            this.toolMenuItems_tools.ToolBackColor = System.Drawing.Color.LightGoldenrodYellow;
-            this.toolMenuItems_tools.ToolFocusColor = System.Drawing.Color.Khaki;
-            this.toolMenuItems_tools.ToolFocusForeColor = System.Drawing.Color.DimGray;
-            this.toolMenuItems_tools.ToolImage = global::FormDesinger.Properties.Resources.tools_close;
-            this.toolMenuItems_tools.ToolIsMenu = this.panel_tools;
-            this.toolMenuItems_tools.ToolIsMenuHeight = 0;
-            this.toolMenuItems_tools.ToolName = "所有Windows窗体";
-            this.toolMenuItems_tools.ToolTag = null;
-            this.toolMenuItems_tools.ToolTip = "工具箱,将下列控件拖到设计器里可添加对应控件";
-            // 
-            // toolMenuItems_checkbox
-            // 
-            this.toolMenuItems_checkbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.toolMenuItems_checkbox.BackColor = System.Drawing.Color.White;
-            this.toolMenuItems_checkbox.Location = new System.Drawing.Point(0, 93);
-            this.toolMenuItems_checkbox.Name = "toolMenuItems_checkbox";
-            this.toolMenuItems_checkbox.Size = new System.Drawing.Size(138, 22);
-            this.toolMenuItems_checkbox.TabIndex = 3;
-            this.toolMenuItems_checkbox.ToolBackColor = System.Drawing.Color.White;
-            this.toolMenuItems_checkbox.ToolFocusColor = System.Drawing.Color.DodgerBlue;
-            this.toolMenuItems_checkbox.ToolFocusForeColor = System.Drawing.Color.White;
-            this.toolMenuItems_checkbox.ToolImage = global::FormDesinger.Properties.Resources.tools_checkbox_32px;
-            this.toolMenuItems_checkbox.ToolIsMenu = null;
-            this.toolMenuItems_checkbox.ToolIsMenuHeight = 0;
-            this.toolMenuItems_checkbox.ToolName = "CheckBox";
-            this.toolMenuItems_checkbox.ToolTag = null;
-            this.toolMenuItems_checkbox.ToolTip = "允许用户选择或清除关联选项";
-            this.toolMenuItems_checkbox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.toolMenuItems_MouseDown);
-            // 
-            // toolMenuItems_treeview
-            // 
-            this.toolMenuItems_treeview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.toolMenuItems_treeview.BackColor = System.Drawing.Color.White;
-            this.toolMenuItems_treeview.Location = new System.Drawing.Point(0, 277);
-            this.toolMenuItems_treeview.Name = "toolMenuItems_treeview";
-            this.toolMenuItems_treeview.Size = new System.Drawing.Size(138, 22);
-            this.toolMenuItems_treeview.TabIndex = 11;
-            this.toolMenuItems_treeview.ToolBackColor = System.Drawing.Color.White;
-            this.toolMenuItems_treeview.ToolFocusColor = System.Drawing.Color.DodgerBlue;
-            this.toolMenuItems_treeview.ToolFocusForeColor = System.Drawing.Color.White;
-            this.toolMenuItems_treeview.ToolImage = global::FormDesinger.Properties.Resources.tools_treeview_32px;
-            this.toolMenuItems_treeview.ToolIsMenu = null;
-            this.toolMenuItems_treeview.ToolIsMenuHeight = 0;
-            this.toolMenuItems_treeview.ToolName = "TreeView";
-            this.toolMenuItems_treeview.ToolTag = null;
-            this.toolMenuItems_treeview.ToolTip = "树形结构,显示可选择包含图像的标签项的分层集合";
-            this.toolMenuItems_treeview.MouseDown += new System.Windows.Forms.MouseEventHandler(this.toolMenuItems_MouseDown);
-            // 
-            // toolMenuItems_progressbar
-            // 
-            this.toolMenuItems_progressbar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.toolMenuItems_progressbar.BackColor = System.Drawing.Color.White;
-            this.toolMenuItems_progressbar.Location = new System.Drawing.Point(0, 254);
-            this.toolMenuItems_progressbar.Name = "toolMenuItems_progressbar";
-            this.toolMenuItems_progressbar.Size = new System.Drawing.Size(138, 22);
-            this.toolMenuItems_progressbar.TabIndex = 10;
-            this.toolMenuItems_progressbar.ToolBackColor = System.Drawing.Color.White;
-            this.toolMenuItems_progressbar.ToolFocusColor = System.Drawing.Color.DodgerBlue;
-            this.toolMenuItems_progressbar.ToolFocusForeColor = System.Drawing.Color.White;
-            this.toolMenuItems_progressbar.ToolImage = global::FormDesinger.Properties.Resources.tools_progressbar_24px;
-            this.toolMenuItems_progressbar.ToolIsMenu = null;
-            this.toolMenuItems_progressbar.ToolIsMenuHeight = 0;
-            this.toolMenuItems_progressbar.ToolName = "ProgressBar";
-            this.toolMenuItems_progressbar.ToolTag = null;
-            this.toolMenuItems_progressbar.ToolTip = "显示操作进度的填充条";
-            this.toolMenuItems_progressbar.MouseDown += new System.Windows.Forms.MouseEventHandler(this.toolMenuItems_MouseDown);
-            // 
-            // toolMenuItems_textbox
-            // 
-            this.toolMenuItems_textbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.toolMenuItems_textbox.BackColor = System.Drawing.Color.White;
-            this.toolMenuItems_textbox.Location = new System.Drawing.Point(0, 47);
-            this.toolMenuItems_textbox.Name = "toolMenuItems_textbox";
-            this.toolMenuItems_textbox.Size = new System.Drawing.Size(138, 22);
-            this.toolMenuItems_textbox.TabIndex = 1;
-            this.toolMenuItems_textbox.ToolBackColor = System.Drawing.Color.White;
-            this.toolMenuItems_textbox.ToolFocusColor = System.Drawing.Color.DodgerBlue;
-            this.toolMenuItems_textbox.ToolFocusForeColor = System.Drawing.Color.White;
-            this.toolMenuItems_textbox.ToolImage = global::FormDesinger.Properties.Resources.tools_textbox_50px;
-            this.toolMenuItems_textbox.ToolIsMenu = null;
-            this.toolMenuItems_textbox.ToolIsMenuHeight = 0;
-            this.toolMenuItems_textbox.ToolName = "TextBox";
-            this.toolMenuItems_textbox.ToolTag = null;
-            this.toolMenuItems_textbox.ToolTip = "允许用户输入文本,并提供多行编辑及密码字符掩码功能";
-            this.toolMenuItems_textbox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.toolMenuItems_MouseDown);
-            // 
-            // toolMenuItems_picturebox
-            // 
-            this.toolMenuItems_picturebox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.toolMenuItems_picturebox.BackColor = System.Drawing.Color.White;
-            this.toolMenuItems_picturebox.Location = new System.Drawing.Point(0, 231);
-            this.toolMenuItems_picturebox.Name = "toolMenuItems_picturebox";
-            this.toolMenuItems_picturebox.Size = new System.Drawing.Size(138, 22);
-            this.toolMenuItems_picturebox.TabIndex = 9;
-            this.toolMenuItems_picturebox.ToolBackColor = System.Drawing.Color.White;
-            this.toolMenuItems_picturebox.ToolFocusColor = System.Drawing.Color.DodgerBlue;
-            this.toolMenuItems_picturebox.ToolFocusForeColor = System.Drawing.Color.White;
-            this.toolMenuItems_picturebox.ToolImage = global::FormDesinger.Properties.Resources.tools_picture_24px;
-            this.toolMenuItems_picturebox.ToolIsMenu = null;
-            this.toolMenuItems_picturebox.ToolIsMenuHeight = 0;
-            this.toolMenuItems_picturebox.ToolName = "PictureBox";
-            this.toolMenuItems_picturebox.ToolTag = null;
-            this.toolMenuItems_picturebox.ToolTip = "\n显示图片";
-            this.toolMenuItems_picturebox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.toolMenuItems_MouseDown);
-            // 
-            // toolMenuItems_button
-            // 
-            this.toolMenuItems_button.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.toolMenuItems_button.BackColor = System.Drawing.Color.White;
-            this.toolMenuItems_button.Location = new System.Drawing.Point(0, 70);
-            this.toolMenuItems_button.Name = "toolMenuItems_button";
-            this.toolMenuItems_button.Size = new System.Drawing.Size(138, 22);
-            this.toolMenuItems_button.TabIndex = 2;
-            this.toolMenuItems_button.ToolBackColor = System.Drawing.Color.White;
-            this.toolMenuItems_button.ToolFocusColor = System.Drawing.Color.DodgerBlue;
-            this.toolMenuItems_button.ToolFocusForeColor = System.Drawing.Color.White;
-            this.toolMenuItems_button.ToolImage = global::FormDesinger.Properties.Resources.tools_button_50pxt;
-            this.toolMenuItems_button.ToolIsMenu = null;
-            this.toolMenuItems_button.ToolIsMenuHeight = 0;
-            this.toolMenuItems_button.ToolName = "Button";
-            this.toolMenuItems_button.ToolTag = null;
-            this.toolMenuItems_button.ToolTip = "按钮,用户单击时引发事件";
-            this.toolMenuItems_button.MouseDown += new System.Windows.Forms.MouseEventHandler(this.toolMenuItems_MouseDown);
-            // 
-            // toolMenuItems_linklabel
-            // 
-            this.toolMenuItems_linklabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.toolMenuItems_linklabel.BackColor = System.Drawing.Color.White;
-            this.toolMenuItems_linklabel.Location = new System.Drawing.Point(0, 208);
-            this.toolMenuItems_linklabel.Name = "toolMenuItems_linklabel";
-            this.toolMenuItems_linklabel.Size = new System.Drawing.Size(138, 22);
-            this.toolMenuItems_linklabel.TabIndex = 8;
-            this.toolMenuItems_linklabel.ToolBackColor = System.Drawing.Color.White;
-            this.toolMenuItems_linklabel.ToolFocusColor = System.Drawing.Color.DodgerBlue;
-            this.toolMenuItems_linklabel.ToolFocusForeColor = System.Drawing.Color.White;
-            this.toolMenuItems_linklabel.ToolImage = global::FormDesinger.Properties.Resources.tools_linklabel_40px;
-            this.toolMenuItems_linklabel.ToolIsMenu = null;
-            this.toolMenuItems_linklabel.ToolIsMenuHeight = 0;
-            this.toolMenuItems_linklabel.ToolName = "LinkLabel";
-            this.toolMenuItems_linklabel.ToolTag = null;
-            this.toolMenuItems_linklabel.ToolTip = "显示支持超链接的标签";
-            this.toolMenuItems_linklabel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.toolMenuItems_MouseDown);
-            // 
-            // toolMenuItems_radiobutton
-            // 
-            this.toolMenuItems_radiobutton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.toolMenuItems_radiobutton.BackColor = System.Drawing.Color.White;
-            this.toolMenuItems_radiobutton.Location = new System.Drawing.Point(0, 116);
-            this.toolMenuItems_radiobutton.Name = "toolMenuItems_radiobutton";
-            this.toolMenuItems_radiobutton.Size = new System.Drawing.Size(138, 22);
-            this.toolMenuItems_radiobutton.TabIndex = 4;
-            this.toolMenuItems_radiobutton.ToolBackColor = System.Drawing.Color.White;
-            this.toolMenuItems_radiobutton.ToolFocusColor = System.Drawing.Color.DodgerBlue;
-            this.toolMenuItems_radiobutton.ToolFocusForeColor = System.Drawing.Color.White;
-            this.toolMenuItems_radiobutton.ToolImage = global::FormDesinger.Properties.Resources.tools_radiobutton_32px;
-            this.toolMenuItems_radiobutton.ToolIsMenu = null;
-            this.toolMenuItems_radiobutton.ToolIsMenuHeight = 0;
-            this.toolMenuItems_radiobutton.ToolName = "RadioButton";
-            this.toolMenuItems_radiobutton.ToolTag = null;
-            this.toolMenuItems_radiobutton.ToolTip = "当与其他单选按钮成对出现时,允许用户从一组选项中选择单个选项";
-            this.toolMenuItems_radiobutton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.toolMenuItems_MouseDown);
-            // 
-            // toolMenuItems_datetimepicker
-            // 
-            this.toolMenuItems_datetimepicker.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.toolMenuItems_datetimepicker.BackColor = System.Drawing.Color.White;
-            this.toolMenuItems_datetimepicker.Location = new System.Drawing.Point(0, 185);
-            this.toolMenuItems_datetimepicker.Name = "toolMenuItems_datetimepicker";
-            this.toolMenuItems_datetimepicker.Size = new System.Drawing.Size(138, 22);
-            this.toolMenuItems_datetimepicker.TabIndex = 7;
-            this.toolMenuItems_datetimepicker.ToolBackColor = System.Drawing.Color.White;
-            this.toolMenuItems_datetimepicker.ToolFocusColor = System.Drawing.Color.DodgerBlue;
-            this.toolMenuItems_datetimepicker.ToolFocusForeColor = System.Drawing.Color.White;
-            this.toolMenuItems_datetimepicker.ToolImage = global::FormDesinger.Properties.Resources.tools_time_145px;
-            this.toolMenuItems_datetimepicker.ToolIsMenu = null;
-            this.toolMenuItems_datetimepicker.ToolIsMenuHeight = 0;
-            this.toolMenuItems_datetimepicker.ToolName = "DateTimePicker";
-            this.toolMenuItems_datetimepicker.ToolTag = null;
-            this.toolMenuItems_datetimepicker.ToolTip = "\n选择日期和时间,并指定格式";
-            this.toolMenuItems_datetimepicker.MouseDown += new System.Windows.Forms.MouseEventHandler(this.toolMenuItems_MouseDown);
-            // 
-            // toolMenuItems_combobox
-            // 
-            this.toolMenuItems_combobox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.toolMenuItems_combobox.BackColor = System.Drawing.Color.White;
-            this.toolMenuItems_combobox.Location = new System.Drawing.Point(0, 139);
-            this.toolMenuItems_combobox.Name = "toolMenuItems_combobox";
-            this.toolMenuItems_combobox.Size = new System.Drawing.Size(138, 22);
-            this.toolMenuItems_combobox.TabIndex = 5;
-            this.toolMenuItems_combobox.ToolBackColor = System.Drawing.Color.White;
-            this.toolMenuItems_combobox.ToolFocusColor = System.Drawing.Color.DodgerBlue;
-            this.toolMenuItems_combobox.ToolFocusForeColor = System.Drawing.Color.White;
-            this.toolMenuItems_combobox.ToolImage = global::FormDesinger.Properties.Resources.tools_dropdown_50px;
-            this.toolMenuItems_combobox.ToolIsMenu = null;
-            this.toolMenuItems_combobox.ToolIsMenuHeight = 0;
-            this.toolMenuItems_combobox.ToolName = "ComboBox";
-            this.toolMenuItems_combobox.ToolTag = null;
-            this.toolMenuItems_combobox.ToolTip = "显示一个可编辑的文本框,其中包括一个一个允许值下拉列表";
-            this.toolMenuItems_combobox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.toolMenuItems_MouseDown);
-            // 
-            // toolMenuItems_listbox
-            // 
-            this.toolMenuItems_listbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.toolMenuItems_listbox.BackColor = System.Drawing.Color.White;
-            this.toolMenuItems_listbox.Location = new System.Drawing.Point(0, 162);
-            this.toolMenuItems_listbox.Name = "toolMenuItems_listbox";
-            this.toolMenuItems_listbox.Size = new System.Drawing.Size(138, 22);
-            this.toolMenuItems_listbox.TabIndex = 6;
-            this.toolMenuItems_listbox.ToolBackColor = System.Drawing.Color.White;
-            this.toolMenuItems_listbox.ToolFocusColor = System.Drawing.Color.DodgerBlue;
-            this.toolMenuItems_listbox.ToolFocusForeColor = System.Drawing.Color.White;
-            this.toolMenuItems_listbox.ToolImage = global::FormDesinger.Properties.Resources.tools_listbox_32px;
-            this.toolMenuItems_listbox.ToolIsMenu = null;
-            this.toolMenuItems_listbox.ToolIsMenuHeight = 0;
-            this.toolMenuItems_listbox.ToolName = "ListBox";
-            this.toolMenuItems_listbox.ToolTag = null;
-            this.toolMenuItems_listbox.ToolTip = "显示用户可以从中选择项的列表";
-            this.toolMenuItems_listbox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.toolMenuItems_MouseDown);
             // 
             // panel_top
             // 
@@ -618,18 +299,6 @@ namespace FormDesinger
             this.splitter2.TabIndex = 6;
             this.splitter2.TabStop = false;
             // 
-            // designerControl1
-            // 
-            this.designerControl1.AutoScroll = true;
-            this.designerControl1.BackColor = System.Drawing.Color.White;
-            this.designerControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.designerControl1.Location = new System.Drawing.Point(140, 52);
-            this.designerControl1.Name = "designerControl1";
-            this.designerControl1.Size = new System.Drawing.Size(839, 593);
-            this.designerControl1.TabIndex = 4;
-            this.designerControl1.SelectControlChanged += new Ivytalk.DataWindow.Core.OperationControl.Recter.SelectControlChangedHandler(this.designerControl1_SelectControlChanged);
-            this.designerControl1.BaseDataWindowControlChanged += new Ivytalk.DataWindow.Events.EventArg.BaseDataWindowControlChangedHandle(this.designerControl1_BaseDataWindowControlChanged);
-            // 
             // panel1
             // 
             this.panel1.Controls.Add(this.propertyGrid1);
@@ -659,6 +328,350 @@ namespace FormDesinger
             this.cbAllControls.Size = new System.Drawing.Size(243, 25);
             this.cbAllControls.TabIndex = 5;
             this.cbAllControls.SelectionChangeCommitted += new System.EventHandler(this.cbAllControls_SelectionChangeCommitted);
+            // 
+            // designerControl1
+            // 
+            this.designerControl1.AutoScroll = true;
+            this.designerControl1.BackColor = System.Drawing.Color.White;
+            this.designerControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.designerControl1.Location = new System.Drawing.Point(140, 52);
+            this.designerControl1.Name = "designerControl1";
+            this.designerControl1.Size = new System.Drawing.Size(839, 593);
+            this.designerControl1.TabIndex = 4;
+            this.designerControl1.SelectControlChanged += new Ivytalk.DataWindow.Core.OperationControl.Recter.SelectControlChangedHandler(this.designerControl1_SelectControlChanged);
+            this.designerControl1.BaseDataWindowControlChanged += new Ivytalk.DataWindow.Events.EventArg.BaseDataWindowControlChangedHandle(this.designerControl1_BaseDataWindowControlChanged);
+            // 
+            // toolMenuItems_adds
+            // 
+            this.toolMenuItems_adds.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.toolMenuItems_adds.BackColor = System.Drawing.Color.White;
+            this.toolMenuItems_adds.Location = new System.Drawing.Point(0, 24);
+            this.toolMenuItems_adds.Name = "toolMenuItems_adds";
+            this.toolMenuItems_adds.Size = new System.Drawing.Size(138, 22);
+            this.toolMenuItems_adds.TabIndex = 12;
+            this.toolMenuItems_adds.ToolBackColor = System.Drawing.Color.White;
+            this.toolMenuItems_adds.ToolFocusColor = System.Drawing.Color.DodgerBlue;
+            this.toolMenuItems_adds.ToolFocusForeColor = System.Drawing.Color.White;
+            this.toolMenuItems_adds.ToolImage = global::FormDesinger.Properties.Resources.tools_add_24px;
+            this.toolMenuItems_adds.ToolIsMenu = null;
+            this.toolMenuItems_adds.ToolIsMenuHeight = 0;
+            this.toolMenuItems_adds.ToolName = "从程序集添加...";
+            this.toolMenuItems_adds.ToolTag = null;
+            this.toolMenuItems_adds.ToolTip = "单击从.net程序集添加外部控件";
+            this.toolMenuItems_adds.Click += new System.EventHandler(this.toolMenuItems_adds_Click);
+            // 
+            // toolMenuItems_tools_cus
+            // 
+            this.toolMenuItems_tools_cus.BackColor = System.Drawing.Color.LightGoldenrodYellow;
+            this.toolMenuItems_tools_cus.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.toolMenuItems_tools_cus.Location = new System.Drawing.Point(0, 1);
+            this.toolMenuItems_tools_cus.Name = "toolMenuItems_tools_cus";
+            this.toolMenuItems_tools_cus.Size = new System.Drawing.Size(138, 22);
+            this.toolMenuItems_tools_cus.TabIndex = 16;
+            this.toolMenuItems_tools_cus.ToolBackColor = System.Drawing.Color.LightGoldenrodYellow;
+            this.toolMenuItems_tools_cus.ToolFocusColor = System.Drawing.Color.Khaki;
+            this.toolMenuItems_tools_cus.ToolFocusForeColor = System.Drawing.Color.DimGray;
+            this.toolMenuItems_tools_cus.ToolImage = global::FormDesinger.Properties.Resources.tools_open;
+            this.toolMenuItems_tools_cus.ToolIsMenu = this.panel_tools_cus;
+            this.toolMenuItems_tools_cus.ToolIsMenuHeight = 100;
+            this.toolMenuItems_tools_cus.ToolName = "自定义控件";
+            this.toolMenuItems_tools_cus.ToolTag = null;
+            this.toolMenuItems_tools_cus.ToolTip = "从.net程序集添加外部控件";
+            // 
+            // toolMenuItems_label
+            // 
+            this.toolMenuItems_label.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.toolMenuItems_label.BackColor = System.Drawing.Color.White;
+            this.toolMenuItems_label.Location = new System.Drawing.Point(0, 25);
+            this.toolMenuItems_label.Name = "toolMenuItems_label";
+            this.toolMenuItems_label.Size = new System.Drawing.Size(138, 22);
+            this.toolMenuItems_label.TabIndex = 15;
+            this.toolMenuItems_label.Tag = "System.Windows.Forms.Label";
+            this.toolMenuItems_label.ToolBackColor = System.Drawing.Color.White;
+            this.toolMenuItems_label.ToolFocusColor = System.Drawing.Color.DodgerBlue;
+            this.toolMenuItems_label.ToolFocusForeColor = System.Drawing.Color.White;
+            this.toolMenuItems_label.ToolImage = global::FormDesinger.Properties.Resources.tools_label_48px;
+            this.toolMenuItems_label.ToolIsMenu = null;
+            this.toolMenuItems_label.ToolIsMenuHeight = 0;
+            this.toolMenuItems_label.ToolName = "Label";
+            this.toolMenuItems_label.ToolTag = "System.Windows.Forms.Label";
+            this.toolMenuItems_label.ToolTip = "为控件提供说明性文字";
+            this.toolMenuItems_label.Load += new System.EventHandler(this.toolMenuItems_label_Load);
+            this.toolMenuItems_label.MouseDown += new System.Windows.Forms.MouseEventHandler(this.toolMenuItems_MouseDown);
+            // 
+            // toolMenuItems_panel
+            // 
+            this.toolMenuItems_panel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.toolMenuItems_panel.BackColor = System.Drawing.Color.White;
+            this.toolMenuItems_panel.Location = new System.Drawing.Point(0, 300);
+            this.toolMenuItems_panel.Name = "toolMenuItems_panel";
+            this.toolMenuItems_panel.Size = new System.Drawing.Size(138, 22);
+            this.toolMenuItems_panel.TabIndex = 14;
+            this.toolMenuItems_panel.Tag = "System.Windows.Forms.Panel";
+            this.toolMenuItems_panel.ToolBackColor = System.Drawing.Color.White;
+            this.toolMenuItems_panel.ToolFocusColor = System.Drawing.Color.DodgerBlue;
+            this.toolMenuItems_panel.ToolFocusForeColor = System.Drawing.Color.White;
+            this.toolMenuItems_panel.ToolImage = global::FormDesinger.Properties.Resources.tools_panel_24px;
+            this.toolMenuItems_panel.ToolIsMenu = null;
+            this.toolMenuItems_panel.ToolIsMenuHeight = 0;
+            this.toolMenuItems_panel.ToolName = "Panel";
+            this.toolMenuItems_panel.ToolTag = "System.Windows.Forms.Panel";
+            this.toolMenuItems_panel.ToolTip = "允许对控件集合分组";
+            this.toolMenuItems_panel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.toolMenuItems_MouseDown);
+            // 
+            // toolMenuItems_tools
+            // 
+            this.toolMenuItems_tools.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.toolMenuItems_tools.BackColor = System.Drawing.Color.LightGoldenrodYellow;
+            this.toolMenuItems_tools.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.toolMenuItems_tools.Location = new System.Drawing.Point(0, 1);
+            this.toolMenuItems_tools.Name = "toolMenuItems_tools";
+            this.toolMenuItems_tools.Size = new System.Drawing.Size(138, 22);
+            this.toolMenuItems_tools.TabIndex = 13;
+            this.toolMenuItems_tools.ToolBackColor = System.Drawing.Color.LightGoldenrodYellow;
+            this.toolMenuItems_tools.ToolFocusColor = System.Drawing.Color.Khaki;
+            this.toolMenuItems_tools.ToolFocusForeColor = System.Drawing.Color.DimGray;
+            this.toolMenuItems_tools.ToolImage = global::FormDesinger.Properties.Resources.tools_close;
+            this.toolMenuItems_tools.ToolIsMenu = this.panel_tools;
+            this.toolMenuItems_tools.ToolIsMenuHeight = 0;
+            this.toolMenuItems_tools.ToolName = "所有Windows窗体";
+            this.toolMenuItems_tools.ToolTag = null;
+            this.toolMenuItems_tools.ToolTip = "工具箱,将下列控件拖到设计器里可添加对应控件";
+            // 
+            // toolMenuItems_checkbox
+            // 
+            this.toolMenuItems_checkbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.toolMenuItems_checkbox.BackColor = System.Drawing.Color.White;
+            this.toolMenuItems_checkbox.Location = new System.Drawing.Point(0, 93);
+            this.toolMenuItems_checkbox.Name = "toolMenuItems_checkbox";
+            this.toolMenuItems_checkbox.Size = new System.Drawing.Size(138, 22);
+            this.toolMenuItems_checkbox.TabIndex = 3;
+            this.toolMenuItems_checkbox.Tag = "System.Windows.Forms.CheckBox";
+            this.toolMenuItems_checkbox.ToolBackColor = System.Drawing.Color.White;
+            this.toolMenuItems_checkbox.ToolFocusColor = System.Drawing.Color.DodgerBlue;
+            this.toolMenuItems_checkbox.ToolFocusForeColor = System.Drawing.Color.White;
+            this.toolMenuItems_checkbox.ToolImage = global::FormDesinger.Properties.Resources.tools_checkbox_32px;
+            this.toolMenuItems_checkbox.ToolIsMenu = null;
+            this.toolMenuItems_checkbox.ToolIsMenuHeight = 0;
+            this.toolMenuItems_checkbox.ToolName = "CheckBox";
+            this.toolMenuItems_checkbox.ToolTag = "System.Windows.Forms.CheckBox";
+            this.toolMenuItems_checkbox.ToolTip = "允许用户选择或清除关联选项";
+            this.toolMenuItems_checkbox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.toolMenuItems_MouseDown);
+            // 
+            // toolMenuItems_treeview
+            // 
+            this.toolMenuItems_treeview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.toolMenuItems_treeview.BackColor = System.Drawing.Color.White;
+            this.toolMenuItems_treeview.Location = new System.Drawing.Point(0, 277);
+            this.toolMenuItems_treeview.Name = "toolMenuItems_treeview";
+            this.toolMenuItems_treeview.Size = new System.Drawing.Size(138, 22);
+            this.toolMenuItems_treeview.TabIndex = 11;
+            this.toolMenuItems_treeview.Tag = "System.Windows.Forms.TreeView";
+            this.toolMenuItems_treeview.ToolBackColor = System.Drawing.Color.White;
+            this.toolMenuItems_treeview.ToolFocusColor = System.Drawing.Color.DodgerBlue;
+            this.toolMenuItems_treeview.ToolFocusForeColor = System.Drawing.Color.White;
+            this.toolMenuItems_treeview.ToolImage = global::FormDesinger.Properties.Resources.tools_treeview_32px;
+            this.toolMenuItems_treeview.ToolIsMenu = null;
+            this.toolMenuItems_treeview.ToolIsMenuHeight = 0;
+            this.toolMenuItems_treeview.ToolName = "TreeView";
+            this.toolMenuItems_treeview.ToolTag = "System.Windows.Forms.TreeView";
+            this.toolMenuItems_treeview.ToolTip = "树形结构,显示可选择包含图像的标签项的分层集合";
+            this.toolMenuItems_treeview.MouseDown += new System.Windows.Forms.MouseEventHandler(this.toolMenuItems_MouseDown);
+            // 
+            // toolMenuItems_progressbar
+            // 
+            this.toolMenuItems_progressbar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.toolMenuItems_progressbar.BackColor = System.Drawing.Color.White;
+            this.toolMenuItems_progressbar.Location = new System.Drawing.Point(0, 254);
+            this.toolMenuItems_progressbar.Name = "toolMenuItems_progressbar";
+            this.toolMenuItems_progressbar.Size = new System.Drawing.Size(138, 22);
+            this.toolMenuItems_progressbar.TabIndex = 10;
+            this.toolMenuItems_progressbar.Tag = "System.Windows.Forms.ProgressBar";
+            this.toolMenuItems_progressbar.ToolBackColor = System.Drawing.Color.White;
+            this.toolMenuItems_progressbar.ToolFocusColor = System.Drawing.Color.DodgerBlue;
+            this.toolMenuItems_progressbar.ToolFocusForeColor = System.Drawing.Color.White;
+            this.toolMenuItems_progressbar.ToolImage = global::FormDesinger.Properties.Resources.tools_progressbar_24px;
+            this.toolMenuItems_progressbar.ToolIsMenu = null;
+            this.toolMenuItems_progressbar.ToolIsMenuHeight = 0;
+            this.toolMenuItems_progressbar.ToolName = "ProgressBar";
+            this.toolMenuItems_progressbar.ToolTag = "System.Windows.Forms.ProgressBar";
+            this.toolMenuItems_progressbar.ToolTip = "显示操作进度的填充条";
+            this.toolMenuItems_progressbar.MouseDown += new System.Windows.Forms.MouseEventHandler(this.toolMenuItems_MouseDown);
+            // 
+            // toolMenuItems_textbox
+            // 
+            this.toolMenuItems_textbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.toolMenuItems_textbox.BackColor = System.Drawing.Color.White;
+            this.toolMenuItems_textbox.Location = new System.Drawing.Point(0, 47);
+            this.toolMenuItems_textbox.Name = "toolMenuItems_textbox";
+            this.toolMenuItems_textbox.Size = new System.Drawing.Size(138, 22);
+            this.toolMenuItems_textbox.TabIndex = 1;
+            this.toolMenuItems_textbox.Tag = "System.Windows.Forms.TextBox";
+            this.toolMenuItems_textbox.ToolBackColor = System.Drawing.Color.White;
+            this.toolMenuItems_textbox.ToolFocusColor = System.Drawing.Color.DodgerBlue;
+            this.toolMenuItems_textbox.ToolFocusForeColor = System.Drawing.Color.White;
+            this.toolMenuItems_textbox.ToolImage = global::FormDesinger.Properties.Resources.tools_textbox_50px;
+            this.toolMenuItems_textbox.ToolIsMenu = null;
+            this.toolMenuItems_textbox.ToolIsMenuHeight = 0;
+            this.toolMenuItems_textbox.ToolName = "TextBox";
+            this.toolMenuItems_textbox.ToolTag = "System.Windows.Forms.TextBox";
+            this.toolMenuItems_textbox.ToolTip = "允许用户输入文本,并提供多行编辑及密码字符掩码功能";
+            this.toolMenuItems_textbox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.toolMenuItems_MouseDown);
+            // 
+            // toolMenuItems_picturebox
+            // 
+            this.toolMenuItems_picturebox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.toolMenuItems_picturebox.BackColor = System.Drawing.Color.White;
+            this.toolMenuItems_picturebox.Location = new System.Drawing.Point(0, 231);
+            this.toolMenuItems_picturebox.Name = "toolMenuItems_picturebox";
+            this.toolMenuItems_picturebox.Size = new System.Drawing.Size(138, 22);
+            this.toolMenuItems_picturebox.TabIndex = 9;
+            this.toolMenuItems_picturebox.Tag = "System.Windows.Forms.PictureBox";
+            this.toolMenuItems_picturebox.ToolBackColor = System.Drawing.Color.White;
+            this.toolMenuItems_picturebox.ToolFocusColor = System.Drawing.Color.DodgerBlue;
+            this.toolMenuItems_picturebox.ToolFocusForeColor = System.Drawing.Color.White;
+            this.toolMenuItems_picturebox.ToolImage = global::FormDesinger.Properties.Resources.tools_picture_24px;
+            this.toolMenuItems_picturebox.ToolIsMenu = null;
+            this.toolMenuItems_picturebox.ToolIsMenuHeight = 0;
+            this.toolMenuItems_picturebox.ToolName = "PictureBox";
+            this.toolMenuItems_picturebox.ToolTag = "System.Windows.Forms.PictureBox";
+            this.toolMenuItems_picturebox.ToolTip = "\n显示图片";
+            this.toolMenuItems_picturebox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.toolMenuItems_MouseDown);
+            // 
+            // toolMenuItems_button
+            // 
+            this.toolMenuItems_button.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.toolMenuItems_button.BackColor = System.Drawing.Color.White;
+            this.toolMenuItems_button.Location = new System.Drawing.Point(0, 70);
+            this.toolMenuItems_button.Name = "toolMenuItems_button";
+            this.toolMenuItems_button.Size = new System.Drawing.Size(138, 22);
+            this.toolMenuItems_button.TabIndex = 2;
+            this.toolMenuItems_button.Tag = "System.Windows.Forms.Button";
+            this.toolMenuItems_button.ToolBackColor = System.Drawing.Color.White;
+            this.toolMenuItems_button.ToolFocusColor = System.Drawing.Color.DodgerBlue;
+            this.toolMenuItems_button.ToolFocusForeColor = System.Drawing.Color.White;
+            this.toolMenuItems_button.ToolImage = global::FormDesinger.Properties.Resources.tools_button_50pxt;
+            this.toolMenuItems_button.ToolIsMenu = null;
+            this.toolMenuItems_button.ToolIsMenuHeight = 0;
+            this.toolMenuItems_button.ToolName = "Button";
+            this.toolMenuItems_button.ToolTag = "System.Windows.Forms.Button";
+            this.toolMenuItems_button.ToolTip = "按钮,用户单击时引发事件";
+            this.toolMenuItems_button.MouseDown += new System.Windows.Forms.MouseEventHandler(this.toolMenuItems_MouseDown);
+            // 
+            // toolMenuItems_linklabel
+            // 
+            this.toolMenuItems_linklabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.toolMenuItems_linklabel.BackColor = System.Drawing.Color.White;
+            this.toolMenuItems_linklabel.Location = new System.Drawing.Point(0, 208);
+            this.toolMenuItems_linklabel.Name = "toolMenuItems_linklabel";
+            this.toolMenuItems_linklabel.Size = new System.Drawing.Size(138, 22);
+            this.toolMenuItems_linklabel.TabIndex = 8;
+            this.toolMenuItems_linklabel.Tag = "System.Windows.Forms.LinkLabel";
+            this.toolMenuItems_linklabel.ToolBackColor = System.Drawing.Color.White;
+            this.toolMenuItems_linklabel.ToolFocusColor = System.Drawing.Color.DodgerBlue;
+            this.toolMenuItems_linklabel.ToolFocusForeColor = System.Drawing.Color.White;
+            this.toolMenuItems_linklabel.ToolImage = global::FormDesinger.Properties.Resources.tools_linklabel_40px;
+            this.toolMenuItems_linklabel.ToolIsMenu = null;
+            this.toolMenuItems_linklabel.ToolIsMenuHeight = 0;
+            this.toolMenuItems_linklabel.ToolName = "LinkLabel";
+            this.toolMenuItems_linklabel.ToolTag = "System.Windows.Forms.LinkLabel";
+            this.toolMenuItems_linklabel.ToolTip = "显示支持超链接的标签";
+            this.toolMenuItems_linklabel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.toolMenuItems_MouseDown);
+            // 
+            // toolMenuItems_radiobutton
+            // 
+            this.toolMenuItems_radiobutton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.toolMenuItems_radiobutton.BackColor = System.Drawing.Color.White;
+            this.toolMenuItems_radiobutton.Location = new System.Drawing.Point(0, 116);
+            this.toolMenuItems_radiobutton.Name = "toolMenuItems_radiobutton";
+            this.toolMenuItems_radiobutton.Size = new System.Drawing.Size(138, 22);
+            this.toolMenuItems_radiobutton.TabIndex = 4;
+            this.toolMenuItems_radiobutton.Tag = "System.Windows.Forms.RadioButton";
+            this.toolMenuItems_radiobutton.ToolBackColor = System.Drawing.Color.White;
+            this.toolMenuItems_radiobutton.ToolFocusColor = System.Drawing.Color.DodgerBlue;
+            this.toolMenuItems_radiobutton.ToolFocusForeColor = System.Drawing.Color.White;
+            this.toolMenuItems_radiobutton.ToolImage = global::FormDesinger.Properties.Resources.tools_radiobutton_32px;
+            this.toolMenuItems_radiobutton.ToolIsMenu = null;
+            this.toolMenuItems_radiobutton.ToolIsMenuHeight = 0;
+            this.toolMenuItems_radiobutton.ToolName = "RadioButton";
+            this.toolMenuItems_radiobutton.ToolTag = "System.Windows.Forms.RadioButton";
+            this.toolMenuItems_radiobutton.ToolTip = "当与其他单选按钮成对出现时,允许用户从一组选项中选择单个选项";
+            this.toolMenuItems_radiobutton.MouseDown += new System.Windows.Forms.MouseEventHandler(this.toolMenuItems_MouseDown);
+            // 
+            // toolMenuItems_datetimepicker
+            // 
+            this.toolMenuItems_datetimepicker.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.toolMenuItems_datetimepicker.BackColor = System.Drawing.Color.White;
+            this.toolMenuItems_datetimepicker.Location = new System.Drawing.Point(0, 185);
+            this.toolMenuItems_datetimepicker.Name = "toolMenuItems_datetimepicker";
+            this.toolMenuItems_datetimepicker.Size = new System.Drawing.Size(138, 22);
+            this.toolMenuItems_datetimepicker.TabIndex = 7;
+            this.toolMenuItems_datetimepicker.Tag = "System.Windows.Forms.DateTimePicker";
+            this.toolMenuItems_datetimepicker.ToolBackColor = System.Drawing.Color.White;
+            this.toolMenuItems_datetimepicker.ToolFocusColor = System.Drawing.Color.DodgerBlue;
+            this.toolMenuItems_datetimepicker.ToolFocusForeColor = System.Drawing.Color.White;
+            this.toolMenuItems_datetimepicker.ToolImage = global::FormDesinger.Properties.Resources.tools_time_145px;
+            this.toolMenuItems_datetimepicker.ToolIsMenu = null;
+            this.toolMenuItems_datetimepicker.ToolIsMenuHeight = 0;
+            this.toolMenuItems_datetimepicker.ToolName = "DateTimePicker";
+            this.toolMenuItems_datetimepicker.ToolTag = "System.Windows.Forms.DateTimePicker";
+            this.toolMenuItems_datetimepicker.ToolTip = "\n选择日期和时间,并指定格式";
+            this.toolMenuItems_datetimepicker.MouseDown += new System.Windows.Forms.MouseEventHandler(this.toolMenuItems_MouseDown);
+            // 
+            // toolMenuItems_combobox
+            // 
+            this.toolMenuItems_combobox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.toolMenuItems_combobox.BackColor = System.Drawing.Color.White;
+            this.toolMenuItems_combobox.Location = new System.Drawing.Point(0, 139);
+            this.toolMenuItems_combobox.Name = "toolMenuItems_combobox";
+            this.toolMenuItems_combobox.Size = new System.Drawing.Size(138, 22);
+            this.toolMenuItems_combobox.TabIndex = 5;
+            this.toolMenuItems_combobox.Tag = "System.Windows.Forms.ComboBox";
+            this.toolMenuItems_combobox.ToolBackColor = System.Drawing.Color.White;
+            this.toolMenuItems_combobox.ToolFocusColor = System.Drawing.Color.DodgerBlue;
+            this.toolMenuItems_combobox.ToolFocusForeColor = System.Drawing.Color.White;
+            this.toolMenuItems_combobox.ToolImage = global::FormDesinger.Properties.Resources.tools_dropdown_50px;
+            this.toolMenuItems_combobox.ToolIsMenu = null;
+            this.toolMenuItems_combobox.ToolIsMenuHeight = 0;
+            this.toolMenuItems_combobox.ToolName = "ComboBox";
+            this.toolMenuItems_combobox.ToolTag = "System.Windows.Forms.ComboBox";
+            this.toolMenuItems_combobox.ToolTip = "显示一个可编辑的文本框,其中包括一个一个允许值下拉列表";
+            this.toolMenuItems_combobox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.toolMenuItems_MouseDown);
+            // 
+            // toolMenuItems_listbox
+            // 
+            this.toolMenuItems_listbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.toolMenuItems_listbox.BackColor = System.Drawing.Color.White;
+            this.toolMenuItems_listbox.Location = new System.Drawing.Point(0, 162);
+            this.toolMenuItems_listbox.Name = "toolMenuItems_listbox";
+            this.toolMenuItems_listbox.Size = new System.Drawing.Size(138, 22);
+            this.toolMenuItems_listbox.TabIndex = 6;
+            this.toolMenuItems_listbox.Tag = "System.Windows.Forms.ListBox";
+            this.toolMenuItems_listbox.ToolBackColor = System.Drawing.Color.White;
+            this.toolMenuItems_listbox.ToolFocusColor = System.Drawing.Color.DodgerBlue;
+            this.toolMenuItems_listbox.ToolFocusForeColor = System.Drawing.Color.White;
+            this.toolMenuItems_listbox.ToolImage = global::FormDesinger.Properties.Resources.tools_listbox_32px;
+            this.toolMenuItems_listbox.ToolIsMenu = null;
+            this.toolMenuItems_listbox.ToolIsMenuHeight = 0;
+            this.toolMenuItems_listbox.ToolName = "ListBox";
+            this.toolMenuItems_listbox.ToolTag = "System.Windows.Forms.ListBox";
+            this.toolMenuItems_listbox.ToolTip = "显示用户可以从中选择项的列表";
+            this.toolMenuItems_listbox.MouseDown += new System.Windows.Forms.MouseEventHandler(this.toolMenuItems_MouseDown);
             // 
             // FromDesigner
             // 

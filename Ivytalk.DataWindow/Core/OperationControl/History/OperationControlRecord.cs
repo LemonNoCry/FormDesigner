@@ -1,4 +1,5 @@
-﻿using Ivytalk.DataWindow.DesignLayer;
+﻿using System;
+using Ivytalk.DataWindow.DesignLayer;
 using Ivytalk.DataWindow.Serializable;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -53,6 +54,7 @@ namespace Ivytalk.DataWindow.Core.OperationControl.History
                     RecordModifySize();
                     break;
                 case OperationControlType.Add:
+                    RecordAdd();
                     break;
                 case OperationControlType.Delete:
                     RecordDelete();
@@ -60,6 +62,11 @@ namespace Ivytalk.DataWindow.Core.OperationControl.History
                 case OperationControlType.ModifyProperty:
                     RecordModifyProperty();
                     break;
+                case OperationControlType.MoveShow:
+                    RecordMoveShow();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
             Overlayer.Recter.RefreshRecterRectangle();
@@ -73,6 +80,32 @@ namespace Ivytalk.DataWindow.Core.OperationControl.History
             {
                 var control = Control[i];
                 var history = OperationControls[i];
+
+                control.Location = history.Location;
+            }
+        }
+
+        private void RecordMoveShow()
+        {
+            for (int i = 0; i < Control.Count; i++)
+            {
+                var control = Control[i];
+                var history = OperationControls[i];
+
+                control.Visible = false;
+
+                if (history.ParentSerializable != null)
+                {
+                    var parent = Overlayer.FindControl(history.ParentSerializable.Name);
+                    if (parent != control.Parent)
+                    {
+                        parent.Controls.Add(control);
+                    }
+                }
+                else
+                {
+                    control.Parent.Controls.Remove(control);
+                }
 
                 control.Location = history.Location;
             }
@@ -102,12 +135,28 @@ namespace Ivytalk.DataWindow.Core.OperationControl.History
             }
         }
 
+        private void RecordAdd()
+        {
+            for (int i = 0; i < Control.Count; i++)
+            {
+                var control = Control[i];
+                control.Parent.Controls.Remove(control);
+                control.Dispose();
+            }
+        }
+
         private void RecordDelete()
         {
             for (int i = 0; i < Control.Count; i++)
             {
                 var control = Control[i];
-                control.Show();
+                var history = OperationControls[i];
+
+                var parent = Overlayer.FindControl(history.ParentSerializable.Name);
+                if (parent != control.Parent)
+                {
+                    parent.Controls.Add(control);
+                }
             }
         }
 
@@ -118,8 +167,7 @@ namespace Ivytalk.DataWindow.Core.OperationControl.History
                 var control = Control[i];
                 var history = OperationControls[i];
 
-                dynamic dyn = history;
-                TypeAdapter.Adapt(dyn, control);
+                history.ControlSerializableToControl(control);
             }
         }
     }

@@ -54,6 +54,7 @@
     <Compile Include="Core\DataWindowAnalysis.cs" />
     <Compile Include="Core\MessageFilter\MessageFilter.cs" />
     <Compile Include="Core\OperationControl\AlignType.cs" />
+    <Compile Include="Core\CollectionExpend.cs" />
     <Compile Include="Core\OperationControl\DragType.cs" />
     <Compile Include="Core\OperationControl\History\OperationControlHistory.cs" />
     <Compile Include="Core\OperationControl\History\OperationControlRecord.cs" />

@@ -19,6 +19,11 @@ namespace Ivytalk.DataWindow.DesignLayer
         /// </summary>
         public readonly List<Control> MustEditControls = new List<Control>();
 
+        /// <summary>
+        /// 窗体上固有的控件
+        /// </summary>
+        public readonly List<Control> InherentControls = new List<Control>();
+
         public void AddMustControls(params Control[] cons)
         {
             MustEditControls.AddRange(cons);
@@ -33,10 +38,31 @@ namespace Ivytalk.DataWindow.DesignLayer
         /// <returns></returns>
         public bool IsMustControl(Control con)
         {
-            return MustEditControls.Contains(con) ||
-                   MustEditControls.Any(s => con.Controls.Contains(s));
+            return MustEditControls.Contains(con);
         }
 
+        public bool IsInherentControl(Control con)
+        {
+            return InherentControls.Contains(con);
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            EachDataWindowControls(this, c => { InherentControls.Add(c); });
+        }
+
+        public void EachDataWindowControls(Control control, Action<Control> action)
+        {
+            foreach (Control con in control.Controls)
+            {
+                action?.Invoke(con);
+                if (con.HasChildren)
+                {
+                    EachDataWindowControls(con, action);
+                }
+            }
+        }
 
         #region 事件
 
