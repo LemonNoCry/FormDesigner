@@ -321,5 +321,15 @@ namespace FormDesinger
                 designerControl1.Overlayer.SetSelectControl(dc.Control);
             }
         }
+
+        private void toolStrip_center_right_Click(object sender, EventArgs e)
+        {
+            designerControl1.Overlayer.ControlAlign(AlignType.Right);
+        }
+
+        private void toolStrip_center_bottom_Click(object sender, EventArgs e)
+        {
+            designerControl1.Overlayer.ControlAlign(AlignType.Bottom);
+        }
     }
 }

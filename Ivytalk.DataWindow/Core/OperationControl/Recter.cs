@@ -436,11 +436,12 @@ namespace Ivytalk.DataWindow.Core.OperationControl
             for (var index = _selectRecters.Count - 1; index >= 0; index--)
             {
                 var selectRecter = _selectRecters[index];
-                if (selectRecter.Control.Parent==null)
+                if (selectRecter.Control.Parent == null)
                 {
                     _selectRecters.Remove(selectRecter);
                     continue;
                 }
+
                 var r = Overlayer.HostToOverlayerRectangle(selectRecter.Control);
                 selectRecter.Rectangle = r;
             }
@@ -660,6 +661,14 @@ namespace Ivytalk.DataWindow.Core.OperationControl
 
         public void DeleteRecter(OperationControlHistory history)
         {
+            if (_selectRecters
+                .Where(s => Overlayer.BaseDataWindow.IsProhibitEditControl(s.Control) || Overlayer.BaseDataWindow.IsMustControl(s.Control))
+                .Any())
+            {
+                MessageBox.Show("控件必须存在，禁止删除", "系统提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
             List<ControlSerializable> css = new List<ControlSerializable>();
             foreach (var sel in _selectRecters)
             {

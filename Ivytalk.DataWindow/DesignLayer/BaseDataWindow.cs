@@ -19,10 +19,13 @@ namespace Ivytalk.DataWindow.DesignLayer
         /// </summary>
         public readonly List<Control> MustEditControls = new List<Control>();
 
+        public readonly List<Control> ProhibitEditControls = new List<Control>();
+
         /// <summary>
         /// 窗体上固有的控件
         /// </summary>
         public readonly List<Control> InherentControls = new List<Control>();
+
 
         public void AddMustControls(params Control[] cons)
         {
@@ -46,6 +49,11 @@ namespace Ivytalk.DataWindow.DesignLayer
             return InherentControls.Contains(con);
         }
 
+        public bool IsProhibitEditControl(Control con)
+        {
+            return ProhibitEditControls.Contains(con);
+        }
+
         public Control GetInherentControl(string name)
         {
             return InherentControls.SingleOrDefault(s => s.Name.Equals(name));
@@ -54,7 +62,11 @@ namespace Ivytalk.DataWindow.DesignLayer
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            EachDataWindowControls(this, c => { InherentControls.Add(c); });
+            EachDataWindowControls(this, c =>
+            {
+                InherentControls.Add(c);
+                ProhibitedOperationControl(c);
+            });
         }
 
         public void EachDataWindowControls(Control control, Action<Control> action)
@@ -66,6 +78,14 @@ namespace Ivytalk.DataWindow.DesignLayer
                 {
                     EachDataWindowControls(con, action);
                 }
+            }
+        }
+
+        public void ProhibitedOperationControl(Control con)
+        {
+            if (con is ToolStrip ts)
+            {
+                ProhibitEditControls.Add(ts);
             }
         }
 

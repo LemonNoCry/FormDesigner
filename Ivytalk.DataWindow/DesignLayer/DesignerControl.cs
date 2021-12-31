@@ -20,11 +20,7 @@ namespace Ivytalk.DataWindow.DesignLayer
         /// </summary>
         public BaseDataWindow BaseDataWindow;
 
-        /// <summary>
-        /// 遮罩层
-        /// <para>所有可设计控件在此绘制</para>
-        /// </summary>
-        public Overlayer Overlayer; //对父容器可见
+         public Overlayer Overlayer; //对父容器可见
 
         public DesignerControl()
         {

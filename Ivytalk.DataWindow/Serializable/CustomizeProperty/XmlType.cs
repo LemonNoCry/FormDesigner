@@ -53,6 +53,11 @@ namespace Ivytalk.DataWindow.Serializable.CustomizeProperty
                         return;
                     }
                 }
+
+                if (type == null)
+                {
+                    type = typeof(Control);
+                }
             }
         }
     }

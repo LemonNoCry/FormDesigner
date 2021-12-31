@@ -16,6 +16,11 @@ namespace Ivytalk.DataWindow.Core
             return Collections.ControlConvertSerializable(control);
         }
 
+        public static ControlSerializable ControlConvertAllSerializable(this Control control)
+        {
+            return DataWindowAnalysis.GetSerializationControls(control);
+        }
+
         public static void ControlSerializableToControl(this ControlSerializable cs, Control control)
         {
             dynamic dyn = cs;

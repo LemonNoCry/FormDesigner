@@ -254,7 +254,19 @@ namespace Ivytalk.DataWindow.DesignLayer
         {
             DataWindowControls.Clear();
             DataWindowControls.Add(BaseDataWindow);
-            EachDataWindowControls(BaseDataWindow, c => { DataWindowControls.Add(c); });
+            EachDataWindowControls(BaseDataWindow, c =>
+            {
+                if (c.IsContainerControl())
+                {
+                    c.ControlAdded -= BaseDataWindow_ControlAdded;
+                    c.ControlRemoved -= BaseDataWindow_ControlRemoved;
+
+                    c.ControlAdded += BaseDataWindow_ControlAdded;
+                    c.ControlRemoved += BaseDataWindow_ControlRemoved;
+                }
+
+                DataWindowControls.Add(c);
+            });
             var args = new BaseDataWindowControlEventArgs()
             {
                 AllControls = DataWindowControls,
@@ -572,10 +584,9 @@ namespace Ivytalk.DataWindow.DesignLayer
         public SelectRecter GetClickTopContainerControl(MouseEventArgs e)
         {
             var cons = GetClickControls(e);
-            if (cons != null && cons.Any())
+            if (cons != null && cons.Where(s => s.Control.IsContainerControl()).Any())
             {
-                return cons.Where(s => s.Control.IsContainerControl())
-                    .OrderByDescending(s => s.SpaceIndex)
+                return cons.OrderByDescending(s => s.SpaceIndex)
                     .ThenByDescending(s => s.ZIndex)
                     .First();
             }
@@ -588,6 +599,11 @@ namespace Ivytalk.DataWindow.DesignLayer
             var sr = new List<SelectRecter>();
             foreach (Control c in controls) //遍历控件容器 看是否选中其中某一控件
             {
+                if (BaseDataWindow.IsProhibitEditControl(c))
+                {
+                    continue;
+                }
+
                 Rectangle r = HostToOverlayerRectangle(c);
                 Rectangle rr = r;
                 rr.Inflate(10, 10);
@@ -708,6 +724,11 @@ namespace Ivytalk.DataWindow.DesignLayer
                 {
                     foreach (Control c in BaseDataWindow.Controls) //遍历控件容器 看是否选中其中某一控件
                     {
+                        if (BaseDataWindow.IsProhibitEditControl(c))
+                        {
+                            continue;
+                        }
+
                         Rectangle r = HostToOverlayerRectangle(c);
                         if (select_r.IntersectsWith(r)) //判断控件是否有部分包含在选中区域内
                         {
@@ -910,7 +931,13 @@ namespace Ivytalk.DataWindow.DesignLayer
             {
                 if (c.GetType().FullName == findType.FullName)
                 {
-                    var ids = Convert.ToInt32(Regex.Replace(c.Name, @"[^0-9]+", ""));
+                    var nums = Regex.Replace(c.Name, @"[^0-9]+", "");
+                    if (string.IsNullOrWhiteSpace(nums))
+                    {
+                        continue;
+                    }
+
+                    var ids = Convert.ToInt32(nums);
                     if (ids > id)
                     {
                         id = ids;
@@ -1060,7 +1087,7 @@ namespace Ivytalk.DataWindow.DesignLayer
             cons.Add(control);
 
             SetControlProperty(control);
-            var point = BaseDataWindow.PointToClient(new Point(dea.X, dea.Y));
+            var point = this.PointToClient(new Point(dea.X, dea.Y));
             var sr = GetClickTopContainerControl(new MouseEventArgs(MouseButtons.Left, 1, point.X, point.Y, 1));
             if (sr == null)
             {
@@ -1423,85 +1450,37 @@ namespace Ivytalk.DataWindow.DesignLayer
         public void ControlAlign(AlignType alignType)
         {
             if (!ControlAlignCheck()) return;
-            Point minPoint = new Point(-1, -1);
-            Size minSize = new Size(0, 0);
-            if (!Recter.IsSelect)
+
+            if (!Recter.IsMultipleSelect)
             {
                 return;
             }
 
-            #region 取用于对齐的Control
+            var selControls = Recter.GetSelectControls();
+            var sel = selControls[0];
+            var screenRec = HostToOverlayerRectangle(sel);
 
-            foreach (Control c in BaseDataWindow.Controls) //遍历控件容器 看是否选中其中某一控件
+            foreach (var selectRecter in Recter.GetSelectControlsRects())
             {
-                foreach (var sel in Recter.GetSelectRects())
+                var r = OverlayerToHostRectangle(selectRecter.Control, screenRec);
+                switch (alignType)
                 {
-                    Rectangle r = HostToOverlayerRectangle(c);
-
-                    if (sel.Rectangle == r) //判断控件是否有部分包含在选中区域内
-                    {
-                        switch (alignType)
-                        {
-                            case AlignType.Left: //以最上面的为准
-                                if (minPoint.X == -1)
-                                    minPoint = c.Location;
-                                if (c.Location.Y < minPoint.Y)
-                                    minPoint = c.Location;
-                                break;
-                            case AlignType.Top: //以最左边的为准
-                                if (minPoint.Y == -1)
-                                    minPoint = c.Location;
-                                if (c.Location.X < minPoint.X)
-                                    minPoint = c.Location;
-                                break;
-                            case AlignType.Right:
-                                if (minPoint.X == -1)
-                                    minPoint = c.Location;
-                                if (c.Location.Y < minPoint.Y)
-                                    minPoint = c.Location;
-                                break;
-                            case AlignType.Bottom:
-                                break;
-                        }
-                    }
+                    case AlignType.Left:
+                        selectRecter.Control.Location = new Point(r.X, selectRecter.Control.Location.Y);
+                        break;
+                    case AlignType.Right:
+                        selectRecter.Control.Location = new Point(r.Right - selectRecter.Control.Width, selectRecter.Control.Location.Y);
+                        break;
+                    case AlignType.Top:
+                        selectRecter.Control.Location = new Point(selectRecter.Control.Location.X, r.Y);
+                        break;
+                    case AlignType.Bottom:
+                        selectRecter.Control.Location = new Point(selectRecter.Control.Location.X, r.Bottom - selectRecter.Control.Height);
+                        break;
                 }
             }
 
-            #endregion
-
-            #region 设置值
-
-            for (int i = 0; i < BaseDataWindow.Controls.Count; i++) //遍历控件容器 看是否选中其中某一控件
-            {
-                Control c = BaseDataWindow.Controls[i];
-                for (int j = 0; j < Recter.GetSelectRects().Count; j++)
-                {
-                    var sel = Recter.GetSelectRects()[j];
-
-                    Rectangle r = HostToOverlayerRectangle(c);
-                    if (sel.Rectangle == r) //判断控件是否有部分包含在选中区域内
-                    {
-                        switch (alignType)
-                        {
-                            case AlignType.Left:
-                                c.Location = new Point(minPoint.X, c.Location.Y);
-                                break;
-                            case AlignType.Top:
-                                c.Location = new Point(c.Location.X, minPoint.Y);
-                                break;
-                        }
-
-                        c.Invalidate();
-
-
-                        Rectangle newRec = HostToOverlayerRectangle(c);
-                        sel.Rectangle = newRec;
-                    }
-                }
-            }
-
-            #endregion
-
+            Recter.RefreshRecterRectangle();
             Invalidate2(false);
         }
 
