@@ -14,23 +14,11 @@
     <copyright>$copyright$</copyright>
 
     <dependencies>
-      <group targetFramework=".NETFramework4.0">
+      <group targetFramework="net40">
         <dependency id="Mapster" version="7.2.0" exclude="Build,Analyzers" />
         <dependency id="Mapster.Core" version="1.2.0" exclude="Build,Analyzers" />
       </group>
     </dependencies>
-    <frameworkAssemblies>
-      <frameworkAssembly assemblyName="Microsoft.CSharp" targetFramework=".NETFramework4.0" />
-      <frameworkAssembly assemblyName="System.Core" targetFramework=".NETFramework4.0" />
-      <frameworkAssembly assemblyName="System.Data.DataSetExtensions" targetFramework=".NETFramework4.0" />
-      <frameworkAssembly assemblyName="System.Data" targetFramework=".NETFramework4.0" />
-      <frameworkAssembly assemblyName="System.Design" targetFramework=".NETFramework4.0" />
-      <frameworkAssembly assemblyName="System" targetFramework=".NETFramework4.0" />
-      <frameworkAssembly assemblyName="System.Drawing" targetFramework=".NETFramework4.0" />
-      <frameworkAssembly assemblyName="System.Windows.Forms" targetFramework=".NETFramework4.0" />
-      <frameworkAssembly assemblyName="System.Xml" targetFramework=".NETFramework4.0" />
-      <frameworkAssembly assemblyName="System.Xml.Linq" targetFramework=".NETFramework4.0" />
-    </frameworkAssemblies>
-
+  
   </metadata>
 </package>
