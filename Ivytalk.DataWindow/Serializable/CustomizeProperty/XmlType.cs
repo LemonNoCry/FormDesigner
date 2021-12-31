@@ -30,7 +30,7 @@ namespace Ivytalk.DataWindow.Serializable.CustomizeProperty
                 return typeof(Control);
             }
 
-            return Type.GetType(x.TypeFullName);
+            return x.type;
         }
 
         public static implicit operator XmlType(Type c)
@@ -38,12 +38,22 @@ namespace Ivytalk.DataWindow.Serializable.CustomizeProperty
             return new XmlType(c);
         }
 
-
         [XmlAttribute]
-        public string TypeFullName
+        public string TypeName
         {
-            get => type + ", " + type.Assembly;
-            set => type = Type.GetType(value);
+            get => type.FullName;
+            set
+            {
+                var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+                foreach (var ass in assemblies)
+                {
+                    type = ass.GetType(value);
+                    if (type != null)
+                    {
+                        return;
+                    }
+                }
+            }
         }
     }
 }
