@@ -1247,6 +1247,7 @@ namespace Ivytalk.DataWindow.DesignLayer
             BaseDataWindow.Text = formText;
 
             Recter.ClearSelect();
+            OperationControlHistory.ClearHistory();
             SelectRectangle = null;
             _firstSelectPoint = new Point();
             _selectMouseDown = false;
@@ -1254,7 +1255,7 @@ namespace Ivytalk.DataWindow.DesignLayer
             SelectHost();
             Invalidate2(false);
         }
-
+        
         /// <summary>
         /// 获取或设置设计窗体大小
         /// </summary>

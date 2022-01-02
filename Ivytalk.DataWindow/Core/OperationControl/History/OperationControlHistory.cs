@@ -40,5 +40,11 @@ namespace Ivytalk.DataWindow.Core.OperationControl.History
             var history = Pop();
             history?.Record();
         }
+
+        public void ClearHistory()
+        {
+            Clear();
+            IsOper = false;
+        }
     }
 }

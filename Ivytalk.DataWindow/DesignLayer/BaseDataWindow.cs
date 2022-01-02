@@ -12,6 +12,9 @@ namespace Ivytalk.DataWindow.DesignLayer
     /// </summary>
     public partial class BaseDataWindow : Form
     {
+        /// <summary>
+        /// 是否设计模式
+        /// </summary>
         public bool DesignStatus { get; set; }
 
         /// <summary>
