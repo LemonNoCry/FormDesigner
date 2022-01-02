@@ -13,6 +13,7 @@ namespace Ivytalk.DataWindow.CustomPropertys
         private string _name = string.Empty;
         private object _defaultValue = null;
         private object _value = null;
+        private object _fixedValue = null;
         private object _objectSource = null;
         private PropertyInfo[] _propertyInfos = null;
 
@@ -35,9 +36,10 @@ namespace Ivytalk.DataWindow.CustomPropertys
         /// <param name="description">描述</param>
         /// <param name="objectSource">控件源</param>
         public CustomProperty(string name, string category, string description, object objectSource)
-            : this(name, name, null, category, description, objectSource, null)
+            : this(name, name, null, category, description, null, objectSource, null)
         {
         }
+
 
         /// <summary>
         /// 自定义属性显示
@@ -48,7 +50,12 @@ namespace Ivytalk.DataWindow.CustomPropertys
         /// <param name="description">描述</param>
         /// <param name="objectSource">控件源</param>
         public CustomProperty(string name, string propertyName, string category, string description, object objectSource)
-            : this(name, propertyName, null, category, description, objectSource, null)
+            : this(name, propertyName, null, category, description, null, objectSource, null)
+        {
+        }
+
+        public CustomProperty(string name, string propertyName, string category, string description, object objectSource, object fixedValue, Type editorType)
+            : this(name, propertyName, null, category, description, fixedValue, objectSource, editorType)
         {
         }
 
@@ -62,9 +69,10 @@ namespace Ivytalk.DataWindow.CustomPropertys
         /// <param name="objectSource">控件源</param>
         /// <param name="editorType">编辑器类型</param>
         public CustomProperty(string name, string propertyName, string category, string description, object objectSource, Type editorType)
-            : this(name, propertyName, null, category, description, objectSource, editorType)
+            : this(name, propertyName, null, category, description, null, objectSource, editorType)
         {
         }
+
 
         /// <summary>
         /// 自定义属性显示
@@ -76,9 +84,9 @@ namespace Ivytalk.DataWindow.CustomPropertys
         /// <param name="description">描述</param>
         /// <param name="objectSource">控件源</param>
         /// <param name="editorType">编辑器类型</param>
-        public CustomProperty(string name, string propertyName, Type valueType, string category, string description,
+        public CustomProperty(string name, string propertyName, Type valueType, string category, string description, object fixedValue,
             object objectSource, Type editorType)
-            : this(name, new string[] { propertyName }, valueType, null, null, false, true, category, description, objectSource, editorType)
+            : this(name, new string[] {propertyName}, valueType, null, null, fixedValue, false, true, category, description, objectSource, editorType)
         {
         }
 
@@ -121,7 +129,7 @@ namespace Ivytalk.DataWindow.CustomPropertys
         /// <param name="editorType">编辑器类型</param>
         public CustomProperty(string name, string[] propertyNames, Type valueType, string category, string description,
             object objectSource, Type editorType)
-            : this(name, propertyNames, valueType, null, null, false, true, category, description, objectSource, editorType)
+            : this(name, propertyNames, valueType, null, null, null, false, true, category, description, objectSource, editorType)
         {
         }
 
@@ -133,13 +141,14 @@ namespace Ivytalk.DataWindow.CustomPropertys
         /// <param name="valueType">值类型</param>
         /// <param name="defaultValue">默认值</param>
         /// <param name="value">值</param>
+        /// <param name="fixedValue">固定值</param>
         /// <param name="isReadOnly">是否只读</param>
         /// <param name="isBrowsable">是否在设计器显示</param>
         /// <param name="category">类型名(分组)</param>
         /// <param name="description">描述</param>
         /// <param name="objectSource">控件源</param>
         /// <param name="editorType">编辑器类型</param>
-        public CustomProperty(string name, string[] propertyNames, Type valueType, object defaultValue, object value,
+        public CustomProperty(string name, string[] propertyNames, Type valueType, object defaultValue, object value, object fixedValue,
             bool isReadOnly, bool isBrowsable, string category, string description, object objectSource, Type editorType)
         {
             Name = name;
@@ -147,6 +156,7 @@ namespace Ivytalk.DataWindow.CustomPropertys
             ValueType = valueType;
             _defaultValue = defaultValue;
             _value = value;
+            _fixedValue = fixedValue;
             IsReadOnly = isReadOnly;
             IsBrowsable = isBrowsable;
             Category = category;
@@ -171,7 +181,7 @@ namespace Ivytalk.DataWindow.CustomPropertys
 
                 if (PropertyNames == null)
                 {
-                    PropertyNames = new string[] { _name };
+                    PropertyNames = new string[] {_name};
                 }
             }
         }
@@ -208,13 +218,30 @@ namespace Ivytalk.DataWindow.CustomPropertys
         /// </summary>
         public object Value
         {
-            get { return _value; }
+            get
+            {
+                if (_fixedValue != null)
+                {
+                    return _fixedValue;
+                }
+
+                return _value;
+            }
             set
             {
                 _value = value;
 
                 OnValueChanged();
             }
+        }
+
+        /// <summary>
+        /// 固定值
+        /// </summary>
+        public object FixedValue
+        {
+            get => _fixedValue;
+            set => _fixedValue = value;
         }
 
         /// <summary>
@@ -261,7 +288,10 @@ namespace Ivytalk.DataWindow.CustomPropertys
 
         protected void OnObjectSourceChanged()
         {
+            if (ObjectSource == null) return;
+            if (_fixedValue != null) return;
             if (PropertyInfos.Length == 0) return;
+
 
             object value = PropertyInfos[0].GetValue(_objectSource, null);
             if (_defaultValue == null) DefaultValue = value;
@@ -282,6 +312,11 @@ namespace Ivytalk.DataWindow.CustomPropertys
         {
             get
             {
+                if (ObjectSource == null)
+                {
+                    return default;
+                }
+
                 if (_propertyInfos == null)
                 {
                     Type type = ObjectSource.GetType();

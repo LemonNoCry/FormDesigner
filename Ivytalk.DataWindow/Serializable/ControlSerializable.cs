@@ -74,6 +74,9 @@ namespace Ivytalk.DataWindow.Serializable
 
             control.Tag = control.Tag ?? "";
             collection.Add(new CustomProperty("Tag", "Tag", "行为", "与用户关联的自定义数据", control));
+
+
+            collection.Add(new CustomProperty("Type", "Type", "内部", "类型", null, Type.FullName, null) {IsReadOnly = true, ValueType = typeof(string)});
             return collection;
         }
     }
