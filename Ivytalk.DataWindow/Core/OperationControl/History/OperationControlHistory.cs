@@ -9,8 +9,14 @@ namespace Ivytalk.DataWindow.Core.OperationControl.History
         /// </summary>
         private const int Limit = 500;
 
+        /// <summary>
+        /// 是否有操作记录
+        /// </summary>
+        public bool IsOper { get; set; }
+
         public new void Push(OperationControlRecord item)
         {
+            IsOper = true;
             base.Push(item);
             while (Count > Limit)
             {
@@ -30,6 +36,7 @@ namespace Ivytalk.DataWindow.Core.OperationControl.History
 
         public void Record()
         {
+            IsOper = true;
             var history = Pop();
             history?.Record();
         }
