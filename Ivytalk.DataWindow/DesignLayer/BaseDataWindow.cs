@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Ivytalk.DataWindow.Utility;
 
 namespace Ivytalk.DataWindow.DesignLayer
 {
@@ -44,7 +45,25 @@ namespace Ivytalk.DataWindow.DesignLayer
         /// <returns></returns>
         public bool IsMustControl(Control con)
         {
-            return MustEditControls.Contains(con);
+            var flag = MustEditControls.Contains(con);
+            if (flag)
+            {
+                return flag;
+            }
+
+            if (con.HasChildren)
+            {
+                foreach (Control c in con.Controls)
+                {
+                    flag = IsMustControl(c);
+                    if (flag)
+                    {
+                        return flag;
+                    }
+                }
+            }
+
+            return flag;
         }
 
         public bool IsInherentControl(Control con)
