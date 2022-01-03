@@ -20,7 +20,7 @@ namespace Ivytalk.DataWindow.DesignLayer
         /// </summary>
         public BaseDataWindow BaseDataWindow;
 
-         public Overlayer Overlayer; //对父容器可见
+        public Overlayer Overlayer; //对父容器可见
 
         public DesignerControl()
         {

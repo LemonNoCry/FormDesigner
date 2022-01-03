@@ -91,9 +91,11 @@ namespace Ivytalk.DataWindow.Core
         public static void ResolveToDataWindow(ControlSerializable cs, BaseDataWindow baseDataWindow)
         {
             baseDataWindow.Text = cs.Text;
+            baseDataWindow.SuspendLayout();
             ClearDataWindowControls(baseDataWindow);
 
             ResolveToOverlayerChild(cs.ControlsSerializable, baseDataWindow, baseDataWindow);
+            baseDataWindow.ResumeLayout();
             baseDataWindow.Refresh();
         }
 
@@ -124,8 +126,6 @@ namespace Ivytalk.DataWindow.Core
                 control.Controls.Add(con);
                 child.ControlSerializableToControl(con);
                 con.Visible = true;
-
-                Application.DoEvents();
 
                 if (child.ControlsSerializable != null && child.ControlsSerializable.Any())
                 {
